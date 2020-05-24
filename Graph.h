@@ -275,9 +275,9 @@ public:
 
 	void printVerticesToSelect() {
 		for(unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
-			write(u + 1, "=[");
+			write(u + 1, "= [");
 			writeVertex(u);
-			write(']');
+			write("] ");
 			if(u + 1 % 10 == 0)
 				write("\n");
 		}

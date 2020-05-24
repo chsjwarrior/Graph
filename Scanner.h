@@ -4,11 +4,11 @@
 
 namespace Scanner {
 	void writeVertex(const int& vertex) {
-		if(vertex > -1) {
+		if (vertex > -1) {
 			std::cout << 'V';
-			if(vertex < 99)
+			if (vertex < 99)
 				std::cout << "0";
-			if(vertex < 9)
+			if (vertex < 9)
 				std::cout << "0";
 			std::cout << vertex + 1;
 		} else
@@ -16,11 +16,11 @@ namespace Scanner {
 	}
 
 	void writeEdge(const int& edge) {
-		if(edge > -1) {
+		if (edge > -1) {
 			std::cout << "E";
-			if(edge < 99)
+			if (edge < 99)
 				std::cout << "0";
-			if(edge < 9)
+			if (edge < 9)
 				std::cout << "0";
 			std::cout << edge + 1;
 		} else
@@ -28,13 +28,13 @@ namespace Scanner {
 	}
 
 	void writeValue(const int& value) {
-		if(value < 1000) {
-			if(value < 100)
+		if (value < 1000) {
+			if (value < 100)
 				std::cout << " ";
 			std::cout << value;
-			if(value < 10)
+			if (value < 10)
 				std::cout << " ";
-			if(value >= 0)
+			if (value >= 0)
 				std::cout << " ";
 		} else
 			std::cout << "inf ";
@@ -69,17 +69,15 @@ namespace Scanner {
 
 	template<typename... Types>
 	int read(Types... args) {
-		int value;
-		do {
-			writeln(args...);
-			std::cin >> value;
-			if(std::cin.fail()) {
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				system("CLS");
-				value = -1;
-			}
-		} while(value < 0);
+		int value = NULL;
+		writeln(args...);
+		std::cin >> value;
+		if (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			system("CLS");
+			value = NULL;
+		}
 		return value;
 	}
 };

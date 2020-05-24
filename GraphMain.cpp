@@ -20,7 +20,7 @@ using namespace Scanner;
 Graph* graph;
 
 void destroyGraph() {
-	if(graph == nullptr)
+	if (graph == nullptr)
 		return;
 	delete graph;
 	graph = nullptr;
@@ -28,30 +28,30 @@ void destroyGraph() {
 
 void openFile(const std::string& path) {
 	std::ifstream file(path);
-	if(file.is_open()) {
+	if (file.is_open()) {
 		bool fail = false;
 		unsigned int u, v, line = 1;
 		int w;
 		file >> u >> v >> w;
 		destroyGraph();
 		graph = new Graph(u, w != 0);
-		while(file >> u && file >> v && file >> w && !fail) {
+		while (file >> u && file >> v && file >> w && !fail) {
 			line++;
 			u--;
 			v--;
-			if(!graph->isValidVertex(u)) {
+			if (!graph->isValidVertex(u)) {
 				fail = true;
 				writeln("Erro na linha ", line, " vertice U invalido");
 			}
-			if(!graph->isValidVertex(v)) {
+			if (!graph->isValidVertex(v)) {
 				fail = true;
 				writeln("Erro na linha ", line, " vertice V invalido");
 			}
-			if(!fail)
+			if (!fail)
 				graph->insertEdge(u, v, w);
 		}
 		file.close();
-		if(fail)
+		if (fail)
 			destroyGraph();
 		else
 			writeln("Grafo criado com exito.");
@@ -59,12 +59,36 @@ void openFile(const std::string& path) {
 		writeln("Não foi possivel abrir o arquivo.");
 }
 
+void createGraph() {
+	unsigned int u = read("Dgt a qtd de Vertices.");
+	unsigned int v = read("Dgt 1: Grafo dirigido.", "Dgt outro valor: Grafo nao dirigido.");
+	destroyGraph();
+	graph = new Graph(u, v == 1);
+	int w = read("Dgt 1: Grafo valorado.", "Dgt outro valor: Grafo nao valorado.");
+
+	do {
+		graph->printVerticesToSelect();
+		u = read("Selecione o numero do primeiro vertice ou 0 para retornar:");
+		if (u != 0) {
+			v = read("Selecione o segundo vertice ou 0 para cancelar:");
+			if (v != 0) {
+				if (w == 1) {// se grafo valorado
+					w = read("Dgt o custo da Aresta: ");
+					graph->insertEdge(u - 1, v - 1, w);
+					w = 1;
+				} else
+					graph->insertEdge(u - 1, v - 1);
+			}
+		}
+	} while (v != 0 && u != 0);
+}
+
 unsigned int getOrigin() {
 	unsigned int origin;
 	do {
 		graph->printVerticesToSelect();
 		origin = read("Dgt o vertice de origem");
-	} while(origin > graph->AMOUNT_VERTICES);
+	} while (origin > graph->AMOUNT_VERTICES);
 	return --origin;
 }
 
@@ -79,211 +103,187 @@ void dfs() {
 }
 
 void dijkstra() {
-	if(graph == nullptr)
-		return;
 	Dijkstra dijkstra(*graph);
 	dijkstra.dijkstra(getOrigin());
 }
 
 void floydWarshall() {
-	if(graph == nullptr)
-		return;
 	FloydWarshall floydWarshall(*graph);
 	floydWarshall.floydWarshall();
 }
 
 void fleury() {
-	if(graph == nullptr)
-		return;
 	Fleury fleury(*graph);
 	fleury.fleury();
 }
 
 void robertFlores() {
-	if(graph == nullptr)
-		return;
 	RobertFlores robertFlores(*graph);
 	robertFlores.robertFlores(getOrigin());
 }
 
 void closerNeighbor() {
-	if(graph == nullptr)
-		return;
 	CloserNeighbor closerNeighbor(*graph);
 	closerNeighbor.closerNeighbor(getOrigin());
 }
 
 void closerNeighborRepetitive() {
-	if(graph == nullptr)
-		return;
 	CloserNeighbor closerNeighbor(*graph);
 	closerNeighbor.closerNeighborRepetitive();
 }
 
 void cheaperConnection() {
-	if(graph == nullptr)
-		return;
 	CheaperConnection cheaperConnection(*graph);
 	cheaperConnection.cheaperConnection();
 }
 
 void goodman() {
-	if(graph == nullptr)
-		return;
 	Goodman goodman(*graph);
 	goodman.goodman();
 }
 
 void disjointAssemblies() {
-	if(graph == nullptr)
-		return;
 	DisjointAssemblies disjointAssemblies(*graph);
 	disjointAssemblies.connectedComponents();
 }
 
 void kruskal() {
-	if(graph == nullptr)
-		return;
 	Kruskal kruskal(*graph);
 	kruskal.kruskal();
 }
 
 void prim() {
-	if(graph == nullptr)
-		return;
 	Prim prim(*graph);
 	prim.prim(getOrigin());
 }
 
 void sequentialColoring() {
-	if(graph == nullptr)
-		return;
 	Coloring coloring(*graph);
 	coloring.sequentialColoring();
 }
 
 void heuristicColoring() {
-	if(graph == nullptr)
-		return;
 	Coloring coloring(*graph);
 	coloring.heuristicColoring();
 }
 
 int main() {
-    graph = nullptr;
+	graph = nullptr;
 	writeln("Desenvolvido por Carlos Henrique Stapait Junior");
 	int value = 0;
 
 	do {
 		writeln("Dgt 0 para encerrar.",
-                "Dgt 1 para abrir um grafo.");
-        if (graph != nullptr)
-            writeln("--------------------------------------------",
-                  "Dgt 2 para imprimir Matriz de adjacencia",
-                  "Dgt 3 para imprimir Matriz de incidencia",
-                  "Dgt 4 para imprimir lista de adjacencia",
-                  "Dgt 5 para imprimir lista de incidencia",
-                  "Dgt 6 para imprimir Matriz de custo",
-                  "Dgt 7 para imprimir Informacoes do grafo",
-                  "--------------------------------------------",
-                  "Dgt 8 para Busca em largura",
-                  "Dgt 9 para Busca em profundidade",
-                  "Dgt 10 para Dijkstra",
-                  "Dgt 11 para Floyd Warshall",
-                  "Dgt 12 para Fleury",
-                  "Dgt 13 para Robert Flores",
-                  "Dgt 14 para Vizinho mais proximo",
-                  "Dgt 15 para Vizinho mais proximo repetitivo",
-                  "Dgt 16 para Ligacao mais economica",
-                  "Dgt 17 para Goodman",
-                  "Dgt 18 para Conjuntos disjuntos",
-                  "Dgt 19 para Kruskal",
-                  "Dgt 20 para Prim",
-                  "Dgt 21 para Coloracao sequencial",
-                  "Dgt 22 para Coloracao heuristica");
-        value = read("--------------------------------------------");
+			"Dgt 1 para criar um grafo.",
+			"Dgt 2 para abrir um arquivo.");
+		if (graph != nullptr)
+			writeln("--------------------------------------------",
+				"Dgt 3 para imprimir Matriz de adjacencia",
+				"Dgt 4 para imprimir Matriz de incidencia",
+				"Dgt 5 para imprimir lista de adjacencia",
+				"Dgt 6 para imprimir lista de incidencia",
+				"Dgt 7 para imprimir Matriz de custo",
+				"Dgt 8 para imprimir Informacoes do grafo",
+				"--------------------------------------------",
+				"Dgt 9 para Busca em largura",
+				"Dgt 10 para Busca em profundidade",
+				"Dgt 11 para Dijkstra",
+				"Dgt 12 para Floyd Warshall",
+				"Dgt 13 para Fleury",
+				"Dgt 14 para Robert Flores",
+				"Dgt 15 para Vizinho mais proximo",
+				"Dgt 16 para Vizinho mais proximo repetitivo",
+				"Dgt 17 para Ligacao mais economica",
+				"Dgt 18 para Goodman",
+				"Dgt 19 para Conjuntos disjuntos",
+				"Dgt 20 para Kruskal",
+				"Dgt 21 para Prim",
+				"Dgt 22 para Coloracao sequencial",
+				"Dgt 23 para Coloracao heuristica");
+		value = read("--------------------------------------------");
 
 		system("CLS");
-		if (value != 0) {
-            if (value == 1) {
-                openFile("C:\\temp\\graph.txt");
-            } else if (graph == nullptr){
-                writeErr("Grafo não inicializado");
-            } else {
-                switch(value) {
-                case 2:
-                    graph->printAdjacencematrix();
-                    break;
-                case 3:
-                    graph->printIncidenceMatrix();
-                    break;
-                case 4:
-                    graph->printAdjacenceList();
-                    break;
-                case 5:
-                    graph->printIncidenceList();
-                    break;
-                case 6:
-                    graph->printCostMatrix();
-                    break;
-                case 7:
-                    graph->printGraphInfo();
-                    break;
-                case 8:
-                    bfs();
-                    break;
-                case 9:
-                    dfs();
-                    break;
-                case 10:
-                    dijkstra();
-                    break;
-                case 11:
-                    floydWarshall();
-                    break;
-                case 12:
-                    fleury();
-                    break;
-                case 13:
-                    robertFlores();
-                    break;
-                case 14:
-                    closerNeighbor();
-                    break;
-                case 15:
-                    closerNeighborRepetitive();
-                    break;
-                case 16:
-                    cheaperConnection();
-                    break;
-                case 17:
-                    goodman();
-                    break;
-                case 18:
-                    disjointAssemblies();
-                    break;
-                case 19:
-                    kruskal();
-                    break;
-                case 20:
-                    prim();
-                    break;
-                case 21:
-                    sequentialColoring();
-                    break;
-                case 22:
-                    heuristicColoring();
-                    break;
-                default:
-                    writeErr("valor invalido, dgt novamente");
-                }
-            }
+
+		if (value == 1) {
+			createGraph();
+		} else if (value == 2) {
+			openFile("C:\\temp\\graph.txt");
+		} else if (graph == nullptr) {
+			writeErr("Grafo não inicializado");
+		} else if (value != 0) {
+			switch (value) {
+			case 3:
+				graph->printAdjacencematrix();
+				break;
+			case 4:
+				graph->printIncidenceMatrix();
+				break;
+			case 5:
+				graph->printAdjacenceList();
+				break;
+			case 6:
+				graph->printIncidenceList();
+				break;
+			case 7:
+				graph->printCostMatrix();
+				break;
+			case 8:
+				graph->printGraphInfo();
+				break;
+			case 9:
+				bfs();
+				break;
+			case 10:
+				dfs();
+				break;
+			case 11:
+				dijkstra();
+				break;
+			case 12:
+				floydWarshall();
+				break;
+			case 13:
+				fleury();
+				break;
+			case 14:
+				robertFlores();
+				break;
+			case 15:
+				closerNeighbor();
+				break;
+			case 16:
+				closerNeighborRepetitive();
+				break;
+			case 17:
+				cheaperConnection();
+				break;
+			case 18:
+				goodman();
+				break;
+			case 19:
+				disjointAssemblies();
+				break;
+			case 20:
+				kruskal();
+				break;
+			case 21:
+				prim();
+				break;
+			case 22:
+				sequentialColoring();
+				break;
+			case 23:
+				heuristicColoring();
+				break;
+			default:
+				writeErr("valor invalido, dgt novamente");
+			}
 		}
-	} while(value != 0);
+	} while (value != 0);
 
 	destroyGraph();
 	writeln("Programa encerrado");
 	return 0;
 
-    return 0;
+	return 0;
 }
