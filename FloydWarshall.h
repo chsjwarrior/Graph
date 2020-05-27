@@ -87,6 +87,7 @@ public:
 		for(unsigned int k = 0; k < graph.AMOUNT_VERTICES; k++)
 			for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
 				for(unsigned int j = 0; j < graph.AMOUNT_VERTICES; j++)
+					if (i != j)
 					if(costMatrix[i][j] > costMatrix[i][k] + costMatrix[k][j]) {
 						costMatrix[i][j] = costMatrix[i][k] + costMatrix[k][j];
 						pi[i][j] = pi[k][j];

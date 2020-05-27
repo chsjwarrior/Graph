@@ -73,6 +73,7 @@ public:
 			for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
 				if(visited[*v] == false) {
 					queue.push(*v);
+					visited[*v] = true;
 					pi[*v] = u;
 					discovery[*v] = discovery[u] + 1;
 				}
