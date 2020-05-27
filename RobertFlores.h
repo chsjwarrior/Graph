@@ -16,8 +16,8 @@ private:
 	unsigned int index;
 
 	const bool contains(const unsigned int& v) const {
-		for(unsigned int i = 0; i < index; i++)
-			if(array[i] == v)
+		for (unsigned int i = 0; i < index; i++)
+			if (array[i] == v)
 				return true;
 		return false;
 	}
@@ -27,32 +27,29 @@ private:
 		print();
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
-			if(*v != u)
-				if(index == graph.AMOUNT_VERTICES && array[0] == *v) {
-					print();
-					writeVertex(*v);
+		for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
+			if (*v != u)
+				if (index == graph.AMOUNT_VERTICES && array[0] == *v) {
 					write(" achou");
-					print();
 					break;
-				} else if(!contains(*v))
+				} else if (!contains(*v))
 					robertFloresR(*v);
 		}
-		if(index > 0)
+		if (index > 0)
 			index--;
 		print();
 	}
 
 	void print() const {
-		for(unsigned int i = 0; i < index; i++) {
+		write("\n");
+		for (unsigned int i = 0; i < index; i++) {
 			writeVertex(array[i]);
 			write("-");
 		}
-		write("\n");
 	}
 
 public:
-    RobertFlores() = delete;
+	RobertFlores() = delete;
 	RobertFlores(const Graph& graph) : graph(graph) {
 		array = new unsigned int[graph.AMOUNT_VERTICES];
 		index = 0;
@@ -65,7 +62,8 @@ public:
 	}
 
 	void robertFlores(const unsigned int& origin) {
-		writeln("Robert & Flores:");
+		write("Robert & Flores:");
 		robertFloresR(origin);
+		write("\n");
 	}
 };
