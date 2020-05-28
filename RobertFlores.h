@@ -27,7 +27,7 @@ private:
 		print();
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v)) {
 			if (*v != u)
 				if (index == graph.AMOUNT_VERTICES && array[0] == *v) {
 					write(" achou");

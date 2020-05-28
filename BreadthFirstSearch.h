@@ -20,17 +20,17 @@ private:
 	void print() const {
 		writeln("Busca em largura:");
 		write("Vi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\ndi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeValue(discovery[i]);
 			write("|");
 		}
 		write("\npi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeVertex(pi[i]);
 			write("|");
 		}
@@ -38,7 +38,7 @@ private:
 	}
 
 public:
-    BreadthFirstSearch() = delete;
+	BreadthFirstSearch() = delete;
 	BreadthFirstSearch(const Graph& graph) : graph(graph) {
 		discovery = new unsigned int[graph.AMOUNT_VERTICES];
 		pi = new int[graph.AMOUNT_VERTICES];
@@ -55,7 +55,7 @@ public:
 	}
 
 	void bfs(const unsigned int& origin) const {
-		for(unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
 			discovery[u] = MAX_WEIGHT;
 			pi[u] = -1;
 			visited[u] = false;
@@ -64,14 +64,14 @@ public:
 		std::queue<unsigned int> queue;
 		unsigned int u = origin;
 		discovery[u] = 0;
+		visited[u] = true;
 		queue.push(u);
-		while(!queue.empty()) {
+		while (!queue.empty()) {
 			u = queue.front();
 			queue.pop();
-			visited[u] = true;
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
-			for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
-				if(visited[*v] == false) {
+			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+				if (visited[*v] == false) {
 					queue.push(*v);
 					visited[*v] = true;
 					pi[*v] = u;

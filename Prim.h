@@ -3,7 +3,6 @@
 
 /*O algoritmo de Prim */
 
-//funcionando não dirigidos
 class Prim {
 private:
 	const Graph& graph;
@@ -14,8 +13,8 @@ private:
 	const unsigned int extractSmaller() const {
 		int lowerValue = MAX_WEIGHT;
 		unsigned int lowWeightVertex = 0;
-		for(int unsigned u = 0; u < graph.AMOUNT_VERTICES; u++)
-			if(visited[u] == false && key[u] < lowerValue) {
+		for (int unsigned u = 0; u < graph.AMOUNT_VERTICES; u++)
+			if (visited[u] == false && key[u] < lowerValue) {
 				lowerValue = key[u];
 				lowWeightVertex = u;
 			}
@@ -23,7 +22,7 @@ private:
 	}
 
 	void relax(const unsigned int& u, const unsigned int& v) const {
-		if(graph.getWeigthFrom(u, v) < key[v]) {
+		if (graph.getWeigthFrom(u, v) < key[v]) {
 			pi[v] = u;
 			key[v] = graph.getWeigthFrom(u, v);
 		}
@@ -32,17 +31,17 @@ private:
 	void print() const {
 		writeln("Prim:");
 		write("Vi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\nki  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeValue(key[i]);
 			write("|");
 		}
 		write("\npi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeVertex(pi[i]);
 			write("|");
 		}
@@ -50,7 +49,7 @@ private:
 	}
 
 public:
-    Prim() = delete;
+	Prim() = delete;
 	Prim(const Graph& graph) : graph(graph) {
 		key = new int[graph.AMOUNT_VERTICES];
 		pi = new int[graph.AMOUNT_VERTICES];
@@ -67,7 +66,7 @@ public:
 	}
 
 	void prim(const unsigned int& origin)const {
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			key[i] = MAX_WEIGHT;
 			pi[i] = -1;
 			visited[i] = false;
@@ -75,14 +74,14 @@ public:
 		key[origin] = 0;
 		int priorityQueue = graph.AMOUNT_VERTICES;
 
-		while(priorityQueue >= 0) {
+		while (priorityQueue >= 0) {
 			unsigned int u = extractSmaller();
 			priorityQueue--;
 			visited[u] = true;
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
-			for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
-				if(visited[*v] == false)
+			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+				if (visited[*v] == false)
 					relax(u, *v);
 		}
 		print();

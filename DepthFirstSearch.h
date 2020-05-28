@@ -22,8 +22,8 @@ private:
 		discovery[u] = ++time;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
-			if(visited[*v] == false)
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+			if (visited[*v] == false)
 				dfsVisit(*v);
 		close[u] = ++time;
 	}
@@ -31,17 +31,17 @@ private:
 	void print() const {
 		writeln("Busca em profundidade");
 		write("Vi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\ndi  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeValue(discovery[i]);
 			write("|");
 		}
 		write("\nci  |");
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
 			writeValue(close[i]);
 			write("|");
 		}
@@ -49,7 +49,7 @@ private:
 	}
 
 public:
-    DepthFirstSearch() = delete;
+	DepthFirstSearch() = delete;
 	DepthFirstSearch(const Graph& graph) : graph(graph) {
 		discovery = new unsigned int[graph.AMOUNT_VERTICES];
 		close = new unsigned int[graph.AMOUNT_VERTICES];
@@ -68,7 +68,7 @@ public:
 	}
 
 	void dfs(const unsigned int& origin) {
-		for(unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
 			discovery[u] = MAX_WEIGHT;
 			close[u] = MAX_WEIGHT;
 			visited[u] = false;
@@ -76,8 +76,8 @@ public:
 
 		time = 0;
 		unsigned int v = origin;
-		for(unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
-			if(visited[v] == false)
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+			if (visited[v] == false)
 				dfsVisit(v);
 			v = u;
 		}

@@ -24,11 +24,11 @@ private:
 	const std::pair<unsigned int, unsigned int> validateGraph() const {
 		unsigned int degree;
 		unsigned int amountOddVertex = 0, firstOddVertex = graph.AMOUNT_VERTICES;
-		for(unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
 			degree = graph.getOutDegreeFrom(u);//para digrafo usa-se grau de saída
-			if(degree % 2 != 0) {
+			if (degree % 2 != 0) {
 				amountOddVertex++;
-				if(firstOddVertex == graph.AMOUNT_VERTICES)
+				if (firstOddVertex == graph.AMOUNT_VERTICES)
 					firstOddVertex = u;
 			}
 		}
@@ -40,24 +40,24 @@ private:
 		visited[u] = true;
 		unsigned int count = 1;
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
-			if(!visited[*v])
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+			if (!visited[*v])
 				count += dfsVisit(*v);
 		return count;
 	}
 
 	const bool isBridge(const unsigned int& u, const unsigned int& v) {
-		if(graph.getOutDegreeFrom(u) == 1)
+		if (graph.getOutDegreeFrom(u) == 1)
 			return false;
 
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
-                visited[i] = false;
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
+			visited[i] = false;
 		unsigned int bridgeCount = dfsVisit(v);
 
 		graph.removeEdge(u, v);
 
-		for(unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
-                visited[i] = false;
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
+			visited[i] = false;
 		unsigned int nonBridge = dfsVisit(v);
 
 		graph.insertEdge(u, v);
@@ -67,8 +67,8 @@ private:
 
 	void fleuryR(const unsigned int& u) {
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
-			if(!isBridge(u, *v)) {
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+			if (!isBridge(u, *v)) {
 				writeVertex(u);
 				write("->");
 				writeVertex(*v);
@@ -80,7 +80,7 @@ private:
 	}
 
 public:
-    Fleury() = delete;
+	Fleury() = delete;
 	Fleury(const Graph& graph) : graph(graph) {
 		visited = new bool[graph.AMOUNT_VERTICES];
 	}
@@ -94,13 +94,13 @@ public:
 		writeln("Fleury:");
 		const std::pair<unsigned int, unsigned int> pair = validateGraph();
 
-		if(pair.first > 2) {
+		if (pair.first > 2) {
 			write(pair.first);
 			writeln(" vertices tem grau impar", "O Grafo nao e euleriano");
 		} else {
-			if(pair.first == 0)
+			if (pair.first == 0)
 				writeln("Todos os vertices tem grau par", "e possivel encontrar um caminho euleriano.");
-			else if(pair.first == 2)
+			else if (pair.first == 2)
 				writeln("Dois vertices tem grau impar", "e possivel encontrar um caminho semi-euleriano.");
 			fleuryR(pair.second);
 		}

@@ -8,28 +8,9 @@ O algoritmo de Goodman serve para avaliar a conexidade em grafos não dirigidos.
 
 class Goodman {
 private:
-	const Graph& graph;
+	Graph graph;
 	std::set<unsigned int> vertices;
 	std::list<std::list<unsigned int>> sets;
-
-	const bool contains(const std::list<unsigned int>& set, const unsigned int& u) const {
-		for(auto v = set.cbegin(); v != set.cend(); v++)
-			if(*v == u)
-				return true;
-		return false;
-	}
-
-	void makeUnion(const unsigned int& u) {
-		print();
-		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for(auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
-			if(!contains(sets.back(), *v)) {
-				sets.back().push_back(*v);
-				vertices.erase(*v);
-				makeUnion(*v);
-			}
-		}
-	}
 
 	void makeSet(unsigned int& u) {
 		std::list<unsigned int> set;
@@ -40,34 +21,59 @@ private:
 	void print() const {
 		writeln("Goodman:");
 		unsigned int i = 0;
-		for(auto set = sets.begin(); set != sets.end(); set++) {
+		for (auto set = sets.cbegin(); set != sets.cend(); set++) {
 			write("Conjunto ", ++i, ":");
-			for(auto u = set->begin(); u != set->end(); u++)
+			for (auto u = set->cbegin(); u != set->cend(); u++) {
 				writeVertex(*u);
+				write("+");
+			}
 			write("|");
 		}
 		write("\n");
 	}
 
 public:
-    Goodman() = delete;
+	Goodman() = delete;
 	Goodman(const Graph& graph) : graph(graph) {}
 
 	~Goodman() {
 		vertices.clear();
-		for(auto set = sets.begin(); set != sets.end(); set++)
+		for (auto set = sets.begin(); set != sets.end(); set++)
 			set->clear();
 		sets.clear();
 	}
 
 	void goodman() {
-	    for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++)
+		if (graph.IS_DIGRAPH) {
+			writeln("O Grafo precisa ser nao dirigido para o algoritmo de Goodman funcionar.");
+			return;
+		}
+
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++)
 			vertices.insert(u);
 
-		while(!vertices.empty()) {
-			unsigned int u = *vertices.cbegin();
+		while (!vertices.empty()) {
+			unsigned int u = *vertices.rbegin();
+			vertices.erase(u);
 			makeSet(u);
-			makeUnion(u);
+
+			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
+			while (!adjacences.empty()) {
+				unsigned int v = *adjacences.cbegin();
+				adjacences.erase(adjacences.cbegin());
+				graph.removeEdge(u, v);
+				if (u == v)
+					continue;
+				sets.back().push_back(v);
+				print();
+				for (auto vv = adjacences.cbegin(); !adjacences.empty(); vv = adjacences.erase(vv)) {
+					graph.insertEdge(v, *vv, graph.getWeigthFrom(u, *vv));
+					graph.removeEdge(u, *vv);
+				}
+				u = v;
+				vertices.erase(u);
+				adjacences = graph.getAdjacencesFrom(u);
+			}
 		}
 	}
 };
