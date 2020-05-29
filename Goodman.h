@@ -49,7 +49,7 @@ public:
 			return;
 		}
 
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++)
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			vertices.insert(u);
 
 		while (!vertices.empty()) {

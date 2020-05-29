@@ -48,13 +48,13 @@ private:
 	*/
 
 public:
-	const unsigned int AMOUNT_VERTICES;
+	const unsigned int AMOUNT_VERTEXES;
 	const bool IS_DIGRAPH;
 
 	Graph() = delete;
 	Graph(const unsigned int& amountVertices, const bool& isDigraph) :
-		AMOUNT_VERTICES(amountVertices), IS_DIGRAPH(isDigraph) {}
-	Graph(const Graph& graph) : AMOUNT_VERTICES(graph.AMOUNT_VERTICES), IS_DIGRAPH(graph.IS_DIGRAPH) {
+		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {}
+	Graph(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES), IS_DIGRAPH(graph.IS_DIGRAPH) {
 		edges = graph.getEdges();
 	}
 	~Graph() {
@@ -63,7 +63,7 @@ public:
 	}
 
 	const bool isValidVertex(const unsigned int& v) const {
-		return v < AMOUNT_VERTICES;
+		return v < AMOUNT_VERTEXES;
 	}
 
 	void insertEdge(const unsigned int& u, const unsigned int& v, const int& weight = 1) {
@@ -136,15 +136,15 @@ public:
 	void printAdjacencematrix() const {
 		writeln("Matriz de adjacencia");
 		write("Vi  |");
-		for (unsigned int i = 0; i < AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\n");
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			write("|");
-			for (unsigned int v = 0, count = 0; v < AMOUNT_VERTICES; v++, count = 0) {
+			for (unsigned int v = 0, count = 0; v < AMOUNT_VERTEXES; v++, count = 0) {
 				getAdjacencesFrom(u);
 				for (auto vv = adjacences.cbegin(); vv != adjacences.cend(); vv = adjacences.erase(vv))
 					if (*vv == v)
@@ -165,7 +165,7 @@ public:
 		}
 		write("\n");
 		int value;
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			write("|");
 			for (auto e = edges.cbegin(); e != edges.cend(); e++) {
@@ -188,7 +188,7 @@ public:
 
 	void printAdjacenceList() const {
 		writeln("Lista de adjacencia");
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
@@ -213,15 +213,15 @@ public:
 	void printCostMatrix() const {
 		std::cout << "Matriz de custo" << std::endl;
 		write("Vi  |");
-		for (unsigned int i = 0; i < AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\n");
-		for (unsigned int i = 0; i < AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
-			for (unsigned int j = 0; j < AMOUNT_VERTICES; j++) {
+			for (unsigned int j = 0; j < AMOUNT_VERTEXES; j++) {
 				writeValue(getWeigthFrom(i, j));
 				write("|");
 			}
@@ -233,9 +233,9 @@ public:
 		writeln("Conjunto de vertices:");
 		write("V={");
 		unsigned int i = 0;
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
-			if (u + 1 < AMOUNT_VERTICES) {
+			if (u + 1 < AMOUNT_VERTEXES) {
 				write(',');
 				if (++i % 20 == 0)
 					write("\n");
@@ -253,17 +253,17 @@ public:
 		}
 		writeln("}", "Graus dos vertices:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\nin  |");
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeValue(getInDegreeFrom(u));
 			write("|");
 		}
 		write("\nout |");
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeValue(getOutDegreeFrom(u));
 			write("|");
 		}
@@ -271,7 +271,7 @@ public:
 	}
 
 	void printVerticesToSelect() {
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			write(u + 1, "= [");
 			writeVertex(u);
 			write("] ");

@@ -4,12 +4,12 @@
 using namespace Scanner;
 
 /*
-O algoritmo de Goodman serve para avaliar a conexidade em grafos não dirigidos.
+funcionando
 */
 
 class DisjointAssemblies {
 private:
-	const unsigned int AMOUNT_VERTICES;
+	const unsigned int AMOUNT_VERTEXES;
 	std::multiset<Edge> edges;
 	std::list<std::set<unsigned int>> sets;
 
@@ -50,7 +50,7 @@ private:
 
 public:
     DisjointAssemblies() = delete;
-	DisjointAssemblies(const Graph& graph) : AMOUNT_VERTICES(graph.AMOUNT_VERTICES) {
+	DisjointAssemblies(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES) {
 		edges = graph.getEdges();
 	}
 
@@ -64,7 +64,7 @@ public:
 	void connectedComponents() {
 		writeln("Conjuntos disjuntos:");
 		write("\t", "|");
-		for(unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for(unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			makeSet(u);
 			writeVertex(u);
 			write("\t");

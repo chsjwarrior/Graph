@@ -20,17 +20,17 @@ private:
 	void print() const {
 		writeln("Busca em largura:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(discovery[i]);
 			write("|");
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(pi[i]);
 			write("|");
 		}
@@ -40,9 +40,9 @@ private:
 public:
 	BreadthFirstSearch() = delete;
 	BreadthFirstSearch(const Graph& graph) : graph(graph) {
-		discovery = new unsigned int[graph.AMOUNT_VERTICES];
-		pi = new int[graph.AMOUNT_VERTICES];
-		visited = new bool[graph.AMOUNT_VERTICES];
+		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
+		pi = new int[graph.AMOUNT_VERTEXES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~BreadthFirstSearch() {
@@ -55,7 +55,7 @@ public:
 	}
 
 	void bfs(const unsigned int& origin) const {
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = MAX_WEIGHT;
 			pi[u] = -1;
 			visited[u] = false;

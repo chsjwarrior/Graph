@@ -6,7 +6,7 @@ using namespace Scanner;
 /*
 O algoritmo de Fleury é utilizado para a identificação de um ciclo euleriano em um grafo.
 
- parcialmente funcionando, em grafos dirigidos dependendo do vértice inicial é possivel mas ele não encontra.
+ funcionando, mas é preciso testar de outras maneiras ainda.
  funcionou com seguinte grafo:
 4 5 0
 1 2 0
@@ -23,16 +23,16 @@ private:
 
 	const std::pair<unsigned int, unsigned int> validateGraph() const {
 		unsigned int degree;
-		unsigned int amountOddVertex = 0, firstOddVertex = graph.AMOUNT_VERTICES;
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		unsigned int amountOddVertex = 0, firstOddVertex = graph.AMOUNT_VERTEXES;
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			degree = graph.getOutDegreeFrom(u);//para digrafo usa-se grau de saída
 			if (degree % 2 != 0) {
 				amountOddVertex++;
-				if (firstOddVertex == graph.AMOUNT_VERTICES)
+				if (firstOddVertex == graph.AMOUNT_VERTEXES)
 					firstOddVertex = u;
 			}
 		}
-		std::pair<unsigned int, unsigned int> pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTICES ? 0 : firstOddVertex);
+		std::pair<unsigned int, unsigned int> pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTEXES ? 0 : firstOddVertex);
 		return pair;
 	}
 
@@ -50,13 +50,13 @@ private:
 		if (graph.getOutDegreeFrom(u) == 1)
 			return false;
 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			visited[i] = false;
 		unsigned int bridgeCount = dfsVisit(v);
 
 		graph.removeEdge(u, v);
 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			visited[i] = false;
 		unsigned int nonBridge = dfsVisit(v);
 
@@ -82,7 +82,7 @@ private:
 public:
 	Fleury() = delete;
 	Fleury(const Graph& graph) : graph(graph) {
-		visited = new bool[graph.AMOUNT_VERTICES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~Fleury() {

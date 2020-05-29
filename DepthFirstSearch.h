@@ -31,17 +31,17 @@ private:
 	void print() const {
 		writeln("Busca em profundidade");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(discovery[i]);
 			write("|");
 		}
 		write("\nci  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(close[i]);
 			write("|");
 		}
@@ -51,9 +51,9 @@ private:
 public:
 	DepthFirstSearch() = delete;
 	DepthFirstSearch(const Graph& graph) : graph(graph) {
-		discovery = new unsigned int[graph.AMOUNT_VERTICES];
-		close = new unsigned int[graph.AMOUNT_VERTICES];
-		visited = new bool[graph.AMOUNT_VERTICES];
+		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
+		close = new unsigned int[graph.AMOUNT_VERTEXES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 		time = NULL;
 	}
 
@@ -68,7 +68,7 @@ public:
 	}
 
 	void dfs(const unsigned int& origin) {
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = MAX_WEIGHT;
 			close[u] = MAX_WEIGHT;
 			visited[u] = false;
@@ -76,7 +76,7 @@ public:
 
 		time = 0;
 		unsigned int v = origin;
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			if (visited[v] == false)
 				dfsVisit(v);
 			v = u;

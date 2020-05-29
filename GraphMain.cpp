@@ -88,7 +88,7 @@ unsigned int getOrigin() {
 	do {
 		graph->printVerticesToSelect();
 		origin = read("Dgt o vertice de origem");
-	} while (origin > graph->AMOUNT_VERTICES || origin < 1);
+	} while (origin > graph->AMOUNT_VERTEXES || origin < 1);
 	return --origin;
 }
 

@@ -19,7 +19,7 @@ private:
 	const unsigned int extractSmaller() const {
 		int lowerValue = MAX_WEIGHT;
 		unsigned int lowWeightVertex = 0;
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++)
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (visited[u] == false && distance[u] < lowerValue) {
 				lowerValue = distance[u];
 				lowWeightVertex = u;
@@ -37,17 +37,17 @@ private:
 	void print() const {
 		writeln("Dijkstra:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(distance[i]);
 			write("|");
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(pi[i]);
 			write("|");
 		}
@@ -57,9 +57,9 @@ private:
 public:
 	Dijkstra() = delete;
 	Dijkstra(const Graph& graph) : graph(graph) {
-		pi = new int[graph.AMOUNT_VERTICES];
-		distance = new int[graph.AMOUNT_VERTICES];
-		visited = new bool[graph.AMOUNT_VERTICES];
+		pi = new int[graph.AMOUNT_VERTEXES];
+		distance = new int[graph.AMOUNT_VERTEXES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~Dijkstra() {
@@ -72,7 +72,7 @@ public:
 	}
 
 	void dijkstra(const unsigned int& origin) const {
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = MAX_WEIGHT;
 			pi[u] = -1;
 			visited[u] = false;
@@ -80,7 +80,7 @@ public:
 		distance[origin] = 0;
 		unsigned int priorityQueue = 0;
 
-		while (priorityQueue < graph.AMOUNT_VERTICES) {
+		while (priorityQueue < graph.AMOUNT_VERTEXES) {
 			unsigned int lowWeightVertex = extractSmaller();
 			priorityQueue++;
 			visited[lowWeightVertex] = true;

@@ -29,7 +29,7 @@ private:
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v)) {
 			if (*v != u)
-				if (index == graph.AMOUNT_VERTICES && array[0] == *v) {
+				if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
 					write(" achou");
 					break;
 				} else if (!contains(*v))
@@ -51,7 +51,7 @@ private:
 public:
 	RobertFlores() = delete;
 	RobertFlores(const Graph& graph) : graph(graph) {
-		array = new unsigned int[graph.AMOUNT_VERTICES];
+		array = new unsigned int[graph.AMOUNT_VERTEXES];
 		index = 0;
 	}
 

@@ -5,7 +5,7 @@ using namespace Scanner;
 
 class Kruskal {
 private:
-	const unsigned int AMOUNT_VERTICES;
+	const unsigned int AMOUNT_VERTEXES;
 
 	struct Comparator {
 		const bool operator()(const Edge& lhs, const Edge& rhs) const {
@@ -40,11 +40,11 @@ private:
 
 public:
 	Kruskal() = delete;
-	Kruskal(const Graph& graph) : AMOUNT_VERTICES(graph.AMOUNT_VERTICES) {
+	Kruskal(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES) {
 		std::multiset<Edge> set = graph.getEdges();
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
 			edges.push(*e);
-		subSets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTICES];
+		subSets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}
 
 	~Kruskal() {
@@ -54,7 +54,7 @@ public:
 
 	void kruskal() {
 		writeln("Kruskal:");
-		for (unsigned int u = 0; u < AMOUNT_VERTICES; u++) {
+		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			subSets[u].first = u;
 			subSets[u].second = 0;
 		}

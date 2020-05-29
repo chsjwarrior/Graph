@@ -17,16 +17,16 @@ private:
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty() && isValidColor; v = adjacences.erase(v))
 				isValidColor = color[*v] != colorI;
-		} while (!isValidColor && colorI <= graph.AMOUNT_VERTICES);
+		} while (!isValidColor && colorI <= graph.AMOUNT_VERTEXES);
 		color[u] = colorI;
 	}
 
 	const unsigned int getHigherDegreeNotColored() const {
-		unsigned int vertex = graph.AMOUNT_VERTICES;
+		unsigned int vertex = graph.AMOUNT_VERTEXES;
 		unsigned int higherDegreeNotColored = 0;
-		for (unsigned int u = 0, count = 0; u < graph.AMOUNT_VERTICES; u++, count = 0) {
+		for (unsigned int u = 0, count = 0; u < graph.AMOUNT_VERTEXES; u++, count = 0) {
 			if (color[u] == 0) {
-				if (vertex == graph.AMOUNT_VERTICES)
+				if (vertex == graph.AMOUNT_VERTEXES)
 					vertex = u;//first vertex not colored
 				std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 				for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
@@ -43,12 +43,12 @@ private:
 
 	void print() const {
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		std::cout << std::endl << "ci  |";
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(color[i]);
 			write("|");
 		}
@@ -58,7 +58,7 @@ private:
 public:
 	Coloring() = delete;
 	Coloring(const Graph& graph) : graph(graph) {
-		color = new unsigned int[graph.AMOUNT_VERTICES];
+		color = new unsigned int[graph.AMOUNT_VERTEXES];
 	}
 
 	~Coloring() {
@@ -67,10 +67,10 @@ public:
 	}
 
 	void sequentialColoring() const {
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			color[i] = 0;
 
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTICES; u++)
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (color[u] == 0)
 				setValidColor(u);
 		writeln("Coloracao seguencial:");
@@ -78,11 +78,11 @@ public:
 	}
 
 	void heuristicColoring() {
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++)
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			color[i] = 0;
 
 		unsigned int u = getHigherDegreeNotColored();
-		while (u != graph.AMOUNT_VERTICES) {
+		while (u != graph.AMOUNT_VERTEXES) {
 			setValidColor(u);
 			u = getHigherDegreeNotColored();
 		}

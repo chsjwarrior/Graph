@@ -13,7 +13,7 @@ private:
 	const unsigned int extractSmaller() const {
 		int lowerValue = MAX_WEIGHT;
 		unsigned int lowWeightVertex = 0;
-		for (int unsigned u = 0; u < graph.AMOUNT_VERTICES; u++)
+		for (int unsigned u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (visited[u] == false && key[u] < lowerValue) {
 				lowerValue = key[u];
 				lowWeightVertex = u;
@@ -31,17 +31,17 @@ private:
 	void print() const {
 		writeln("Prim:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write("|");
 		}
 		write("\nki  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(key[i]);
 			write("|");
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(pi[i]);
 			write("|");
 		}
@@ -51,9 +51,9 @@ private:
 public:
 	Prim() = delete;
 	Prim(const Graph& graph) : graph(graph) {
-		key = new int[graph.AMOUNT_VERTICES];
-		pi = new int[graph.AMOUNT_VERTICES];
-		visited = new bool[graph.AMOUNT_VERTICES];
+		key = new int[graph.AMOUNT_VERTEXES];
+		pi = new int[graph.AMOUNT_VERTEXES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~Prim() {
@@ -66,13 +66,13 @@ public:
 	}
 
 	void prim(const unsigned int& origin)const {
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTICES; i++) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			key[i] = MAX_WEIGHT;
 			pi[i] = -1;
 			visited[i] = false;
 		}
 		key[origin] = 0;
-		int priorityQueue = graph.AMOUNT_VERTICES;
+		int priorityQueue = graph.AMOUNT_VERTEXES;
 
 		while (priorityQueue >= 0) {
 			unsigned int u = extractSmaller();
