@@ -5,7 +5,19 @@ using namespace Scanner;
 
 /*
 O algoritmo da ligação mais economica encontra um ciclo hamiltoniano no grafo passando pelas aresta com menor peso.
-funcionando.
+Essa implementação do  algoritmo não funciona para grafos semi-hamiltoniano.
+testadoe e funcionando com o seguinte grafo:
+5 10 0
+1 2 185
+1 3 119
+1 4 152
+1 5 133
+2 3 121
+2 4 150
+2 5 200
+3 4 174
+3 5 120
+4 5 199
 */
 
 class CheaperConnection {

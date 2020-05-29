@@ -4,6 +4,8 @@
 using namespace Scanner;
 
 /*
+O algoritmodo do vizinho mais próximo realiza um tipo de uma busca em profundidade escolhendo o vértice de menor custo.
+pode encontrar um ciclo hamiltoniano.
 funcionando.
 */
 
@@ -45,19 +47,39 @@ public:
 	}
 
 	void closerNeighbor(const unsigned int origin) const {
+		writeln("Vizinho mais proximo:");
+
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			visited[i] = false;
-		writeln("Vizinho mais proximo:");
 		closerNeighborR(origin);
+
+		bool allVisited = true;
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES && allVisited; i++)
+			allVisited = visited[i];
+		if (allVisited) {
+			write("->");
+			writeVertex(origin);
+		}
+
 		write("\n");
 	}
 
 	void closerNeighborRepetitive() const {
 		writeln("Vizinho mais proximo repetitivo:");
+
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 				visited[i] = false;
 			closerNeighborR(u);
+
+			bool allVisited = true;
+			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES && allVisited; i++)
+				allVisited = visited[i];
+			if (allVisited) {
+				write("->");
+				writeVertex(u);
+			}
+
 			write("\n");
 		}
 	}
