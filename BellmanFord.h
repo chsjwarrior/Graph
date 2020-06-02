@@ -62,6 +62,7 @@ public:
 		}
 		distance[origin] = 0;
 
+		//esse algoritmo garante a menor distancia
 		std::multiset<Edge> edges = graph.getEdges();
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			for (auto e = edges.cbegin(); e != edges.cend(); e++)
@@ -70,7 +71,7 @@ public:
 					pi[e->V] = e->U;
 				}
 
-
+		//esse algoritmo verifica se o grafo possui ciclo negativo
 		for (auto e = edges.cbegin(); e != edges.cend(); e++)
 			if (distance[e->U] != MAX_WEIGHT && distance[e->U] + e->WEIGHT < distance[e->V]) {
 				writeln("O Grafo contem ciclo com peso negativo");

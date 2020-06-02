@@ -154,6 +154,7 @@
     <ClInclude Include="FloydWarshall.h" />
     <ClInclude Include="Goodman.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="Kosaraju.h" />
     <ClInclude Include="Kruskal.h" />
     <ClInclude Include="Prim.h" />
     <ClInclude Include="RobertFlores.h" />

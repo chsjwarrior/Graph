@@ -10,6 +10,7 @@
 #include "RobertFlores.h"
 #include "CloserNeighbor.h"
 #include "CheaperConnection.h"
+#include "Kosaraju.h"
 #include "Goodman.h"
 #include "DisjointAssemblies.h"
 #include "Kruskal.h"
@@ -145,6 +146,11 @@ void cheaperConnection() {
 	cheaperConnection.cheaperConnection();
 }
 
+void kosaraju() {
+	Kosaraju kosaraju(*graph);
+	kosaraju.kosaraju();
+}
+
 void goodman() {
 	Goodman goodman(*graph);
 	goodman.goodman();
@@ -202,13 +208,14 @@ int main() {
 				"Dgt 15 para Robert Flores",
 				"Dgt 16 para Vizinho mais proximo",
 				"Dgt 17 para Vizinho mais proximo repetitivo",
-				"Dgt 18 para Ligacao mais economica",
-				"Dgt 19 para Goodman",
-				"Dgt 20 para Conjuntos disjuntos",
-				"Dgt 21 para Kruskal",
-				"Dgt 22 para Prim",
-				"Dgt 23 para Coloracao sequencial",
-				"Dgt 24 para Coloracao heuristica");
+				"Dgt 18 para Ligacao mais economica",				
+				"Dgt 19 para Kosaraju",
+				"Dgt 20 para Goodman",
+				"Dgt 21 para Conjuntos disjuntos",
+				"Dgt 22 para Kruskal",
+				"Dgt 23 para Prim",
+				"Dgt 24 para Coloracao sequencial",
+				"Dgt 25 para Coloracao heuristica");
 		value = read("--------------------------------------------");
 
 		system("CLS");
@@ -273,21 +280,24 @@ int main() {
 				cheaperConnection();
 				break;
 			case 19:
-				goodman();
+				kosaraju();				
 				break;
 			case 20:
-				disjointAssemblies();
+				goodman();				
 				break;
 			case 21:
-				kruskal();
+				disjointAssemblies();				
 				break;
 			case 22:
-				prim();
+				kruskal();				
 				break;
 			case 23:
-				sequentialColoring();
+				prim();				
 				break;
 			case 24:
+				sequentialColoring();
+				break;
+			case 25:
 				heuristicColoring();
 				break;
 			default:
