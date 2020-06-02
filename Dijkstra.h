@@ -4,8 +4,9 @@
 using namespace Scanner;
 
 /*
-O algoritmo de Dijkstra resolve o problema do caminho mínimo com uma origem.
-Mas esse algoritmo só funciona com grafos valorados com valores positivos.
+O algoritmo de Dijkstra soluciona o problema do caminho mais curto num grafo dirigido ou não dirigido com arestas de peso não negativo.
+O algoritmo que serve para resolver o mesmo problema em um grafo com pesos negativos é o algoritmo de Bellman-Ford, que possui maior tempo de execução que o Dijkstra.
+
 funcionando.
 */
 
@@ -57,17 +58,17 @@ private:
 public:
 	Dijkstra() = delete;
 	Dijkstra(const Graph& graph) : graph(graph) {
-		pi = new int[graph.AMOUNT_VERTEXES];
 		distance = new int[graph.AMOUNT_VERTEXES];
+		pi = new int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~Dijkstra() {
-		delete[] pi;
 		delete[] distance;
+		delete[] pi;
 		delete[] visited;
-		pi = nullptr;
 		distance = nullptr;
+		pi = nullptr;
 		visited = nullptr;
 	}
 

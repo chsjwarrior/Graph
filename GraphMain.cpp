@@ -5,6 +5,7 @@
 #include "DepthFirstSearch.h"
 #include "Dijkstra.h"
 #include "FloydWarshall.h"
+#include "BellmanFord.h"
 #include "Fleury.h"
 #include "RobertFlores.h"
 #include "CloserNeighbor.h"
@@ -55,7 +56,8 @@ void openFile(const std::string& path) {
 			destroyGraph();
 		else
 			writeln("Grafo criado com exito.");
-	} else
+	}
+	else
 		writeln("Não foi possivel abrir o arquivo.");
 }
 
@@ -76,7 +78,8 @@ void createGraph() {
 					w = read("Dgt o custo da Aresta: ");
 					graph->insertEdge(u - 1, v - 1, w);
 					w = 1;
-				} else
+				}
+				else
 					graph->insertEdge(u - 1, v - 1);
 			}
 		}
@@ -110,6 +113,11 @@ void dijkstra() {
 void floydWarshall() {
 	FloydWarshall floydWarshall(*graph);
 	floydWarshall.floydWarshall();
+}
+
+void bellmanFord() {
+	BellmanFord bellmanFord(*graph);
+	bellmanFord.bellmanFord(getOrigin());
 }
 
 void fleury() {
@@ -189,28 +197,32 @@ int main() {
 				"Dgt 10 para Busca em profundidade",
 				"Dgt 11 para Dijkstra",
 				"Dgt 12 para Floyd Warshall",
-				"Dgt 13 para Fleury",
-				"Dgt 14 para Robert Flores",
-				"Dgt 15 para Vizinho mais proximo",
-				"Dgt 16 para Vizinho mais proximo repetitivo",
-				"Dgt 17 para Ligacao mais economica",
-				"Dgt 18 para Goodman",
-				"Dgt 19 para Conjuntos disjuntos",
-				"Dgt 20 para Kruskal",
-				"Dgt 21 para Prim",
-				"Dgt 22 para Coloracao sequencial",
-				"Dgt 23 para Coloracao heuristica");
+				"Dgt 13 para Bellman-Ford",
+				"Dgt 14 para Fleury",
+				"Dgt 15 para Robert Flores",
+				"Dgt 16 para Vizinho mais proximo",
+				"Dgt 17 para Vizinho mais proximo repetitivo",
+				"Dgt 18 para Ligacao mais economica",
+				"Dgt 19 para Goodman",
+				"Dgt 20 para Conjuntos disjuntos",
+				"Dgt 21 para Kruskal",
+				"Dgt 22 para Prim",
+				"Dgt 23 para Coloracao sequencial",
+				"Dgt 24 para Coloracao heuristica");
 		value = read("--------------------------------------------");
 
 		system("CLS");
 
 		if (value == 1) {
 			createGraph();
-		} else if (value == 2) {
+		}
+		else if (value == 2) {
 			openFile("C:\\temp\\graph.txt");
-		} else if (graph == nullptr) {
+		}
+		else if (graph == nullptr) {
 			writeErr("Grafo não inicializado");
-		} else if (value != 0) {
+		}
+		else if (value != 0) {
 			switch (value) {
 			case 3:
 				graph->printAdjacencematrix();
@@ -243,36 +255,39 @@ int main() {
 				floydWarshall();
 				break;
 			case 13:
-				fleury();
+				bellmanFord();
 				break;
 			case 14:
-				robertFlores();
+				fleury();
 				break;
 			case 15:
-				closerNeighbor();
+				robertFlores();
 				break;
 			case 16:
-				closerNeighborRepetitive();
+				closerNeighbor();
 				break;
 			case 17:
-				cheaperConnection();
+				closerNeighborRepetitive();
 				break;
 			case 18:
-				goodman();
+				cheaperConnection();
 				break;
 			case 19:
-				disjointAssemblies();
+				goodman();
 				break;
 			case 20:
-				kruskal();
+				disjointAssemblies();
 				break;
 			case 21:
-				prim();
+				kruskal();
 				break;
 			case 22:
-				sequentialColoring();
+				prim();
 				break;
 			case 23:
+				sequentialColoring();
+				break;
+			case 24:
 				heuristicColoring();
 				break;
 			default:

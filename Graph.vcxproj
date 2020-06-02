@@ -142,6 +142,7 @@
     <ClCompile Include="GraphMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BellmanFord.h" />
     <ClInclude Include="BreadthFirstSearch.h" />
     <ClInclude Include="CheaperConnection.h" />
     <ClInclude Include="CloserNeighbor.h" />
