@@ -75,8 +75,7 @@ public:
 		}
 
 		time = 0;
-		unsigned int v = origin;
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
+		for (unsigned int u = 0, unsigned int v = origin; u < graph.AMOUNT_VERTEXES; u++) {
 			if (visited[v] == false)
 				dfsVisit(v);
 			v = u;
