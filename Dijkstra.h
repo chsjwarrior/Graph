@@ -20,7 +20,7 @@ private:
 		int lowerValue = MAX_WEIGHT;
 		unsigned int lowWeightVertex = 0;
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			if (visited[u] == false && distance[u] < lowerValue) {
+			if (visited[u] == false && distance[u] < lowerValue) {//distance[u] <= lowerValue, verificar
 				lowerValue = distance[u];
 				lowWeightVertex = u;
 			}
@@ -81,14 +81,14 @@ public:
 		unsigned int priorityQueue = 0;
 
 		while (priorityQueue < graph.AMOUNT_VERTEXES) {
-			unsigned int lowWeightVertex = extractSmaller();
+			unsigned int u = extractSmaller();
 			priorityQueue++;
-			visited[lowWeightVertex] = true;
+			visited[u] = true;
 
-			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(lowWeightVertex);
+			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (graph.getWeigthFrom(lowWeightVertex, *v) > 0)
-					relax(lowWeightVertex, *v);
+				if (graph.getWeigthFrom(u, *v) > 0)//se o peso é negativo deveria anular o programa.
+					relax(u, *v);
 		}
 		print();
 	}
