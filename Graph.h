@@ -175,7 +175,8 @@ public:
 						value = -1;
 					else if (e->V == u)
 						value = 1;
-				} else if (e->U == u)
+				}
+				else if (e->U == u)
 					value = 1;
 				else if (e->V == u)
 					value = 1;

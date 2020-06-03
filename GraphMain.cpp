@@ -10,9 +10,9 @@
 #include "RobertFlores.h"
 #include "CloserNeighbor.h"
 #include "CheaperConnection.h"
-#include "Kosaraju.h"
 #include "Goodman.h"
 #include "DisjointAssemblies.h"
+#include "Kosaraju.h"
 #include "Kruskal.h"
 #include "Prim.h"
 #include "Coloring.h"
@@ -146,11 +146,6 @@ void cheaperConnection() {
 	cheaperConnection.cheaperConnection();
 }
 
-void kosaraju() {
-	Kosaraju kosaraju(*graph);
-	kosaraju.kosaraju();
-}
-
 void goodman() {
 	Goodman goodman(*graph);
 	goodman.goodman();
@@ -159,6 +154,11 @@ void goodman() {
 void disjointAssemblies() {
 	DisjointAssemblies disjointAssemblies(*graph);
 	disjointAssemblies.connectedComponents();
+}
+
+void kosaraju() {
+	Kosaraju kosaraju(*graph);
+	kosaraju.kosaraju();
 }
 
 void kruskal() {
@@ -208,10 +208,10 @@ int main() {
 				"Dgt 15 para Robert Flores",
 				"Dgt 16 para Vizinho mais proximo",
 				"Dgt 17 para Vizinho mais proximo repetitivo",
-				"Dgt 18 para Ligacao mais economica",				
-				"Dgt 19 para Kosaraju",
-				"Dgt 20 para Goodman",
-				"Dgt 21 para Conjuntos disjuntos",
+				"Dgt 18 para Ligacao mais economica",
+				"Dgt 19 para Goodman",
+				"Dgt 20 para Conjuntos disjuntos",
+				"Dgt 21 para Kosaraju",
 				"Dgt 22 para Kruskal",
 				"Dgt 23 para Prim",
 				"Dgt 24 para Coloracao sequencial",
@@ -280,19 +280,19 @@ int main() {
 				cheaperConnection();
 				break;
 			case 19:
-				kosaraju();				
+				goodman();
 				break;
 			case 20:
-				goodman();				
+				disjointAssemblies();
 				break;
 			case 21:
-				disjointAssemblies();				
+				kosaraju();
 				break;
 			case 22:
-				kruskal();				
+				kruskal();
 				break;
 			case 23:
-				prim();				
+				prim();
 				break;
 			case 24:
 				sequentialColoring();
