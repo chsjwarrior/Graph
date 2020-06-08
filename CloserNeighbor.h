@@ -49,8 +49,7 @@ public:
 	void closerNeighbor(const unsigned int origin) const {
 		writeln("Vizinho mais proximo:");
 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			visited[i] = false;
+		memset(visited, false, sizeof(visited));
 		closerNeighborR(origin);
 
 		bool allVisited = true;
@@ -60,7 +59,6 @@ public:
 			write("->");
 			writeVertex(origin);
 		}
-
 		write("\n");
 	}
 
@@ -68,8 +66,7 @@ public:
 		writeln("Vizinho mais proximo repetitivo:");
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-				visited[i] = false;
+			memset(visited, false, sizeof(visited));
 			closerNeighborR(u);
 
 			bool allVisited = true;
@@ -79,7 +76,6 @@ public:
 				write("->");
 				writeVertex(u);
 			}
-
 			write("\n");
 		}
 	}

@@ -41,6 +41,7 @@ private:
 		while (!queue.empty() && !visited[k]) {
 			u = queue.front();
 			queue.pop();
+
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty() && !visited[k]; v = adjacences.erase(v))
 				if (!visited[*v]) {

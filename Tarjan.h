@@ -1,4 +1,5 @@
 #pragma once
+#include "Graph.h"
 
 /*
 Parcialmente funcionando
@@ -32,7 +33,7 @@ private:
 			while (stack.top() != u) {
 				w = stack.top();
 				writeVertex(w);
-				write(" ");
+				write(' ');
 				onStack[w] = false;
 				stack.pop();
 			}

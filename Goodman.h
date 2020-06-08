@@ -1,6 +1,6 @@
 #pragma once
-#include "Graph.h"
 #include <list>
+#include "Graph.h"
 
 /*
 O algoritmo de Goodman serve para avaliar a conexidade em grafos não dirigidos.
@@ -32,12 +32,12 @@ private:
 	void print() const {
 		unsigned int i = 0;
 		for (auto set = sets.cbegin(); set != sets.cend(); set++) {
-			write("Conjunto ", ++i, ":");
+			write("Conjunto ", ++i, ':');
 			for (auto u = set->cbegin(); u != set->cend(); u++) {
 				writeVertex(*u);
-				write("+");
+				write('+');
 			}
-			write("|");
+			write('|');
 		}
 		write("\n");
 	}

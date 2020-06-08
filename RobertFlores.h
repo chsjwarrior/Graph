@@ -44,7 +44,7 @@ private:
 		write("\n");
 		for (unsigned int i = 0; i < index; i++) {
 			writeVertex(array[i]);
-			write("-");
+			write('-');
 		}
 	}
 
@@ -62,7 +62,7 @@ public:
 	}
 
 	void robertFlores(const unsigned int& origin) {
-		write("Robert & Flores:");
+		write("Robert-Flores:");
 		robertFloresR(origin);
 		write("\n");
 	}

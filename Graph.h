@@ -1,6 +1,6 @@
 #pragma once
-#include "Scanner.h"
 #include <set>
+#include "Scanner.h"
 
 #ifndef NIL
 #define NIL -1
@@ -177,40 +177,40 @@ public:
 	}
 
 	void printAdjacencematrix() const {
-		writeln("Matriz de adjacencia");
+		writeln("Matriz de adjacencia:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\n");
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
-			write("|");
+			write('|');
 			for (unsigned int v = 0, count = 0; v < AMOUNT_VERTEXES; v++, count = 0) {
 				getAdjacencesFrom(u);
-				for (auto vv = adjacences.cbegin(); vv != adjacences.cend(); vv = adjacences.erase(vv))
+				for (auto vv = adjacences.cbegin(); !adjacences.empty(); vv = adjacences.erase(vv))
 					if (*vv == v)
 						count++;
 				writeValue(count);
-				write("|");
+				write('|');
 			}
 			write("\n");
 		}
 	}
 
 	void printIncidenceMatrix() const {
-		writeln("Matriz de incidencia");
+		writeln("Matriz de incidencia:");
 		write("V\\E |");
 		for (unsigned int i = 0; i < edges.size(); i++) {
 			writeEdge(i);
-			write("|");
+			write('|');
 		}
 		write("\n");
 		int value;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
-			write("|");
+			write('|');
 			for (auto e = edges.cbegin(); e != edges.cend(); e++) {
 				value = 0;
 				if (IS_DIGRAPH) {
@@ -224,14 +224,14 @@ public:
 				else if (e->V == u)
 					value = 1;
 				writeValue(value);
-				write("|");
+				write('|');
 			}
 			write("\n");
 		}
 	}
 
 	void printAdjacenceList() const {
-		writeln("Lista de adjacencia");
+		writeln("Lista de adjacencia:");
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			getAdjacencesFrom(u);
@@ -244,10 +244,10 @@ public:
 	}
 
 	void printIncidenceList() const {
-		writeln("Lista de incidencia");
-		for (auto e = edges.cbegin(); e != edges.cend(); e++) {
+		writeln("Lista de incidencia:");
+		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
 			writeVertex(e->U);
-			write(",");
+			write(',');
 			writeVertex(e->V);
 			write("->");
 		}
@@ -255,19 +255,19 @@ public:
 	}
 
 	void printCostMatrix() const {
-		std::cout << "Matriz de custo" << std::endl;
+		writeln("Matriz de custo:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\n");
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 			for (unsigned int j = 0; j < AMOUNT_VERTEXES; j++) {
 				writeValue(getWeigthFrom(i, j));
-				write("|");
+				write('|');
 			}
 			write("\n");
 		}
@@ -285,7 +285,7 @@ public:
 					write("\n");
 			}
 		}
-		writeln("}", "Conjunto de arestas:");
+		writeln('}', "Conjunto de arestas:");
 		write("E={");
 		i = 0;
 		for (auto e = edges.cbegin(); e != edges.cend(); e++) {
@@ -295,23 +295,23 @@ public:
 			if (++i % 12 == 0)
 				write("\n");
 		}
-		writeln("}", "Graus dos vertices:");
+		writeln('}', "Graus dos vertices:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		if (IS_DIGRAPH) {
 			write("\nin  |");
 			for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 				writeValue(getInDegreeFrom(u));
-				write("|");
+				write('|');
 			}
 		}
 		write("\nout |");
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeValue(getOutDegreeFrom(u));
-			write("|");
+			write('|');
 		}
 		write("\n");
 	}

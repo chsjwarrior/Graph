@@ -1,6 +1,6 @@
 #pragma once
-#include "Graph.h"
 #include <queue>
+#include "Graph.h"
 
 using namespace Scanner;
 
@@ -22,17 +22,17 @@ private:
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\ndi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(discovery[i]);
-			write("|");
+			write('|');
 		}
 		write("\npi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(pi[i]);
-			write("|");
+			write('|');
 		}
 		write("\n");
 	}
@@ -69,6 +69,7 @@ public:
 		while (!queue.empty()) {
 			u = queue.front();
 			queue.pop();
+
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 				if (visited[*v] == false) {

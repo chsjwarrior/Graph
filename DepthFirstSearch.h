@@ -33,17 +33,17 @@ private:
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\ndi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(discovery[i]);
-			write("|");
+			write('|');
 		}
 		write("\nci  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(close[i]);
-			write("|");
+			write('|');
 		}
 		write("\n");
 	}

@@ -30,7 +30,7 @@ private:
 		}
 		writeVertex(u);
 		writeVertex(v);
-		write("|");
+		write('|');
 		print();
 	}
 
@@ -64,7 +64,7 @@ public:
 
 	void connectedComponents() {
 		writeln("Conjuntos disjuntos:");
-		write("\t", "|");
+		write("\t", '|');
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			makeSet(u);
 			writeVertex(u);

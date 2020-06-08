@@ -7,9 +7,9 @@ namespace Scanner {
 		if (vertex > -1) {
 			std::cout << 'V';
 			if (vertex < 99)
-				std::cout << "0";
+				std::cout << '0';
 			if (vertex < 9)
-				std::cout << "0";
+				std::cout << '0';
 			std::cout << vertex + 1;
 		} else
 			std::cout << "nil ";
@@ -17,11 +17,11 @@ namespace Scanner {
 
 	void writeEdge(const int& edge) {
 		if (edge > -1) {
-			std::cout << "E";
+			std::cout << 'E';
 			if (edge < 99)
-				std::cout << "0";
+				std::cout << '0';
 			if (edge < 9)
-				std::cout << "0";
+				std::cout << '0';
 			std::cout << edge + 1;
 		} else
 			std::cout << "nil ";
@@ -30,12 +30,12 @@ namespace Scanner {
 	void writeValue(const int& value) {
 		if (value < 1000) {
 			if (value < 100)
-				std::cout << " ";
+				std::cout << ' ';
 			std::cout << value;
 			if (value < 10)
-				std::cout << " ";
+				std::cout << ' ';
 			if (value >= 0)
-				std::cout << " ";
+				std::cout << ' ';
 		} else
 			std::cout << "inf ";
 	}

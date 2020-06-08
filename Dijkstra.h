@@ -40,17 +40,17 @@ private:
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\ndi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(distance[i]);
-			write("|");
+			write('|');
 		}
 		write("\npi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(pi[i]);
-			write("|");
+			write('|');
 		}
 		write("\n");
 	}

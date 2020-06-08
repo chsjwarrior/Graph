@@ -45,12 +45,12 @@ private:
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
-		std::cout << std::endl << "ci  |";
+		write("\nci  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(color[i]);
-			write("|");
+			write('|');
 		}
 		write("\n");
 	}
@@ -67,8 +67,7 @@ public:
 	}
 
 	void sequentialColoring() const {
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			color[i] = 0;
+		memset(color, false, sizeof(color));
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (color[u] == 0)
@@ -78,8 +77,7 @@ public:
 	}
 
 	void heuristicColoring() {
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			color[i] = 0;
+		memset(color, false, sizeof(color));
 
 		unsigned int u = getHigherDegreeNotColored();
 		while (u != graph.AMOUNT_VERTEXES) {

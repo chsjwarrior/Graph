@@ -1,6 +1,6 @@
 #pragma once
-#include "Graph.h"
 #include <stack>
+#include "Graph.h"
 
 /*
 O Algoritmo Kosaraju detecta componentes fortemente conectadas.
@@ -14,6 +14,7 @@ private:
 
 	void fillOrder(const unsigned int& u) {
 		visited[u] = true;
+
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v])
@@ -33,11 +34,11 @@ private:
 			graph.insertEdge(e->V, e->U, e->WEIGHT);
 	}
 
-	void dfs(int u) {
-		visited[u] = true;
-
+	void dfs(int u) {		
 		writeVertex(u);
 		write(" ");
+
+		visited[u] = true;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
@@ -56,8 +57,7 @@ public:
 	}
 
 	void kosaraju() {
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			visited[u] = false;
+		memset(visited, false, sizeof(visited));
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (!visited[u])
@@ -65,8 +65,7 @@ public:
 
 		graphTranspose();
 
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			visited[u] = false;
+		memset(visited, false, sizeof(visited));
 
 		writeln("Kosaraju:");
 		unsigned int c = 1;

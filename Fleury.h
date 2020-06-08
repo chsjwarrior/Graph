@@ -49,14 +49,12 @@ private:
 		if (graph.getOutDegreeFrom(u) == 1)
 			return false;
 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			visited[i] = false;
+		memset(visited, false, sizeof(visited));
 		unsigned int bridgeCount = dfsVisit(v);
 
 		graph.removeEdge(u, v);
 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			visited[i] = false;
+		memset(visited, false, sizeof(visited));
 		unsigned int nonBridge = dfsVisit(v);
 
 		graph.insertEdge(u, v);

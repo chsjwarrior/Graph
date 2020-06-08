@@ -20,30 +20,30 @@ class FloydWarshall {
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\n");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
 				writeValue(costMatrix[i][j]);
-				write("|");
+				write('|');
 			}
 			write("\n");
 		}
 		write("\nVi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 		}
 		write("\n");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
-			write("|");
+			write('|');
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
 				writeVertex(pi[i][j]);
-				write("|");
+				write('|');
 			}
 			write("\n");
 		}
