@@ -81,7 +81,7 @@ public:
 				if (u != v && costMatrix[u][v] < MAX_WEIGHT)
 					pi[u][v] = u;
 				else
-					pi[u][v] = -1;
+					pi[u][v] = NIL;
 			}
 
 		for (unsigned int k = 0; k < graph.AMOUNT_VERTEXES; k++)

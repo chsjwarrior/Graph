@@ -4,6 +4,7 @@
 using namespace Scanner;
 
 /*
+O algoritmo de DisjointAssebblies serve para avaliar a conexidade em grafos não dirigidos.
 funcionando
 */
 

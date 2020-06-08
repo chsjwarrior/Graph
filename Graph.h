@@ -2,6 +2,10 @@
 #include "Scanner.h"
 #include <set>
 
+#ifndef NIL
+#define NIL -1
+#endif //!NIL
+
 #ifndef MAX_WEIGHT
 #define MAX_WEIGHT 999999
 #endif // !MAX_WEIGHT
@@ -13,8 +17,13 @@ struct Edge {
 	const int WEIGHT;
 
 	Edge() = delete;
-	Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {}
-	~Edge() {}
+	Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
+		write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
+	}
+	Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
+		write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
+	}
+	~Edge() { write("destructor {", U, ",", V, "=", WEIGHT, "}\n"); }
 
 	void print() const {
 		write("{");
@@ -24,15 +33,30 @@ struct Edge {
 		write("}");
 	}
 
-	const bool operator<(const Edge& rhs) const {
-		return U < rhs.U || U == rhs.U && V < rhs.V || V == rhs.V && WEIGHT < rhs.WEIGHT;
+	const bool operator<(const Edge& other) const {
+		if (U < other.U) return true;
+		if (other.U < U) return false;
+		if (V < other.V) return true;
+		if (other.V < V) return false;
+		if (WEIGHT < other.WEIGHT) return true;
+		if (other.WEIGHT < WEIGHT) return false;
 	}
 
-	const Edge& operator=(const Edge& rhs) const {
-		if (this != &rhs) {
-			(unsigned int&)U = rhs.U;
-			(unsigned int&)V = rhs.V;
-			(int&)WEIGHT = rhs.WEIGHT;
+	const bool operator>(const Edge& other) const {
+		if (U > other.U) return true;
+		if (other.U > U) return false;
+		if (V > other.V) return true;
+		if (other.V > V) return false;
+		if (WEIGHT > other.WEIGHT) return true;
+		if (other.WEIGHT > WEIGHT) return false;
+	}
+
+	const Edge& operator=(const Edge& other) const {
+		write("copy Assigment {", U, ",", V, "=", WEIGHT, "}\n");
+		if (this != &other) {
+			(unsigned int&)U = other.U;
+			(unsigned int&)V = other.V;
+			(int&)WEIGHT = other.WEIGHT;
 		}
 		return *this;
 	}
@@ -54,12 +78,22 @@ public:
 	Graph() = delete;
 	Graph(const unsigned int& amountVertices, const bool& isDigraph) :
 		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {}
-	Graph(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES), IS_DIGRAPH(graph.IS_DIGRAPH) {
-		edges = graph.getEdges();
+	Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DIGRAPH(other.IS_DIGRAPH) {
+		edges = other.getEdges();
 	}
 	~Graph() {
 		adjacences.clear();
 		edges.clear();
+	}
+
+	const Graph& operator=(const Graph& other) {
+		if (this != &other) {
+			(unsigned int&)AMOUNT_VERTEXES = other.AMOUNT_VERTEXES;
+			(bool&)IS_DIGRAPH = other.IS_DIGRAPH;
+			edges.clear();
+			edges = other.edges;
+		}
+		return *this;
 	}
 
 	const bool isValidVertex(const unsigned int& v) const {
@@ -72,7 +106,7 @@ public:
 
 	void removeEdge(const unsigned int& u, const unsigned int& v) {
 		auto edge = edges.cend();
-		for (auto e = edges.cbegin(); e != edges.cend(); e++)
+		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
 			if (e->U == u && e->V == v || !IS_DIGRAPH && (e->U == v && e->V == u))
 				edge = e;
 		if (edge != edges.cend())
@@ -81,7 +115,7 @@ public:
 
 	const int getWeigthFrom(const unsigned int& u, const unsigned int& v) const {
 		auto edge = edges.cend();
-		for (auto e = edges.cbegin(); e != edges.cend(); e++)
+		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
 			if (e->U == u && e->V == v || !IS_DIGRAPH && (e->U == v && e->V == u))
 				edge = e;
 
@@ -103,21 +137,30 @@ public:
 		return degree;
 	}
 
+	//esse método tambem é usuado para grafos não dirigidos
 	const unsigned int getOutDegreeFrom(const unsigned int& u) const {
 		unsigned int degree = 0;
+		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
+			if (e->U == u)
+				degree++;
+			else if (!IS_DIGRAPH && e->V == u)
+				degree++;
+
+		/*
 		getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
 			degree++;
 			if (!IS_DIGRAPH && u == *v)
 				degree++;
 		}
+		*/
 		return degree;
 	}
 
 	std::multiset<unsigned int>& getAdjacencesFrom(const unsigned int& u) const {
 		if (!adjacences.empty())
 			adjacences.clear();
-		for (auto e = edges.cbegin(); e != edges.cend(); e++)
+		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
 			if (e->U == u)
 				adjacences.insert(e->V);
 			else if (!IS_DIGRAPH && e->V == u)
@@ -258,10 +301,12 @@ public:
 			writeVertex(i);
 			write("|");
 		}
-		write("\nin  |");
-		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-			writeValue(getInDegreeFrom(u));
-			write("|");
+		if (IS_DIGRAPH) {
+			write("\nin  |");
+			for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
+				writeValue(getInDegreeFrom(u));
+				write("|");
+			}
 		}
 		write("\nout |");
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {

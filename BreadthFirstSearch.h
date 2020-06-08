@@ -57,7 +57,7 @@ public:
 	void bfs(const unsigned int& origin) const {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = MAX_WEIGHT;
-			pi[u] = -1;
+			pi[u] = NIL;
 			visited[u] = false;
 		}
 

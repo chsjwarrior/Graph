@@ -58,7 +58,7 @@ public:
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = MAX_WEIGHT;
-			pi[u] = -1;
+			pi[u] = NIL;
 		}
 		distance[origin] = 0;
 
@@ -78,6 +78,7 @@ public:
 				return;
 			}
 
+		edges.clear();
 		print();
 	}
 };

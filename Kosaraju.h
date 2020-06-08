@@ -8,39 +8,41 @@ O Algoritmo Kosaraju detecta componentes fortemente conectadas.
 
 class Kosaraju {
 private:
-	Graph& graph;
+	Graph graph;
 	bool* visited;
+	std::stack<int> stack;
 
-	void fillOrder(const unsigned int& u, std::stack<int>& stack) {
+	void fillOrder(const unsigned int& u) {
 		visited[u] = true;
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v])
-				fillOrder(*v, stack);
+				fillOrder(*v);
 
 		stack.push(u);
 	}
 
-	Graph graphTranspose() {
-		Graph g(graph.AMOUNT_VERTEXES, graph.IS_DIGRAPH);
-
+	void graphTranspose() {
 		std::multiset<Edge> edges = graph.getEdges();
-		for (auto e = edges.cbegin(); !edges.empty(); e = edges.erase(e))
-			g.insertEdge(e->V, e->U, e->WEIGHT);
 
-		return g;
+		const int amountVertexes = graph.AMOUNT_VERTEXES;
+		const bool isDigraph = graph.IS_DIGRAPH;
+		graph = Graph(amountVertexes, isDigraph);
+
+		for (auto e = edges.cbegin(); !edges.empty(); e = edges.erase(e))
+			graph.insertEdge(e->V, e->U, e->WEIGHT);
 	}
 
-	void dfs(int u, Graph& transpose) {
+	void dfs(int u) {
 		visited[u] = true;
 
 		writeVertex(u);
 		write(" ");
 
-		std::multiset<unsigned int> adjacences = transpose.getAdjacencesFrom(u);
+		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v])
-				dfs(*v, transpose);
+				dfs(*v);
 	}
 
 public:
@@ -57,13 +59,11 @@ public:
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			visited[u] = false;
 
-		std::stack<int> stack;
-
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (!visited[u])
-				fillOrder(u, stack);
+				fillOrder(u);
 
-		Graph transpose = graphTranspose();
+		graphTranspose();
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			visited[u] = false;
@@ -76,7 +76,7 @@ public:
 
 			if (!visited[u]) {
 				write("Conjunto", c++, ": {");
-				dfs(u, transpose);
+				dfs(u);
 				write("}\n");
 			}
 		}

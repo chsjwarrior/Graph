@@ -6,7 +6,7 @@ using namespace Scanner;
 /*
 O algoritmo da ligação mais economica encontra um ciclo hamiltoniano no grafo passando pelas aresta com menor peso.
 Essa implementação do  algoritmo não funciona para grafos semi-hamiltoniano.
-testadoe e funcionando com o seguinte grafo:
+testado e funcionando com o seguinte grafo:
 5 10 0
 1 2 185
 1 3 119
@@ -125,7 +125,8 @@ public:
 
 			if (hasZeroDegree) //se todos vertices iguais a 2;
 				writeln("O grafo e hamiltoniano.");
-		} else {
+		}
+		else {
 			writeln("O grafo nao e hamiltoniano.");
 		}
 	}

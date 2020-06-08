@@ -13,6 +13,7 @@
 #include "Goodman.h"
 #include "DisjointAssemblies.h"
 #include "Kosaraju.h"
+#include "Tarjan.h"
 #include "Kruskal.h"
 #include "Prim.h"
 #include "Coloring.h"
@@ -161,6 +162,11 @@ void kosaraju() {
 	kosaraju.kosaraju();
 }
 
+void tarjan() {
+	Tarjan tarjan(*graph);
+	tarjan.tarjan();
+}
+
 void kruskal() {
 	Kruskal kruskal(*graph);
 	kruskal.kruskal();
@@ -212,10 +218,11 @@ int main() {
 				"Dgt 19 para Goodman",
 				"Dgt 20 para Conjuntos disjuntos",
 				"Dgt 21 para Kosaraju",
-				"Dgt 22 para Kruskal",
-				"Dgt 23 para Prim",
-				"Dgt 24 para Coloracao sequencial",
-				"Dgt 25 para Coloracao heuristica");
+				"Dgt 22 para Tarjan",
+				"Dgt 23 para Kruskal",
+				"Dgt 24 para Prim",
+				"Dgt 25 para Coloracao sequencial",
+				"Dgt 26 para Coloracao heuristica");
 		value = read("--------------------------------------------");
 
 		system("CLS");
@@ -289,15 +296,18 @@ int main() {
 				kosaraju();
 				break;
 			case 22:
-				kruskal();
+				tarjan();
 				break;
 			case 23:
-				prim();
+				kruskal();
 				break;
 			case 24:
-				sequentialColoring();
+				prim();
 				break;
 			case 25:
+				sequentialColoring();
+				break;
+			case 26:
 				heuristicColoring();
 				break;
 			default:

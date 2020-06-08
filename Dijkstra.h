@@ -75,7 +75,7 @@ public:
 	void dijkstra(const unsigned int& origin) const {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = MAX_WEIGHT;
-			pi[u] = -1;
+			pi[u] = NIL;
 			visited[u] = false;
 		}
 		distance[origin] = 0;

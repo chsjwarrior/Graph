@@ -25,15 +25,14 @@ private:
 		unsigned int degree;
 		unsigned int amountOddVertex = 0, firstOddVertex = graph.AMOUNT_VERTEXES;
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			degree = graph.getOutDegreeFrom(u);//para digrafo usa-se grau de saída
+			degree = graph.getOutDegreeFrom(u);//para digrafo tambem usa-se grau de saída
 			if (degree % 2 != 0) {
 				amountOddVertex++;
 				if (firstOddVertex == graph.AMOUNT_VERTEXES)
 					firstOddVertex = u;
 			}
 		}
-		std::pair<unsigned int, unsigned int> pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTEXES ? 0 : firstOddVertex);
-		return pair;
+		return std::make_pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTEXES ? 0 : firstOddVertex);
 	}
 
 	const unsigned int dfsVisit(const unsigned int& u) const {
@@ -97,7 +96,8 @@ public:
 		if (pair.first > 2) {
 			write(pair.first);
 			writeln(" vertices tem grau impar", "O Grafo nao e euleriano");
-		} else {
+		}
+		else {
 			if (pair.first == 0)
 				writeln("Todos os vertices tem grau par", "e possivel encontrar um caminho euleriano.");
 			else if (pair.first == 2)

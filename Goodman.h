@@ -4,6 +4,17 @@
 
 /*
 O algoritmo de Goodman serve para avaliar a conexidade em grafos não dirigidos.
+
+falhou no seguinte grafo:
+8 8 0
+1 3 3
+2 3 2
+3 4 4
+3 5 5
+4 7 3
+5 7 5
+5 6 1
+5 8 7
 */
 
 class Goodman {
@@ -19,7 +30,6 @@ private:
 	}
 
 	void print() const {
-		writeln("Goodman:");
 		unsigned int i = 0;
 		for (auto set = sets.cbegin(); set != sets.cend(); set++) {
 			write("Conjunto ", ++i, ":");
@@ -44,6 +54,7 @@ public:
 	}
 
 	void goodman() {
+		writeln("Goodman:");
 		if (graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser nao dirigido para o algoritmo de Goodman funcionar.");
 			return;
@@ -66,12 +77,15 @@ public:
 					continue;
 				sets.back().push_back(v);
 				print();
+				graph.printAdjacenceList();
 				for (auto vv = adjacences.cbegin(); !adjacences.empty(); vv = adjacences.erase(vv)) {
 					graph.insertEdge(v, *vv, graph.getWeigthFrom(u, *vv));
 					graph.removeEdge(u, *vv);
 				}
+				graph.printAdjacenceList();
 				u = v;
 				vertices.erase(u);
+				adjacences.clear();
 				adjacences = graph.getAdjacencesFrom(u);
 			}
 		}

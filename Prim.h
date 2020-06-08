@@ -68,7 +68,7 @@ public:
 	void prim(const unsigned int& origin)const {
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			key[i] = MAX_WEIGHT;
-			pi[i] = -1;
+			pi[i] = NIL;
 			visited[i] = false;
 		}
 		key[origin] = 0;
