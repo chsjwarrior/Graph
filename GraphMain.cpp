@@ -6,6 +6,7 @@
 #include "Dijkstra.h"
 #include "FloydWarshall.h"
 #include "BellmanFord.h"
+#include "FordFulkerson.h"
 #include "Fleury.h"
 #include "RobertFlores.h"
 #include "CloserNeighbor.h"
@@ -88,28 +89,28 @@ void createGraph() {
 	} while (v != 0 && u != 0);
 }
 
-unsigned int getOrigin() {
+unsigned int getOrigin(std::string msg) {
 	unsigned int origin;
 	do {
 		graph->printVerticesToSelect();
-		origin = read("Dgt o vertice de origem");
+		origin = read(msg);
 	} while (origin > graph->AMOUNT_VERTEXES || origin < 1);
 	return --origin;
 }
 
 void bfs() {
 	BreadthFirstSearch bfs(*graph);
-	bfs.bfs(getOrigin());
+	bfs.bfs(getOrigin("Dgt o vertice de origem"));
 }
 
 void dfs() {
 	DepthFirstSearch dfs(*graph);
-	dfs.dfs(getOrigin());
+	dfs.dfs(getOrigin("Dgt o vertice de origem"));
 }
 
 void dijkstra() {
 	Dijkstra dijkstra(*graph);
-	dijkstra.dijkstra(getOrigin());
+	dijkstra.dijkstra(getOrigin("Dgt o vertice de origem"));
 }
 
 void floydWarshall() {
@@ -119,7 +120,12 @@ void floydWarshall() {
 
 void bellmanFord() {
 	BellmanFord bellmanFord(*graph);
-	bellmanFord.bellmanFord(getOrigin());
+	bellmanFord.bellmanFord(getOrigin("Dgt o vertice de origem"));
+}
+
+void fordFulkerson() {
+	FordFulkerson fordFulkerson(*graph);
+	fordFulkerson.fordFulkerson(getOrigin("Dgt o vertice de origem"), getOrigin("Dgt o vertice de destino"));
 }
 
 void fleury() {
@@ -129,12 +135,12 @@ void fleury() {
 
 void robertFlores() {
 	RobertFlores robertFlores(*graph);
-	robertFlores.robertFlores(getOrigin());
+	robertFlores.robertFlores(getOrigin("Dgt o vertice de origem"));
 }
 
 void closerNeighbor() {
 	CloserNeighbor closerNeighbor(*graph);
-	closerNeighbor.closerNeighbor(getOrigin());
+	closerNeighbor.closerNeighbor(getOrigin("Dgt o vertice de origem"));
 }
 
 void closerNeighborRepetitive() {
@@ -174,7 +180,7 @@ void kruskal() {
 
 void prim() {
 	Prim prim(*graph);
-	prim.prim(getOrigin());
+	prim.prim(getOrigin("Dgt o vertice de origem"));
 }
 
 void sequentialColoring() {
@@ -210,19 +216,20 @@ int main() {
 				"Dgt 11 para Dijkstra",
 				"Dgt 12 para Floyd Warshall",
 				"Dgt 13 para Bellman-Ford",
-				"Dgt 14 para Fleury",
-				"Dgt 15 para Robert Flores",
-				"Dgt 16 para Vizinho mais proximo",
-				"Dgt 17 para Vizinho mais proximo repetitivo",
-				"Dgt 18 para Ligacao mais economica",
-				"Dgt 19 para Goodman",
-				"Dgt 20 para Conjuntos disjuntos",
-				"Dgt 21 para Kosaraju",
-				"Dgt 22 para Tarjan",
-				"Dgt 23 para Kruskal",
-				"Dgt 24 para Prim",
-				"Dgt 25 para Coloracao sequencial",
-				"Dgt 26 para Coloracao heuristica");
+				"Dgt 14 para Ford-Fulkerson",
+				"Dgt 15 para Fleury",
+				"Dgt 16 para Robert Flores",
+				"Dgt 17 para Vizinho mais proximo",
+				"Dgt 18 para Vizinho mais proximo repetitivo",
+				"Dgt 19 para Ligacao mais economica",
+				"Dgt 20 para Goodman",
+				"Dgt 21 para Conjuntos disjuntos",
+				"Dgt 22 para Kosaraju",
+				"Dgt 23 para Tarjan",
+				"Dgt 24 para Kruskal",
+				"Dgt 25 para Prim",
+				"Dgt 26 para Coloracao sequencial",
+				"Dgt 27 para Coloracao heuristica");
 		value = read("--------------------------------------------");
 
 		system("CLS");
@@ -272,42 +279,46 @@ int main() {
 				bellmanFord();
 				break;
 			case 14:
-				fleury();
+				fordFulkerson();
 				break;
 			case 15:
-				robertFlores();
+				fleury();
+
 				break;
 			case 16:
-				closerNeighbor();
+				robertFlores();
 				break;
 			case 17:
-				closerNeighborRepetitive();
+				closerNeighbor();
 				break;
 			case 18:
-				cheaperConnection();
+				closerNeighborRepetitive();
 				break;
 			case 19:
-				goodman();
+				cheaperConnection();
 				break;
 			case 20:
-				disjointAssemblies();
+				goodman();
 				break;
 			case 21:
-				kosaraju();
+				disjointAssemblies();
 				break;
 			case 22:
-				tarjan();
+				kosaraju();
 				break;
 			case 23:
-				kruskal();
+				tarjan();
 				break;
 			case 24:
-				prim();
+				kruskal();
 				break;
 			case 25:
-				sequentialColoring();
+				prim();
 				break;
 			case 26:
+				sequentialColoring();
+				break;
+			case 27:
 				heuristicColoring();
 				break;
 			default:

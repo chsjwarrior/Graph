@@ -152,6 +152,7 @@
     <ClInclude Include="DisjointAssemblies.h" />
     <ClInclude Include="Fleury.h" />
     <ClInclude Include="FloydWarshall.h" />
+    <ClInclude Include="FordFulkerson.h" />
     <ClInclude Include="Goodman.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Kosaraju.h" />

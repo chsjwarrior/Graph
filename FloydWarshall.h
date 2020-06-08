@@ -16,7 +16,7 @@ class FloydWarshall {
 	int** pi;
 
 	void print() const {
-		writeln("Floyd & Warshall:");
+		writeln("Floyd-Warshall:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
