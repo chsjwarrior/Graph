@@ -38,6 +38,7 @@ private:
 	const unsigned int dfsVisit(const unsigned int& u) const {
 		visited[u] = true;
 		unsigned int count = 1;
+
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v])

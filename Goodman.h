@@ -53,13 +53,13 @@ public:
 		sets.clear();
 	}
 
-	void goodman() {
-		writeln("Goodman:");
+	void goodman() {		
 		if (graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser nao dirigido para o algoritmo de Goodman funcionar.");
 			return;
 		}
 
+		writeln("Goodman:");
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			vertices.insert(u);
 

@@ -51,6 +51,7 @@ public:
 		discovery = new int[graph.AMOUNT_VERTEXES];
 		low = new int[graph.AMOUNT_VERTEXES];
 		onStack = new bool[graph.AMOUNT_VERTEXES];
+		time = NULL;
 	}
 
 	~Tarjan() {
@@ -60,6 +61,7 @@ public:
 		discovery = nullptr;
 		low = nullptr;
 		onStack = nullptr;
+		time = NULL;
 	}
 
 	void tarjan() {

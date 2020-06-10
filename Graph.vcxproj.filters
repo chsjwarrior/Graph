@@ -23,9 +23,6 @@
     <ClInclude Include="BreadthFirstSearch.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="CheaperConnection.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
     <ClInclude Include="CloserNeighbor.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
@@ -75,6 +72,9 @@
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="FordFulkerson.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="CheapestLink.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

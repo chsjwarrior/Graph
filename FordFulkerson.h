@@ -6,9 +6,9 @@ private:
 	const Graph& graph;
 	int** costMatrix;
 	unsigned int* pi;
+	bool* visited;
 
-	const bool bfs(const unsigned int& u, const unsigned int& t) {
-		bool* visited = new bool[graph.AMOUNT_VERTEXES];
+	const bool bfs(unsigned int u, const unsigned int& k) {
 		memset(visited, false, sizeof(visited));
 
 		std::queue<unsigned int> queue;
@@ -16,7 +16,7 @@ private:
 		visited[u] = true;
 		pi[u] = NIL;
 		while (!queue.empty()) {
-			int v = queue.front();
+			u = queue.front();
 			queue.pop();
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
@@ -28,16 +28,20 @@ private:
 				}
 			}
 		}
-		return (visited[t] == true);
+
+		return visited[k];
 	}
 
 public:
 	FordFulkerson() = delete;
 	FordFulkerson(const Graph& graph) : graph(graph) {
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
+
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
+
 		pi = new unsigned int[graph.AMOUNT_VERTEXES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 	~FordFulkerson() {
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
@@ -48,15 +52,17 @@ public:
 		costMatrix = nullptr;
 		delete[] pi;
 		pi = nullptr;
+		delete[] visited;
+		visited = nullptr;
 	}
 
 	void fordFulkerson(const unsigned int& origin, const unsigned int& destiny) {
-		writeln("Ford-Fulkerson:");
 		if (!graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
 			return;
 		}
 
+		writeln("Ford-Fulkerson:");
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			pi[u] = NIL;
 			for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; v++)

@@ -11,7 +11,7 @@
 #include "Fleury.h"
 #include "RobertFlores.h"
 #include "CloserNeighbor.h"
-#include "CheaperConnection.h"
+#include "CheapestLink.h"
 #include "Goodman.h"
 #include "DisjointAssemblies.h"
 #include "Kosaraju.h"
@@ -149,9 +149,9 @@ void closerNeighborRepetitive() {
 	closerNeighbor.closerNeighborRepetitive();
 }
 
-void cheaperConnection() {
-	CheaperConnection cheaperConnection(*graph);
-	cheaperConnection.cheaperConnection();
+void cheapestLink() {
+	CheapestLink cheapestLink(*graph);
+	cheapestLink.cheaperConnection();
 }
 
 void goodman() {
@@ -296,7 +296,7 @@ int main() {
 				closerNeighborRepetitive();
 				break;
 			case 19:
-				cheaperConnection();
+				cheapestLink();
 				break;
 			case 20:
 				goodman();

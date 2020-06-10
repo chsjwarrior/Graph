@@ -52,10 +52,7 @@ public:
 		memset(visited, false, sizeof(visited));
 		closerNeighborR(origin);
 
-		bool allVisited = true;
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES && allVisited; i++)
-			allVisited = visited[i];
-		if (allVisited) {
+		if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](bool x) { return x == true; })) {
 			write("->");
 			writeVertex(origin);
 		}
@@ -69,10 +66,7 @@ public:
 			memset(visited, false, sizeof(visited));
 			closerNeighborR(u);
 
-			bool allVisited = true;
-			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES && allVisited; i++)
-				allVisited = visited[i];
-			if (allVisited) {
+			if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](bool x) { return x == true; })) {
 				write("->");
 				writeVertex(u);
 			}

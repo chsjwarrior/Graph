@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClInclude Include="BellmanFord.h" />
     <ClInclude Include="BreadthFirstSearch.h" />
-    <ClInclude Include="CheaperConnection.h" />
+    <ClInclude Include="CheapestLink.h" />
     <ClInclude Include="CloserNeighbor.h" />
     <ClInclude Include="Coloring.h" />
     <ClInclude Include="DepthFirstSearch.h" />

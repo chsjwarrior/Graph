@@ -18,12 +18,14 @@ struct Edge {
 
 	Edge() = delete;
 	Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
-		write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
+		//write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
 	Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
-		write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
+		//write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
-	~Edge() { write("destructor {", U, ",", V, "=", WEIGHT, "}\n"); }
+	~Edge() {
+		//write("destructor {", U, ",", V, "=", WEIGHT, "}\n");
+	}
 
 	void print() const {
 		write("{");
@@ -51,8 +53,8 @@ struct Edge {
 		if (other.WEIGHT > WEIGHT) return false;
 	}
 
-	const Edge& operator=(const Edge& other) const {
-		write("copy Assigment {", U, ",", V, "=", WEIGHT, "}\n");
+	const Edge& operator=(const Edge& other) const {		
+		//write("copy Assigment {", U, ",", V, "=", WEIGHT, "} & {", other.U, ",", other.V, "=", other.WEIGHT, "}\n");
 		if (this != &other) {
 			(unsigned int&)U = other.U;
 			(unsigned int&)V = other.V;
@@ -187,9 +189,9 @@ public:
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			write('|');
+			getAdjacencesFrom(u);
 			for (unsigned int v = 0, count = 0; v < AMOUNT_VERTEXES; v++, count = 0) {
-				getAdjacencesFrom(u);
-				for (auto vv = adjacences.cbegin(); !adjacences.empty(); vv = adjacences.erase(vv))
+				for (auto vv = adjacences.cbegin(); vv != adjacences.cend(); ++vv)
 					if (*vv == v)
 						count++;
 				writeValue(count);
@@ -213,15 +215,9 @@ public:
 			write('|');
 			for (auto e = edges.cbegin(); e != edges.cend(); e++) {
 				value = 0;
-				if (IS_DIGRAPH) {
-					if (e->U == u)
-						value = -1;
-					else if (e->V == u)
-						value = 1;
-				}
-				else if (e->U == u)
-					value = 1;
-				else if (e->V == u)
+				if (IS_DIGRAPH && e->U == u)
+					value = -1;
+				else if (e->U == u || e->V == u)
 					value = 1;
 				writeValue(value);
 				write('|');
@@ -288,7 +284,7 @@ public:
 		writeln('}', "Conjunto de arestas:");
 		write("E={");
 		i = 0;
-		for (auto e = edges.cbegin(); e != edges.cend(); e++) {
+		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
 			e->print();
 			if ((e) != --edges.cend())
 				write(',');
