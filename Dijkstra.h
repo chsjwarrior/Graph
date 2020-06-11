@@ -13,23 +13,22 @@ private:
 	const Graph& graph;
 	int* distance;
 	int* predecessor;
+	bool* visited;
 
-	const unsigned int extractMin(std::list<unsigned int>& queue) const {
+	const unsigned int extractMin() const {
 		int lowerDistance = MAX_WEIGHT;
 		unsigned int lowerVertex = 0;
-
-		for (auto u = queue.cbegin(); u != queue.cend(); u++)
-			if (distance[*u] < lowerDistance) {//distance[u] <= lowerValue, verificar
-				lowerDistance = distance[*u];
-				lowerVertex = *u;
+		for (unsigned int u; u < graph.AMOUNT_VERTEXES; u++)
+			if (!visited[u] && distance[u] < lowerDistance) {//distance[u] <= lowerValue, verificar
+				lowerDistance = distance[u];
+				lowerVertex = u;
 			}
-		queue.remove(lowerVertex);
 		return lowerVertex;
 	}
 
-	inline void relax(const unsigned int& u, const unsigned int& v) const {
-		if (distance[v] > distance[u] + graph.getWeigthFrom(u, v)) {
-			distance[v] = distance[u] + graph.getWeigthFrom(u, v);
+	inline void relax(const unsigned int& u, const unsigned int& v, const int& w) const {
+		if (distance[v] > distance[u] + w) {
+			distance[v] = distance[u] + w;
 			predecessor[v] = u;
 		}
 	}
@@ -59,31 +58,35 @@ public:
 	Dijkstra(const Graph& graph) : graph(graph) {
 		distance = new int[graph.AMOUNT_VERTEXES];
 		predecessor = new int[graph.AMOUNT_VERTEXES];
+		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~Dijkstra() {
 		delete[] distance;
 		delete[] predecessor;
+		delete[] visited;
 		distance = nullptr;
 		predecessor = nullptr;
+		visited = nullptr;
 	}
 
 	void dijkstra(const unsigned int& source) const {
-		std::list<unsigned int> queue;
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = MAX_WEIGHT;
 			predecessor[u] = NIL;
-			queue.push_back(u);
+			visited[u] = false;
 		}
 		distance[source] = 0;
+		unsigned int queue = 0;
 
-		while (!queue.empty()) {
-			unsigned int u = extractMin(queue);
+		while (queue < graph.AMOUNT_VERTEXES) {
+			unsigned int u = extractMin();
+			queue++;
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (graph.getWeigthFrom(u, *v) > 0)//se o peso é negativo deveria anular o programa.
-					relax(u, *v);
+				if (!visited[u])//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
+					relax(u, *v, graph.getWeigthFrom(u, *v));
 		}
 		print();
 	}

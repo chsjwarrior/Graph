@@ -50,12 +50,12 @@ public:
 	}
 
 	void kruskal() {
-		writeln("Kruskal:");
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			subSets[u].first = u;
 			subSets[u].second = 0;
 		}
 
+		writeln("Kruskal:");
 		while (!edges.empty()) {
 			Edge e = edges.top();
 			edges.pop();

@@ -62,12 +62,12 @@ public:
 		index = NULL;
 	}
 
-	void robertFlores(const unsigned int& origin) {
+	void robertFlores(const unsigned int& source) {
 		memset(visited, false, sizeof(visited));
 		index = 0;
 
 		write("Robert-Flores:");
-		robertFloresR(origin);
+		robertFloresR(source);
 		write("\n");
 	}
 };

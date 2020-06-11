@@ -43,7 +43,6 @@ Tarjan's strongly connected components algorithm
 Topological sorting
 */
 
-
 using namespace Scanner;
 
 Graph* graph;
@@ -211,7 +210,6 @@ void coloring() {
 	Coloring coloring(*graph);
 	coloring.coloring(isSequential);
 }
-
 
 int main() {
 	graph = nullptr;

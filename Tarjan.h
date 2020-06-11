@@ -11,7 +11,7 @@ private:
 	int* low;
 	bool* onStack;
 	int time;
-	std::stack<int> stack;
+	std::stack<unsigned int> stack;
 
 	void strongConnected(const unsigned int& u) {
 		discovery[u] = low[u] = ++time;

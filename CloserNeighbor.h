@@ -16,19 +16,18 @@ private:
 		writeVertex(u);
 
 		bool found = false;
-		unsigned int v = 0;
-		int weight = MAX_WEIGHT;
+		int lowerWeight = MAX_WEIGHT;
+		unsigned int lowerVertex = 0;
 		std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
-		for (auto vv = adjacences.cbegin(); !adjacences.empty(); vv = adjacences.erase(vv))
-			if (!visited[*vv])
-				if (graph.getWeigthFrom(u, *vv) < weight) {
-					found = true;
-					v = *vv;
-					weight = graph.getWeigthFrom(u, *vv);
-				}
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+			if (!visited[*v] && graph.getWeigthFrom(u, *v) < lowerWeight) {
+				found = true;
+				lowerVertex = *v;
+				lowerWeight = graph.getWeigthFrom(u, *v);
+			}
 		if (found) {
 			write("->");
-			closerNeighborR(v);
+			closerNeighborR(lowerVertex);
 		}
 	}
 
@@ -43,15 +42,15 @@ public:
 		visited = nullptr;
 	}
 
-	void closerNeighbor(const unsigned int origin) const {
+	void closerNeighbor(const unsigned int source) const {
 		writeln("Vizinho mais proximo:");
 
 		memset(visited, false, sizeof(visited));
-		closerNeighborR(origin);
+		closerNeighborR(source);
 
 		if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](bool x) { return x == true; })) {
 			write("->");
-			writeVertex(origin);
+			writeVertex(source);
 		}
 		write("\n");
 	}

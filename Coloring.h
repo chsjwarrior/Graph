@@ -8,6 +8,7 @@ private:
 	void setValidColor(const unsigned int& u) const {
 		unsigned int colorI = 0;
 		bool isValidColor = false;
+
 		do {
 			colorI++;
 			isValidColor = true;
@@ -15,12 +16,14 @@ private:
 			for (auto v = adjacences.cbegin(); !adjacences.empty() && isValidColor; v = adjacences.erase(v))
 				isValidColor = color[*v] != colorI;
 		} while (!isValidColor && colorI <= graph.AMOUNT_VERTEXES);
+
 		color[u] = colorI;
 	}
 
 	const unsigned int getHigherDegreeNotColored() const {
 		unsigned int vertex = graph.AMOUNT_VERTEXES;
 		unsigned int higherDegreeNotColored = 0;
+
 		for (unsigned int u = 0, count = 0; u < graph.AMOUNT_VERTEXES; u++, count = 0) {
 			if (color[u] == 0) {
 				if (vertex == graph.AMOUNT_VERTEXES)
