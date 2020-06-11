@@ -1,6 +1,5 @@
 #pragma once
 #include <stack>
-#include "Graph.h"
 
 /*
 O Algoritmo Kosaraju detecta componentes fortemente conectadas.

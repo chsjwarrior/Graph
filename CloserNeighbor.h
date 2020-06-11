@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O algoritmodo do vizinho mais próximo realiza um tipo de uma busca em profundidade escolhendo o vértice de menor custo.

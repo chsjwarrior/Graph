@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 class Coloring {
 private:

@@ -1,6 +1,8 @@
+
 #pragma once
 #include <set>
 #include "Scanner.h"
+#include "EdgeComparator.h"
 
 #ifndef NIL
 #define NIL -1
@@ -11,6 +13,7 @@
 #endif // !MAX_WEIGHT
 
 using namespace Scanner;
+using namespace EdgeComparator;
 
 struct Edge {
 	const unsigned int U, V;
@@ -35,15 +38,6 @@ struct Edge {
 		write("}");
 	}
 
-	const bool operator<(const Edge& other) const {
-		if (U < other.U) return true;
-		if (other.U < U) return false;
-		if (V < other.V) return true;
-		if (other.V < V) return false;
-		if (WEIGHT < other.WEIGHT) return true;
-		if (other.WEIGHT < WEIGHT) return false;
-	}
-
 	const bool operator>(const Edge& other) const {
 		if (U > other.U) return true;
 		if (other.U > U) return false;
@@ -51,14 +45,26 @@ struct Edge {
 		if (other.V > V) return false;
 		if (WEIGHT > other.WEIGHT) return true;
 		if (other.WEIGHT > WEIGHT) return false;
+		return false;
 	}
 
-	const Edge& operator=(const Edge& other) const {		
+
+	const bool operator<(const Edge& other) const {
+		if (U < other.U) return true;
+		if (other.U < U) return false;
+		if (V < other.V) return true;
+		if (other.V < V) return false;
+		if (WEIGHT < other.WEIGHT) return true;
+		if (other.WEIGHT < WEIGHT) return false;
+		return false;
+	}
+
+	const Edge& operator=(const Edge& other) const {
 		//write("copy Assigment {", U, ",", V, "=", WEIGHT, "} & {", other.U, ",", other.V, "=", other.WEIGHT, "}\n");
 		if (this != &other) {
-			(unsigned int&)U = other.U;
-			(unsigned int&)V = other.V;
-			(int&)WEIGHT = other.WEIGHT;
+			(unsigned int&) U = other.U;
+			(unsigned int&) V = other.V;
+			(int&) WEIGHT = other.WEIGHT;
 		}
 		return *this;
 	}
@@ -90,8 +96,8 @@ public:
 
 	const Graph& operator=(const Graph& other) {
 		if (this != &other) {
-			(unsigned int&)AMOUNT_VERTEXES = other.AMOUNT_VERTEXES;
-			(bool&)IS_DIGRAPH = other.IS_DIGRAPH;
+			(unsigned int&) AMOUNT_VERTEXES = other.AMOUNT_VERTEXES;
+			(bool&) IS_DIGRAPH = other.IS_DIGRAPH;
 			edges.clear();
 			edges = other.edges;
 		}

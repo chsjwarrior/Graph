@@ -1,5 +1,4 @@
 #pragma once
-#include "Graph.h"
 
 /*
 Parcialmente funcionando
@@ -20,16 +19,16 @@ private:
 		onStack[u] = true;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
-		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v)) {
 			if (discovery[*v] == NIL) {
 				strongConnected(*v);
 				low[*v] = std::min(low[u], low[*v]);
-			}
-			else if (onStack[*v])
+			} else if (onStack[*v])
 				low[u] = std::min(low[u], discovery[*v]);
+		}
 
 		if (low[u] == discovery[u]) {
-			int w = 0;
+			int w;
 			while (stack.top() != u) {
 				w = stack.top();
 				writeVertex(w);

@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O algoritmo da busca em profundidade é um algoritmo para caminha no grafo.

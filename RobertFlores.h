@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O objetivo do algoritmo Robert e Flores é identificar um ciclo Hamiltoniano,

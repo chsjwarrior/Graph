@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O algoritmo de Floud-Warschall resolver o problema do caminho mínimo com várias origens.

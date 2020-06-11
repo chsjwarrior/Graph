@@ -1,5 +1,4 @@
 #include <fstream>
-
 #include "Scanner.h"
 #include "Graph.h"
 #include "BreadthFirstSearch.h"
@@ -60,8 +59,7 @@ void openFile(const std::string& path) {
 			destroyGraph();
 		else
 			writeln("Grafo criado com exito.");
-	}
-	else
+	} else
 		writeln("Não foi possivel abrir o arquivo.");
 }
 
@@ -82,8 +80,7 @@ void createGraph() {
 					w = read("Dgt o custo da Aresta: ");
 					graph->insertEdge(u - 1, v - 1, w);
 					w = 1;
-				}
-				else
+				} else
 					graph->insertEdge(u - 1, v - 1);
 			}
 		}
@@ -201,50 +198,47 @@ int main() {
 
 	do {
 		writeln("Dgt 0 para encerrar.",
-			"Dgt 1 para criar um grafo.",
-			"Dgt 2 para abrir um arquivo.");
+				"Dgt 1 para criar um grafo.",
+				"Dgt 2 para abrir um arquivo.");
 		if (graph != nullptr)
 			writeln("--------------------------------------------",
-				"Dgt 3 para imprimir Matriz de adjacencia",
-				"Dgt 4 para imprimir Matriz de incidencia",
-				"Dgt 5 para imprimir lista de adjacencia",
-				"Dgt 6 para imprimir lista de incidencia",
-				"Dgt 7 para imprimir Matriz de custo",
-				"Dgt 8 para imprimir Informacoes do grafo",
-				"--------------------------------------------",
-				"Dgt 9 para Busca em largura",
-				"Dgt 10 para Busca em profundidade",
-				"Dgt 11 para Dijkstra",
-				"Dgt 12 para Floyd Warshall",
-				"Dgt 13 para Bellman-Ford",
-				"Dgt 14 para Ford-Fulkerson",
-				"Dgt 15 para Fleury",
-				"Dgt 16 para Robert Flores",
-				"Dgt 17 para Vizinho mais proximo",
-				"Dgt 18 para Vizinho mais proximo repetitivo",
-				"Dgt 19 para Ligacao mais economica",
-				"Dgt 20 para Goodman",
-				"Dgt 21 para Conjuntos disjuntos",
-				"Dgt 22 para Kosaraju",
-				"Dgt 23 para Tarjan",
-				"Dgt 24 para Kruskal",
-				"Dgt 25 para Prim",
-				"Dgt 26 para Coloracao sequencial",
-				"Dgt 27 para Coloracao heuristica");
+					"Dgt 3 para imprimir Matriz de adjacencia",
+					"Dgt 4 para imprimir Matriz de incidencia",
+					"Dgt 5 para imprimir lista de adjacencia",
+					"Dgt 6 para imprimir lista de incidencia",
+					"Dgt 7 para imprimir Matriz de custo",
+					"Dgt 8 para imprimir Informacoes do grafo",
+					"--------------------------------------------",
+					"Dgt 9 para Busca em largura",
+					"Dgt 10 para Busca em profundidade",
+					"Dgt 11 para Dijkstra",
+					"Dgt 12 para Floyd Warshall",
+					"Dgt 13 para Bellman-Ford",
+					"Dgt 14 para Ford-Fulkerson",
+					"Dgt 15 para Fleury",
+					"Dgt 16 para Robert Flores",
+					"Dgt 17 para Vizinho mais proximo",
+					"Dgt 18 para Vizinho mais proximo repetitivo",
+					"Dgt 19 para Ligacao mais economica",
+					"Dgt 20 para Goodman",
+					"Dgt 21 para Conjuntos disjuntos",
+					"Dgt 22 para Kosaraju",
+					"Dgt 23 para Tarjan",
+					"Dgt 24 para Kruskal",
+					"Dgt 25 para Prim",
+					"Dgt 26 para Coloracao sequencial",
+					"Dgt 27 para Coloracao heuristica");
 		value = read("--------------------------------------------");
 
 		system("CLS");
 
 		if (value == 1) {
 			createGraph();
-		}
-		else if (value == 2) {
+		} else if (value == 2) {
 			openFile("C:\\temp\\graph.txt");
-		}
-		else if (graph == nullptr) {
+		} else if (graph == nullptr) {
 			writeErr("Grafo não inicializado");
-		}
-		else if (value != 0) {
+		} else if (value != 0) {
 			switch (value) {
 			case 3:
 				graph->printAdjacencematrix();
@@ -284,7 +278,6 @@ int main() {
 				break;
 			case 15:
 				fleury();
-
 				break;
 			case 16:
 				robertFlores();

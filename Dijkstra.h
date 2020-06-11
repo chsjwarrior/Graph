@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O algoritmo de Dijkstra soluciona o problema do caminho mais curto num grafo dirigido ou não dirigido com arestas de peso não negativo.
@@ -28,7 +25,7 @@ private:
 		return lowWeightVertex;
 	}
 
-	void relax(const unsigned int& u, const unsigned int& v) const {
+	inline void relax(const unsigned int& u, const unsigned int& v) const {
 		if (distance[v] > distance[u] + graph.getWeigthFrom(u, v)) {
 			distance[v] = distance[u] + graph.getWeigthFrom(u, v);
 			pi[v] = u;
@@ -79,11 +76,9 @@ public:
 			visited[u] = false;
 		}
 		distance[origin] = 0;
-		unsigned int priorityQueue = 0;
 
-		while (priorityQueue < graph.AMOUNT_VERTEXES) {
+		for (unsigned int vertex = 0; vertex < graph.AMOUNT_VERTEXES; vertex++) {
 			unsigned int u = extractSmaller();
-			priorityQueue++;
 			visited[u] = true;
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);

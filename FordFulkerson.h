@@ -1,5 +1,4 @@
 #pragma once
-#include "Graph.h"
 
 class FordFulkerson {
 private:
@@ -36,7 +35,6 @@ public:
 	FordFulkerson() = delete;
 	FordFulkerson(const Graph& graph) : graph(graph) {
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
-
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
 
@@ -49,10 +47,10 @@ public:
 			costMatrix[i] = nullptr;
 		}
 		delete[] costMatrix;
-		costMatrix = nullptr;
 		delete[] pi;
-		pi = nullptr;
 		delete[] visited;
+		costMatrix = nullptr;
+		pi = nullptr;
 		visited = nullptr;
 	}
 

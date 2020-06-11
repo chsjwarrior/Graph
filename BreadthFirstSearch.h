@@ -1,8 +1,5 @@
 #pragma once
 #include <queue>
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O algoritmo da busca em largura calcula a distância (menor número de arestas)

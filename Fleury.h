@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O algoritmo de Fleury é utilizado para a identificação de um ciclo euleriano em um grafo.

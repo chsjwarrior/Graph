@@ -1,7 +1,4 @@
 #pragma once
-#include "Graph.h"
-
-using namespace Scanner;
 
 /*
 O Algoritmo de Bellman-Ford é um algoritmo de busca de caminho mínimo em um digrafo (grafo orientado ou dirigido) ponderado, inclusive negativo.
@@ -18,7 +15,7 @@ private:
 
 	void print() const {
 		writeln("Bellman-Ford:");
-		write("Vi  |");
+		write("Vi  |");		 
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
@@ -75,7 +72,7 @@ public:
 		for (auto e = edges.cbegin(); e != edges.cend(); e++)
 			if (distance[e->U] != MAX_WEIGHT && distance[e->U] + e->WEIGHT < distance[e->V]) {
 				writeln("O Grafo contem ciclo com peso negativo");
-				return;
+				e = edges.cend();
 			}
 
 		edges.clear();

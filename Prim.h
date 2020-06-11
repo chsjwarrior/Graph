@@ -1,5 +1,4 @@
 #pragma once
-#include "Graph.h"
 
 /*O algoritmo de Prim */
 

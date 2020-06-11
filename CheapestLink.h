@@ -1,9 +1,4 @@
 #pragma once
-#include "Graph.h"
-#include<list>
-
-
-using namespace Scanner;
 
 /*
 O algoritmo da ligação mais economica encontra um ciclo hamiltoniano no grafo passando pelas aresta com menor peso.
@@ -24,25 +19,25 @@ testado e funcionando com o seguinte grafo:
 
 class CheapestLink {
 private:
-	Graph graph;
+	const Graph& graph;
 	unsigned int* degrees;
 	bool* visited;
 
-	struct Comparator {
+	struct GreaterWeight {
 		const bool operator()(const Edge& lhs, const Edge& rhs) const {
 			return lhs.WEIGHT > rhs.WEIGHT;
 		}
 	};
 
-	std::priority_queue<Edge, std::vector<Edge>, Comparator> edges;
-	std::list<Edge> selected;
+	std::priority_queue<Edge, std::vector<Edge>, GreaterWeight> edges;
+	std::vector<Edge> selected;
 
 	bool cyclic_recursive(const unsigned int& vertex, const  unsigned int& predecessor) {
 		bool cycle_found = false;
 		visited[vertex] = true;
-		for (auto e = selected.cbegin(); e != selected.cend() && !cycle_found; ++e)	{
-			if (e->U == vertex || e->V == vertex) {				
-					const unsigned int neighbour = e->U == vertex ? e->V : e->U;
+		for (auto e = selected.cbegin(); e != selected.cend() && !cycle_found; ++e) {
+			if (e->U == vertex || e->V == vertex) {
+				const unsigned int neighbour = e->U == vertex ? e->V : e->U;
 				if (!visited[neighbour]) {
 					cycle_found = cyclic_recursive(neighbour, vertex);
 				} else if (neighbour != predecessor) {
@@ -56,25 +51,17 @@ private:
 	bool cyclic() {
 		memset(visited, false, sizeof(visited));
 		return cyclic_recursive(0, 0);
-	}	
-
-	inline void insertEdge(const Edge& edge) {		
-		graph.insertEdge(edge.U, edge.V, edge.WEIGHT);
-		degrees[edge.U]++;
-		degrees[edge.V]++;
-		edge.print();
-		write("=", edge.WEIGHT);
-		write(" entry\n");
 	}
 
 public:
 	CheapestLink() = delete;
-	CheapestLink(const Graph& graph) : graph(graph.AMOUNT_VERTEXES, graph.IS_DIGRAPH) {
+	CheapestLink(const Graph& graph) : graph(graph) {
 		std::multiset<Edge> set = graph.getEdges();
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
 			edges.push(*e);
 		degrees = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
+		selected.reserve(graph.AMOUNT_VERTEXES);
 	}
 
 	~CheapestLink() {
@@ -82,6 +69,7 @@ public:
 		delete[] visited;
 		degrees = nullptr;
 		visited = nullptr;
+		selected.clear();
 	}
 
 	void cheaperConnection() {
@@ -92,16 +80,19 @@ public:
 
 		writeln("Ligacao mais economica:");
 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			degrees[i] = 0;
+		memset(degrees, 0, sizeof(degrees));
 
 		Edge lowerWeight = edges.top();
 		selected.emplace_back(lowerWeight.U, lowerWeight.V, lowerWeight.WEIGHT);
-		insertEdge(lowerWeight);
+		degrees[lowerWeight.U]++;
+		degrees[lowerWeight.V]++;
+		lowerWeight.print();
+		write("=", lowerWeight.WEIGHT);
+		write(" entry\n");
 		edges.pop();
 
 		//bool hasZeroDegree = true;
-		while (!edges.empty()) {//enquanto existir vertices não descobertos
+		while (!edges.empty()) {
 			lowerWeight = edges.top();
 
 			if (degrees[lowerWeight.U] < 2 && degrees[lowerWeight.V] < 2) {
@@ -113,7 +104,7 @@ public:
 					write("=", lowerWeight.WEIGHT);
 					write(" entry\n");
 					//hasZeroDegree = std::any_of(degrees, degrees + graph.AMOUNT_VERTEXES, [](unsigned int d) { return d == 0; });
-				} else 
+				} else
 					selected.pop_back();
 			}
 
