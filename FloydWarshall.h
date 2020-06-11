@@ -10,7 +10,7 @@ funcionando
 class FloydWarshall {
 	const Graph& graph;
 	int** costMatrix;
-	int** pi;
+	int** predecessor;
 
 	void print() const {
 		writeln("Floyd-Warshall:");
@@ -39,7 +39,7 @@ class FloydWarshall {
 			writeVertex(i);
 			write('|');
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
-				writeVertex(pi[i][j]);
+				writeVertex(predecessor[i][j]);
 				write('|');
 			}
 			write("\n");
@@ -50,25 +50,25 @@ public:
 	FloydWarshall() = delete;
 	FloydWarshall(const Graph& graph) : graph(graph) {
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
-		pi = new int* [graph.AMOUNT_VERTEXES];
+		predecessor = new int* [graph.AMOUNT_VERTEXES];
 
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
-			pi[i] = new int[graph.AMOUNT_VERTEXES];
+			predecessor[i] = new int[graph.AMOUNT_VERTEXES];
 		}
 	}
 
 	~FloydWarshall() {
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			delete[] costMatrix[i];
-			delete[] pi[i];
+			delete[] predecessor[i];
 			costMatrix[i] = nullptr;
-			pi[i] = nullptr;
+			predecessor[i] = nullptr;
 		}
 		delete[] costMatrix;
-		delete[] pi;
+		delete[] predecessor;
 		costMatrix = nullptr;
-		pi = nullptr;
+		predecessor = nullptr;
 	};
 
 	void floydWarshall() const {
@@ -76,9 +76,9 @@ public:
 			for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; v++) {
 				costMatrix[u][v] = graph.getWeigthFrom(u, v);
 				if (u != v && costMatrix[u][v] < MAX_WEIGHT)
-					pi[u][v] = u;
+					predecessor[u][v] = u;
 				else
-					pi[u][v] = NIL;
+					predecessor[u][v] = NIL;
 			}
 
 		for (unsigned int k = 0; k < graph.AMOUNT_VERTEXES; k++)
@@ -86,7 +86,7 @@ public:
 				for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++)
 					if (costMatrix[i][j] > costMatrix[i][k] + costMatrix[k][j]) {
 						costMatrix[i][j] = costMatrix[i][k] + costMatrix[k][j];
-						pi[i][j] = pi[k][j];
+						predecessor[i][j] = predecessor[k][j];
 					}
 		print();
 	}

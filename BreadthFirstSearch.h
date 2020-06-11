@@ -11,7 +11,7 @@ class BreadthFirstSearch {
 private:
 	const Graph& graph;
 	unsigned int* discovery;
-	int* pi;
+	int* predecessor;
 	bool* visited;
 
 	void print() const {
@@ -28,7 +28,7 @@ private:
 		}
 		write("\npi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			writeVertex(pi[i]);
+			writeVertex(predecessor[i]);
 			write('|');
 		}
 		write("\n");
@@ -38,28 +38,28 @@ public:
 	BreadthFirstSearch() = delete;
 	BreadthFirstSearch(const Graph& graph) : graph(graph) {
 		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
-		pi = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
 	~BreadthFirstSearch() {
 		delete[] discovery;
-		delete[] pi;
+		delete[] predecessor;
 		delete[] visited;
 		discovery = nullptr;
-		pi = nullptr;
+		predecessor = nullptr;
 		visited = nullptr;
 	}
 
-	void bfs(const unsigned int& origin) const {
+	void bfs(const unsigned int& source) const {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = MAX_WEIGHT;
-			pi[u] = NIL;
+			predecessor[u] = NIL;
 			visited[u] = false;
 		}
 
 		std::queue<unsigned int> queue;
-		unsigned int u = origin;
+		unsigned int u = source;
 		discovery[u] = 0;
 		visited[u] = true;
 		queue.push(u);
@@ -69,10 +69,10 @@ public:
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (visited[*v] == false) {
+				if (!visited[*v]) {
 					queue.push(*v);
 					discovery[*v] = discovery[u] + 1;
-					pi[*v] = u;
+					predecessor[*v] = u;
 					visited[*v] = true;
 				}
 		}

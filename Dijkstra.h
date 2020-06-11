@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 
 /*
 O algoritmo de Dijkstra soluciona o problema do caminho mais curto num grafo dirigido ou não dirigido com arestas de peso não negativo.
@@ -11,24 +12,25 @@ class Dijkstra {
 private:
 	const Graph& graph;
 	int* distance;
-	int* pi;
-	bool* visited;
+	int* predecessor;
 
-	const unsigned int extractSmaller() const {
-		int lowerValue = MAX_WEIGHT;
-		unsigned int lowWeightVertex = 0;
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			if (visited[u] == false && distance[u] < lowerValue) {//distance[u] <= lowerValue, verificar
-				lowerValue = distance[u];
-				lowWeightVertex = u;
+	const unsigned int extractMin(std::list<unsigned int>& queue) const {
+		int lowerDistance = MAX_WEIGHT;
+		unsigned int lowerVertex = 0;
+
+		for (auto u = queue.cbegin(); u != queue.cend(); u++)
+			if (distance[*u] < lowerDistance) {//distance[u] <= lowerValue, verificar
+				lowerDistance = distance[*u];
+				lowerVertex = *u;
 			}
-		return lowWeightVertex;
+		queue.remove(lowerVertex);
+		return lowerVertex;
 	}
 
 	inline void relax(const unsigned int& u, const unsigned int& v) const {
 		if (distance[v] > distance[u] + graph.getWeigthFrom(u, v)) {
 			distance[v] = distance[u] + graph.getWeigthFrom(u, v);
-			pi[v] = u;
+			predecessor[v] = u;
 		}
 	}
 
@@ -46,7 +48,7 @@ private:
 		}
 		write("\npi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			writeVertex(pi[i]);
+			writeVertex(predecessor[i]);
 			write('|');
 		}
 		write("\n");
@@ -56,30 +58,27 @@ public:
 	Dijkstra() = delete;
 	Dijkstra(const Graph& graph) : graph(graph) {
 		distance = new int[graph.AMOUNT_VERTEXES];
-		pi = new int[graph.AMOUNT_VERTEXES];
-		visited = new bool[graph.AMOUNT_VERTEXES];
+		predecessor = new int[graph.AMOUNT_VERTEXES];
 	}
 
 	~Dijkstra() {
 		delete[] distance;
-		delete[] pi;
-		delete[] visited;
+		delete[] predecessor;
 		distance = nullptr;
-		pi = nullptr;
-		visited = nullptr;
+		predecessor = nullptr;
 	}
 
-	void dijkstra(const unsigned int& origin) const {
+	void dijkstra(const unsigned int& source) const {
+		std::list<unsigned int> queue;
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = MAX_WEIGHT;
-			pi[u] = NIL;
-			visited[u] = false;
+			predecessor[u] = NIL;
+			queue.push_back(u);
 		}
-		distance[origin] = 0;
+		distance[source] = 0;
 
-		for (unsigned int vertex = 0; vertex < graph.AMOUNT_VERTEXES; vertex++) {
-			unsigned int u = extractSmaller();
-			visited[u] = true;
+		while (!queue.empty()) {
+			unsigned int u = extractMin(queue);
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))

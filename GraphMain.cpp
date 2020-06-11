@@ -19,6 +19,31 @@
 #include "Prim.h"
 #include "Coloring.h"
 
+/*
+https://en.wikipedia.org/wiki/Graph_theory
+
+Bellman–Ford algorithm
+Boruvka's algorithm
+Breadth-first search
+Depth-first search
+Dijkstra's algorithm
+Edmonds–Karp algorithm
+Floyd–Warshall algorithm
+Ford–Fulkerson algorithm
+Hopcroft–Karp algorithm
+Hungarian algorithm
+Kosaraju's algorithm
+Kruskal's algorithm
+Nearest neighbour algorithm
+Network simplex algorithm
+Planarity testing algorithms
+Prim's algorithm
+Push–relabel maximum flow algorithm
+Tarjan's strongly connected components algorithm
+Topological sorting
+*/
+
+
 using namespace Scanner;
 
 Graph* graph;
@@ -102,8 +127,9 @@ void bfs() {
 }
 
 void dfs() {
+	bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 	DepthFirstSearch dfs(*graph);
-	dfs.dfs(getOrigin("Dgt o vertice de origem"));
+	dfs.dfs(getOrigin("Dgt o vertice de origem"), isRecursive);
 }
 
 void dijkstra() {
@@ -137,13 +163,12 @@ void robertFlores() {
 }
 
 void closerNeighbor() {
+	bool isRepetitive = read("Dgt 0 para Vizinha mais proximo. \nDgt qualquer valor para Vizinho mais proximo repetivo.");
 	CloserNeighbor closerNeighbor(*graph);
-	closerNeighbor.closerNeighbor(getOrigin("Dgt o vertice de origem"));
-}
-
-void closerNeighborRepetitive() {
-	CloserNeighbor closerNeighbor(*graph);
-	closerNeighbor.closerNeighborRepetitive();
+	if (isRepetitive)
+		closerNeighbor.closerNeighborRepetitive();
+	else
+		closerNeighbor.closerNeighbor(getOrigin("Dgt o vertice de origem"));
 }
 
 void cheapestLink() {
@@ -181,15 +206,12 @@ void prim() {
 	prim.prim(getOrigin("Dgt o vertice de origem"));
 }
 
-void sequentialColoring() {
+void coloring() {
+	bool isSequential = read("Dgt 0 para Coloracao sequencial. \nDgt qualquer valor para Coloracao heuristica.");
 	Coloring coloring(*graph);
-	coloring.sequentialColoring();
+	coloring.coloring(isSequential);
 }
 
-void heuristicColoring() {
-	Coloring coloring(*graph);
-	coloring.heuristicColoring();
-}
 
 int main() {
 	graph = nullptr;
@@ -218,16 +240,14 @@ int main() {
 					"Dgt 15 para Fleury",
 					"Dgt 16 para Robert Flores",
 					"Dgt 17 para Vizinho mais proximo",
-					"Dgt 18 para Vizinho mais proximo repetitivo",
-					"Dgt 19 para Ligacao mais economica",
-					"Dgt 20 para Goodman",
-					"Dgt 21 para Conjuntos disjuntos",
-					"Dgt 22 para Kosaraju",
-					"Dgt 23 para Tarjan",
-					"Dgt 24 para Kruskal",
-					"Dgt 25 para Prim",
-					"Dgt 26 para Coloracao sequencial",
-					"Dgt 27 para Coloracao heuristica");
+					"Dgt 18 para Ligacao mais economica",
+					"Dgt 19 para Goodman",
+					"Dgt 20 para Conjuntos disjuntos",
+					"Dgt 21 para Kosaraju",
+					"Dgt 22 para Tarjan",
+					"Dgt 23 para Kruskal",
+					"Dgt 24 para Prim",
+					"Dgt 25 para Coloracao");
 		value = read("--------------------------------------------");
 
 		system("CLS");
@@ -286,34 +306,28 @@ int main() {
 				closerNeighbor();
 				break;
 			case 18:
-				closerNeighborRepetitive();
-				break;
-			case 19:
 				cheapestLink();
 				break;
-			case 20:
+			case 19:
 				goodman();
 				break;
-			case 21:
+			case 20:
 				disjointAssemblies();
 				break;
-			case 22:
+			case 21:
 				kosaraju();
 				break;
-			case 23:
+			case 22:
 				tarjan();
 				break;
-			case 24:
+			case 23:
 				kruskal();
 				break;
-			case 25:
+			case 24:
 				prim();
 				break;
-			case 26:
-				sequentialColoring();
-				break;
-			case 27:
-				heuristicColoring();
+			case 25:
+				coloring();
 				break;
 			default:
 				writeErr("valor invalido, dgt novamente");

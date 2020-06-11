@@ -4,7 +4,7 @@ class FordFulkerson {
 private:
 	const Graph& graph;
 	int** costMatrix;
-	unsigned int* pi;
+	int* predecessor;
 	bool* visited;
 
 	const bool bfs(unsigned int u, const unsigned int& k) {
@@ -13,7 +13,7 @@ private:
 		std::queue<unsigned int> queue;
 		queue.push(u);
 		visited[u] = true;
-		pi[u] = NIL;
+		predecessor[u] = NIL;
 		while (!queue.empty()) {
 			u = queue.front();
 			queue.pop();
@@ -22,7 +22,7 @@ private:
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v)) {
 				if (!visited[*v]) {
 					queue.push(*v);
-					pi[*v] = u;
+					predecessor[*v] = u;
 					visited[*v] = true;
 				}
 			}
@@ -38,7 +38,7 @@ public:
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
 
-		pi = new unsigned int[graph.AMOUNT_VERTEXES];
+		predecessor = new int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 	~FordFulkerson() {
@@ -47,14 +47,14 @@ public:
 			costMatrix[i] = nullptr;
 		}
 		delete[] costMatrix;
-		delete[] pi;
+		delete[] predecessor;
 		delete[] visited;
 		costMatrix = nullptr;
-		pi = nullptr;
+		predecessor = nullptr;
 		visited = nullptr;
 	}
 
-	void fordFulkerson(const unsigned int& origin, const unsigned int& destiny) {
+	void fordFulkerson(const unsigned int& source, const unsigned int& destiny) {
 		if (!graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
 			return;
@@ -62,7 +62,7 @@ public:
 
 		writeln("Ford-Fulkerson:");
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			pi[u] = NIL;
+			predecessor[u] = NIL;
 			for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; v++)
 				costMatrix[u][v] = graph.getWeigthFrom(u, v);
 		}
@@ -70,16 +70,16 @@ public:
 		unsigned int u, v;
 		int maxFlow = 0;
 
-		while (bfs(origin, destiny)) {
+		while (bfs(source, destiny)) {
 			int pathFlow = MAX_WEIGHT;
 
-			for (v = destiny; v != origin; v = pi[v]) {
-				u = pi[v];
+			for (v = destiny; v != source; v = predecessor[v]) {
+				u = predecessor[v];
 				pathFlow = std::min(pathFlow, graph.getWeigthFrom(u, v));
 			}
 
-			for (v = destiny; v != origin; v = pi[v]) {
-				u = pi[v];
+			for (v = destiny; v != source; v = predecessor[v]) {
+				u = predecessor[v];
 				costMatrix[u][v] -= pathFlow;
 				costMatrix[v][u] += pathFlow;
 			}

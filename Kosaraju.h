@@ -1,5 +1,4 @@
 #pragma once
-#include <stack>
 
 /*
 O Algoritmo Kosaraju detecta componentes fortemente conectadas.

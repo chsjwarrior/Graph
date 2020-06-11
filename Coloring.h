@@ -63,25 +63,25 @@ public:
 		color = nullptr;
 	}
 
-	void sequentialColoring() const {
+	void coloring(const bool& isSequential) const {
 		memset(color, false, sizeof(color));
 
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			if (color[u] == 0)
+		if (isSequential) {
+			for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
+				if (color[u] == 0)
+					setValidColor(u);
+
+			writeln("Coloracao seguencial:");
+		} else {
+			unsigned int u = getHigherDegreeNotColored();
+			while (u != graph.AMOUNT_VERTEXES) {
 				setValidColor(u);
-		writeln("Coloracao seguencial:");
-		print();
-	}
+				u = getHigherDegreeNotColored();
+			}
 
-	void heuristicColoring() {
-		memset(color, false, sizeof(color));
-
-		unsigned int u = getHigherDegreeNotColored();
-		while (u != graph.AMOUNT_VERTEXES) {
-			setValidColor(u);
-			u = getHigherDegreeNotColored();
+			writeln("Coloracao heuristica:");
 		}
-		writeln("Coloracao heuristica:");
+
 		print();
 	}
 };

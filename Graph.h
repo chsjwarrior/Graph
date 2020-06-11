@@ -2,7 +2,6 @@
 #pragma once
 #include <set>
 #include "Scanner.h"
-#include "EdgeComparator.h"
 
 #ifndef NIL
 #define NIL -1
@@ -13,7 +12,6 @@
 #endif // !MAX_WEIGHT
 
 using namespace Scanner;
-using namespace EdgeComparator;
 
 struct Edge {
 	const unsigned int U, V;
@@ -47,7 +45,6 @@ struct Edge {
 		if (other.WEIGHT > WEIGHT) return false;
 		return false;
 	}
-
 
 	const bool operator<(const Edge& other) const {
 		if (U < other.U) return true;

@@ -11,11 +11,11 @@ class BellmanFord {
 private:
 	const Graph& graph;
 	int* distance;
-	int* pi;
+	int* predecessor;
 
 	void print() const {
 		writeln("Bellman-Ford:");
-		write("Vi  |");		 
+		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
@@ -27,7 +27,7 @@ private:
 		}
 		write("\npi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			writeVertex(pi[i]);
+			writeVertex(predecessor[i]);
 			write('|');
 		}
 		write("\n");
@@ -37,17 +37,17 @@ public:
 	BellmanFord() = delete;
 	BellmanFord(const Graph& graph) : graph(graph) {
 		distance = new int[graph.AMOUNT_VERTEXES];
-		pi = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new int[graph.AMOUNT_VERTEXES];
 	}
 
 	~BellmanFord() {
 		delete[] distance;
-		delete[] pi;
+		delete[] predecessor;
 		distance = nullptr;
-		pi = nullptr;
+		predecessor = nullptr;
 	}
 
-	void bellmanFord(const unsigned int& origin) const {
+	void bellmanFord(const unsigned int& source) const {
 		if (!graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser dirigido para o algoritmo de Bellman-Ford funcionar.");
 			return;
@@ -55,17 +55,17 @@ public:
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = MAX_WEIGHT;
-			pi[u] = NIL;
+			predecessor[u] = NIL;
 		}
-		distance[origin] = 0;
 
+		distance[source] = 0;
 		//esse algoritmo garante a menor distancia
 		std::multiset<Edge> edges = graph.getEdges();
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			for (auto e = edges.cbegin(); e != edges.cend(); e++)
 				if (distance[e->U] != MAX_WEIGHT && distance[e->U] + e->WEIGHT < distance[e->V]) {
 					distance[e->V] = distance[e->U] + e->WEIGHT;
-					pi[e->V] = e->U;
+					predecessor[e->V] = e->U;
 				}
 
 		//esse algoritmo verifica se o grafo possui ciclo negativo
