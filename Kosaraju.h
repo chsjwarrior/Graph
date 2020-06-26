@@ -34,8 +34,7 @@ private:
 
 	void dfs(int u) {		
 		writeVertex(u);
-		write(" ");
-
+		write(' ');
 		visited[u] = true;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
@@ -55,7 +54,12 @@ public:
 	}
 
 	void kosaraju() {
-		memset(visited, false, sizeof(visited));
+		if (!graph.IS_DIGRAPH) {
+			writeln("O Grafo precisa ser dirigido para o algoritmo Kosaraju funcionar.");
+			return;
+		}
+
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (!visited[u])
@@ -72,7 +76,7 @@ public:
 			stack.pop();
 
 			if (!visited[u]) {
-				write("Conjunto", c++, ": {");
+				write("C", c++, ": { ");
 				dfs(u);
 				write("}\n");
 			}

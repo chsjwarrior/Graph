@@ -4,13 +4,13 @@ class Kruskal {
 private:
 	const unsigned int AMOUNT_VERTEXES;
 
-	struct Comparator {
+	struct LessWeight {
 		const bool operator()(const Edge& lhs, const Edge& rhs) const {
 			return lhs.WEIGHT < rhs.WEIGHT;
 		}
 	};
 
-	std::priority_queue<Edge, std::deque<Edge>, Comparator> edges;
+	std::multiset<Edge, LessWeight> edges;
 	std::pair<unsigned int, unsigned int>* subSets;
 	//pair.first = parent;
 	//pair.second = rank;
@@ -40,7 +40,7 @@ public:
 	Kruskal(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES) {
 		std::multiset<Edge> set = graph.getEdges();
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
-			edges.push(*e);
+			edges.emplace(e->U, e->V, e->WEIGHT);
 		subSets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}
 
@@ -57,17 +57,17 @@ public:
 
 		writeln("Kruskal:");
 		while (!edges.empty()) {
-			Edge e = edges.top();
-			edges.pop();
 
-			unsigned int x = find(e.U);
-			unsigned int y = find(e.V);
+			unsigned int x = find(edges.cbegin()->U);
+			unsigned int y = find(edges.cbegin()->V);
 
 			if (x != y) {
-				makeUnion(e.U, e.V);
-				e.print();
+				makeUnion(edges.cbegin()->U, edges.cbegin()->V);
+				edges.cbegin()->print();
 				write("\n");
 			}
+
+			edges.erase(edges.cbegin());
 		}
 	}
 };

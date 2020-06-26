@@ -4,11 +4,11 @@ class FordFulkerson {
 private:
 	const Graph& graph;
 	int** costMatrix;
-	int* predecessor;
+	unsigned int* predecessor;
 	bool* visited;
 
-	const bool bfs(unsigned int u, const unsigned int& k) {
-		memset(visited, false, sizeof(visited));
+	const bool bfsUtil(unsigned int u, const unsigned int& k) {
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
 		std::queue<unsigned int> queue;
 		queue.push(u);
@@ -38,7 +38,7 @@ public:
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
 
-		predecessor = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 	~FordFulkerson() {
@@ -70,8 +70,8 @@ public:
 		unsigned int u, v;
 		int maxFlow = 0;
 
-		while (bfs(source, destiny)) {
-			int pathFlow = MAX_WEIGHT;
+		while (bfsUtil(source, destiny)) {
+			int pathFlow = INF;
 
 			for (v = destiny; v != source; v = predecessor[v]) {
 				u = predecessor[v];

@@ -67,7 +67,7 @@ public:
 	}
 
 	void coloring(const bool& isSequential) const {
-		memset(color, false, sizeof(color));
+		memset(color, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
 		if (isSequential) {
 			for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)

@@ -13,6 +13,7 @@ O algoritmo de Fleury é utilizado para a identificação de um ciclo euleriano em 
 2 4 0
 4 4 0
 */
+
 class Fleury {
 private:
 	Graph graph;
@@ -32,14 +33,14 @@ private:
 		return std::make_pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTEXES ? 0 : firstOddVertex);
 	}
 
-	const unsigned int dfsVisit(const unsigned int& u) const {
+	const unsigned int dfsUtil(const unsigned int& u) const {
 		visited[u] = true;
 		unsigned int count = 1;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v])
-				count += dfsVisit(*v);
+				count += dfsUtil(*v);
 		return count;
 	}
 
@@ -47,13 +48,13 @@ private:
 		if (graph.getOutDegreeFrom(u) == 1)
 			return false;
 
-		memset(visited, false, sizeof(visited));
-		unsigned int bridgeCount = dfsVisit(v);
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
+		unsigned int bridgeCount = dfsUtil(v);
 
 		graph.removeEdge(u, v);
 
-		memset(visited, false, sizeof(visited));
-		unsigned int nonBridge = dfsVisit(v);
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
+		unsigned int nonBridge = dfsUtil(v);
 
 		graph.insertEdge(u, v);
 

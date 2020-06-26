@@ -40,8 +40,8 @@ private:
 
 	void print() const {
 		write("\n");
-		for (unsigned int i = 0; i < index; i++) {
-			writeVertex(array[i]);
+		for (unsigned int* p = array; p != array + index; ++p) {
+			writeVertex(*p);
 			write('-');
 		}
 	}
@@ -63,7 +63,7 @@ public:
 	}
 
 	void robertFlores(const unsigned int& source) {
-		memset(visited, false, sizeof(visited));
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 		index = 0;
 
 		write("Robert-Flores:");

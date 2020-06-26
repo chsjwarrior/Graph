@@ -10,7 +10,7 @@ funcionando
 class FloydWarshall {
 	const Graph& graph;
 	int** costMatrix;
-	int** predecessor;
+	unsigned int** predecessor;
 
 	void print() const {
 		writeln("Floyd-Warshall:");
@@ -50,11 +50,11 @@ public:
 	FloydWarshall() = delete;
 	FloydWarshall(const Graph& graph) : graph(graph) {
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
-		predecessor = new int* [graph.AMOUNT_VERTEXES];
+		predecessor = new unsigned int* [graph.AMOUNT_VERTEXES];
 
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
-			predecessor[i] = new int[graph.AMOUNT_VERTEXES];
+			predecessor[i] = new unsigned int[graph.AMOUNT_VERTEXES];
 		}
 	}
 
@@ -75,7 +75,7 @@ public:
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; v++) {
 				costMatrix[u][v] = graph.getWeigthFrom(u, v);
-				if (u != v && costMatrix[u][v] < MAX_WEIGHT)
+				if (u != v && costMatrix[u][v] < INF)
 					predecessor[u][v] = u;
 				else
 					predecessor[u][v] = NIL;

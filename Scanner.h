@@ -1,10 +1,9 @@
 #pragma once
 #include <iostream>
-#include <limits>
 
 namespace Scanner {
-	void writeVertex(const int& vertex) {
-		if (vertex > -1) {
+	void writeVertex(const unsigned int& vertex) {
+		if (vertex != std::numeric_limits<unsigned int>::max()) {
 			std::cout << 'V';
 			if (vertex < 99)
 				std::cout << '0';
@@ -15,8 +14,8 @@ namespace Scanner {
 			std::cout << "nil ";
 	}
 
-	void writeEdge(const int& edge) {
-		if (edge > -1) {
+	void writeEdge(const unsigned int& edge) {
+		if (edge != std::numeric_limits<unsigned int>::max()) {
 			std::cout << 'E';
 			if (edge < 99)
 				std::cout << '0';
@@ -28,7 +27,7 @@ namespace Scanner {
 	}
 
 	void writeValue(const int& value) {
-		if (value < 1000) {
+		if (value < 10000) {
 			if (value < 100)
 				std::cout << ' ';
 			std::cout << value;
@@ -45,6 +44,12 @@ namespace Scanner {
 		std::cerr << arg << std::endl;
 	}
 
+	template<typename T, typename... Types>
+	void writeErr(T arg, Types... args) {
+		std::cerr << arg << ' ';
+		writeErr(args...);
+	}
+
 	template<typename T>
 	void write(T arg) {
 		std::cout << arg;
@@ -52,7 +57,7 @@ namespace Scanner {
 
 	template<typename T, typename... Types>
 	void write(T arg, Types... args) {
-		std::cout << arg << " ";
+		std::cout << arg << ' ';
 		write(args...);
 	}
 

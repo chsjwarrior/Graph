@@ -29,7 +29,7 @@ private:
 		}
 	};
 
-	std::priority_queue<Edge, std::vector<Edge>, GreaterWeight> edges;
+	std::multiset<Edge, GreaterWeight> edges;
 	std::vector<Edge> selected;
 
 	bool cyclic_recursive(const unsigned int& vertex, const  unsigned int& predecessor) {
@@ -58,7 +58,7 @@ public:
 	CheapestLink(const Graph& graph) : graph(graph) {
 		std::multiset<Edge> set = graph.getEdges();
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
-			edges.push(*e);
+			edges.emplace(e->U, e->V, e->WEIGHT);
 		degrees = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 		selected.reserve(graph.AMOUNT_VERTEXES);
@@ -72,43 +72,41 @@ public:
 		selected.clear();
 	}
 
-	void cheaperConnection() {
+	void cheapestLink() {
 		if (graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser nao dirigido para o algoritmo de da ligação mais economica funcionar.");
+			writeln("O Grafo precisa ser nao dirigido para o algoritmo de da ligacao mais economica funcionar.");
 			return;
 		}
 
 		writeln("Ligacao mais economica:");
 
-		memset(degrees, 0, sizeof(degrees));
+		memset(degrees, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
-		Edge lowerWeight = edges.top();
-		selected.emplace_back(lowerWeight.U, lowerWeight.V, lowerWeight.WEIGHT);
-		degrees[lowerWeight.U]++;
-		degrees[lowerWeight.V]++;
-		lowerWeight.print();
-		write("=", lowerWeight.WEIGHT);
+		selected.emplace_back(edges.cbegin()->U, edges.cbegin()->V, edges.cbegin()->WEIGHT);
+		degrees[edges.cbegin()->U]++;
+		degrees[edges.cbegin()->V]++;
+		edges.cbegin()->print();
+		write("=", edges.cbegin()->WEIGHT);
 		write(" entry\n");
-		edges.pop();
+		edges.erase(edges.cbegin());
 
 		//bool hasZeroDegree = true;
 		while (!edges.empty()) {
-			lowerWeight = edges.top();
 
-			if (degrees[lowerWeight.U] < 2 && degrees[lowerWeight.V] < 2) {
-				selected.emplace_back(lowerWeight.U, lowerWeight.V, lowerWeight.WEIGHT);
+			if (degrees[edges.cbegin()->U] < 2 && degrees[edges.cbegin()->V] < 2) {
+				selected.emplace_back(edges.cbegin()->U, edges.cbegin()->V, edges.cbegin()->WEIGHT);
 				if (!cyclic()) {
-					degrees[lowerWeight.U]++;
-					degrees[lowerWeight.V]++;
-					lowerWeight.print();
-					write("=", lowerWeight.WEIGHT);
+					degrees[edges.cbegin()->U]++;
+					degrees[edges.cbegin()->V]++;
+					edges.cbegin()->print();
+					write("=", edges.cbegin()->WEIGHT);
 					write(" entry\n");
 					//hasZeroDegree = std::any_of(degrees, degrees + graph.AMOUNT_VERTEXES, [](unsigned int d) { return d == 0; });
 				} else
 					selected.pop_back();
 			}
 
-			edges.pop();
+			edges.erase(edges.cbegin());
 		}
 
 		/*

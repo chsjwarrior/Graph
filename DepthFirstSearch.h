@@ -15,38 +15,45 @@ private:
 	bool* visited;
 	unsigned int time;
 
-	void dfsVisitR(const unsigned int& u) {
+	void dfsVisitRecursive(const unsigned int& u) {
 		visited[u] = true;
 		discovery[u] = ++time;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v])
-				dfsVisitR(*v);
+				dfsVisitRecursive(*v);
+
 		close[u] = ++time;
 	}
 
-	void dfsVisit(unsigned int u) {
+	void dfsVisitIterative(unsigned int u) {
 		std::stack<unsigned int> stack;
 
 		stack.push(u);
 		while (!stack.empty()) {
 			u = stack.top();
-			stack.pop();
 
 			if (!visited[u]) {
-				std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
-				for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-					stack.push(*v);
-			}
+				visited[u] = true;
+				discovery[u] = ++time;
 
-			visited[u] = true;
-			discovery[u] = ++time;
+				std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
+				for (auto v = adjacences.crbegin(); v != adjacences.crend(); ++v)
+					if (!visited[*v])
+						stack.push(*v);
+				adjacences.clear();
+
+			} else {
+				if (close[u] == NIL)
+					close[u] = ++time;
+				stack.pop();
+			}
 		}
 	}
 
 	void print() const {
-		writeln("Busca em profundidade");
+		writeln("Busca em profundidade:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
@@ -86,8 +93,8 @@ public:
 
 	void dfs(const unsigned int& source, const bool& isRecursive) {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			discovery[u] = MAX_WEIGHT;
-			close[u] = MAX_WEIGHT;
+			discovery[u] = NIL;
+			close[u] = NIL;
 			visited[u] = false;
 		}
 
@@ -95,9 +102,9 @@ public:
 		for (unsigned int u = 0, v = source; u < graph.AMOUNT_VERTEXES; u++) {
 			if (visited[v] == false)
 				if (isRecursive)
-					dfsVisitR(v);
+					dfsVisitRecursive(v);
 				else
-					dfsVisit(v);
+					dfsVisitIterative(v);
 			v = u;
 		}
 		print();

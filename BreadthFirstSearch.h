@@ -11,8 +11,44 @@ class BreadthFirstSearch {
 private:
 	const Graph& graph;
 	unsigned int* discovery;
-	int* predecessor;
+	unsigned int* predecessor;
 	bool* visited;
+
+	void bfsRecursive(std::queue<unsigned int>& queue) {
+		if (queue.empty())
+			return;
+
+		unsigned int u = queue.front();
+		queue.pop();
+
+		std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
+		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+			if (!visited[*v]) {
+				queue.push(*v);
+				discovery[*v] = discovery[u] + 1;
+				predecessor[*v] = u;
+				visited[*v] = true;
+			}
+
+		bfsRecursive(queue);
+	}
+
+	void bfsIterative(std::queue<unsigned int>& queue) {
+		unsigned int u;
+		while (!queue.empty()) {
+			u = queue.front();
+			queue.pop();
+
+			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
+			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
+				if (!visited[*v]) {
+					queue.push(*v);
+					discovery[*v] = discovery[u] + 1;
+					predecessor[*v] = u;
+					visited[*v] = true;
+				}
+		}
+	}
 
 	void print() const {
 		writeln("Busca em largura:");
@@ -38,7 +74,7 @@ public:
 	BreadthFirstSearch() = delete;
 	BreadthFirstSearch(const Graph& graph) : graph(graph) {
 		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
-		predecessor = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
@@ -51,31 +87,23 @@ public:
 		visited = nullptr;
 	}
 
-	void bfs(const unsigned int& source) const {
+	void bfs(const unsigned int& source, const bool& isRecursive) {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			discovery[u] = MAX_WEIGHT;
+			discovery[u] = NIL;
 			predecessor[u] = NIL;
 			visited[u] = false;
 		}
 
 		std::queue<unsigned int> queue;
-		unsigned int u = source;
-		discovery[u] = 0;
-		visited[u] = true;
-		queue.push(u);
-		while (!queue.empty()) {
-			u = queue.front();
-			queue.pop();
+		discovery[source] = 0;
+		visited[source] = true;
+		queue.push(source);
 
-			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
-			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (!visited[*v]) {
-					queue.push(*v);
-					discovery[*v] = discovery[u] + 1;
-					predecessor[*v] = u;
-					visited[*v] = true;
-				}
-		}
+		if (isRecursive)
+			bfsRecursive(queue);
+		else
+			bfsIterative(queue);
+
 		print();
 	}
 };

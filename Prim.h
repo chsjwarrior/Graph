@@ -6,13 +6,13 @@ class Prim {
 private:
 	const Graph& graph;
 	int* key;
-	int* predecessor;
+	unsigned int* predecessor;
 	bool* visited;
 
 	const unsigned int extractMin() const {
-		int lowerDistance = MAX_WEIGHT;
-		unsigned int lowerVertex = 0;
-		for (int unsigned u = 0; u < graph.AMOUNT_VERTEXES; u++)
+		int lowerDistance = INF;
+		unsigned int lowerVertex = NIL;
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (!visited[u] && key[u] < lowerDistance) {
 				lowerDistance = key[u];
 				lowerVertex = u;
@@ -20,10 +20,10 @@ private:
 		return lowerVertex;
 	}
 
-	inline void relax(const unsigned int& u, const unsigned int& v) const {
+	inline void relax(const unsigned int& u, const unsigned int& v, const int& w) {
 		if (graph.getWeigthFrom(u, v) < key[v]) {
 			predecessor[v] = u;
-			key[v] = graph.getWeigthFrom(u, v);
+			key[v] = w;
 		}
 	}
 
@@ -51,7 +51,7 @@ public:
 	Prim() = delete;
 	Prim(const Graph& graph) : graph(graph) {
 		key = new int[graph.AMOUNT_VERTEXES];
-		predecessor = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
@@ -64,9 +64,9 @@ public:
 		visited = nullptr;
 	}
 
-	void prim(const unsigned int& source)const {
+	void prim(const unsigned int& source) {
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			key[i] = MAX_WEIGHT;
+			key[i] = INF;
 			predecessor[i] = NIL;
 			visited[i] = false;
 		}
@@ -81,7 +81,7 @@ public:
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 				if (!visited[*v])
-					relax(u, *v);
+					relax(u, *v, graph.getWeigthFrom(u, *v));
 		}
 		print();
 	}

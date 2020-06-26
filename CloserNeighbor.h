@@ -15,17 +15,15 @@ private:
 		visited[u] = true;
 		writeVertex(u);
 
-		bool found = false;
-		int lowerWeight = MAX_WEIGHT;
-		unsigned int lowerVertex = 0;
+		int lowerWeight = INF;
+		unsigned int lowerVertex = NIL;
 		std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (!visited[*v] && graph.getWeigthFrom(u, *v) < lowerWeight) {
-				found = true;
 				lowerVertex = *v;
 				lowerWeight = graph.getWeigthFrom(u, *v);
 			}
-		if (found) {
+		if (lowerVertex != NIL) {
 			write("->");
 			closerNeighborR(lowerVertex);
 		}
@@ -45,10 +43,10 @@ public:
 	void closerNeighbor(const unsigned int source) const {
 		writeln("Vizinho mais proximo:");
 
-		memset(visited, false, sizeof(visited));
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 		closerNeighborR(source);
 
-		if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](bool x) { return x == true; })) {
+		if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](const bool& x) { return x == true; })) {
 			write("->");
 			writeVertex(source);
 		}
@@ -59,10 +57,10 @@ public:
 		writeln("Vizinho mais proximo repetitivo:");
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			memset(visited, false, sizeof(visited));
+			memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 			closerNeighborR(u);
 
-			if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](bool x) { return x == true; })) {
+			if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](const bool& x) { return x == true; })) {
 				write("->");
 				writeVertex(u);
 			}

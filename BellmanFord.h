@@ -11,7 +11,7 @@ class BellmanFord {
 private:
 	const Graph& graph;
 	int* distance;
-	int* predecessor;
+	unsigned int* predecessor;
 
 	void print() const {
 		writeln("Bellman-Ford:");
@@ -37,7 +37,7 @@ public:
 	BellmanFord() = delete;
 	BellmanFord(const Graph& graph) : graph(graph) {
 		distance = new int[graph.AMOUNT_VERTEXES];
-		predecessor = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 	}
 
 	~BellmanFord() {
@@ -49,12 +49,12 @@ public:
 
 	void bellmanFord(const unsigned int& source) const {
 		if (!graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser dirigido para o algoritmo de Bellman-Ford funcionar.");
+			writeln("O Grafo precisa ser dirigido para o algoritmo Bellman-Ford funcionar.");
 			return;
 		}
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			distance[u] = MAX_WEIGHT;
+			distance[u] = INF;
 			predecessor[u] = NIL;
 		}
 
@@ -63,14 +63,14 @@ public:
 		std::multiset<Edge> edges = graph.getEdges();
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			for (auto e = edges.cbegin(); e != edges.cend(); e++)
-				if (distance[e->U] != MAX_WEIGHT && distance[e->U] + e->WEIGHT < distance[e->V]) {
+				if (distance[e->U] != INF && distance[e->U] + e->WEIGHT < distance[e->V]) {
 					distance[e->V] = distance[e->U] + e->WEIGHT;
 					predecessor[e->V] = e->U;
 				}
 
 		//esse algoritmo verifica se o grafo possui ciclo negativo
 		for (auto e = edges.cbegin(); e != edges.cend(); e++)
-			if (distance[e->U] != MAX_WEIGHT && distance[e->U] + e->WEIGHT < distance[e->V]) {
+			if (distance[e->U] != INF && distance[e->U] + e->WEIGHT < distance[e->V]) {
 				writeln("O Grafo contem ciclo com peso negativo");
 				e = edges.cend();
 			}

@@ -1,15 +1,13 @@
-
 #pragma once
 #include <set>
-#include "Scanner.h"
 
 #ifndef NIL
-#define NIL -1
+#define NIL std::numeric_limits<unsigned int>::max()
 #endif //!NIL
 
-#ifndef MAX_WEIGHT
-#define MAX_WEIGHT 999999
-#endif // !MAX_WEIGHT
+#ifndef INF
+#define INF 10000
+#endif //!INF
 
 using namespace Scanner;
 
@@ -20,20 +18,20 @@ struct Edge {
 	Edge() = delete;
 	Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
 		//write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
-	}
+	}	
 	Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
 		//write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
-	}
+	}	
 	~Edge() {
 		//write("destructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
 
 	void print() const {
-		write("{");
+		write('{');
 		writeVertex(U);
-		write(",");
+		write(',');
 		writeVertex(V);
-		write("}");
+		write('}');
 	}
 
 	const bool operator>(const Edge& other) const {
@@ -56,7 +54,9 @@ struct Edge {
 		return false;
 	}
 
-	const Edge& operator=(const Edge& other) const {
+	const Edge& operator=(const Edge&) = delete;
+	/*
+	const Edge& operator=(const Edge& other) {
 		//write("copy Assigment {", U, ",", V, "=", WEIGHT, "} & {", other.U, ",", other.V, "=", other.WEIGHT, "}\n");
 		if (this != &other) {
 			(unsigned int&) U = other.U;
@@ -65,6 +65,7 @@ struct Edge {
 		}
 		return *this;
 	}
+	*/
 };
 
 class Graph {
@@ -81,9 +82,9 @@ public:
 	const bool IS_DIGRAPH;
 
 	Graph() = delete;
-	Graph(const unsigned int& amountVertices, const bool& isDigraph) :
+	explicit Graph(const unsigned int& amountVertices, const bool& isDigraph) :
 		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {}
-	Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DIGRAPH(other.IS_DIGRAPH) {
+	explicit Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DIGRAPH(other.IS_DIGRAPH) {
 		edges = other.getEdges();
 	}
 	~Graph() {
@@ -128,7 +129,7 @@ public:
 			return edge->WEIGHT;
 		else if (u == v)
 			return 0;
-		return MAX_WEIGHT;
+		return INF;
 	}
 
 	const unsigned int getInDegreeFrom(const unsigned int& u) const {

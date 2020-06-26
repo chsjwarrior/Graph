@@ -1,5 +1,4 @@
 #pragma once
-#include <list>
 
 /*
 O algoritmo de Dijkstra soluciona o problema do caminho mais curto num grafo dirigido ou não dirigido com arestas de peso não negativo.
@@ -12,13 +11,13 @@ class Dijkstra {
 private:
 	const Graph& graph;
 	int* distance;
-	int* predecessor;
+	unsigned int* predecessor;
 	bool* visited;
 
 	const unsigned int extractMin() const {
-		int lowerDistance = MAX_WEIGHT;
-		unsigned int lowerVertex = 0;
-		for (unsigned int u; u < graph.AMOUNT_VERTEXES; u++)
+		int lowerDistance = INF;
+		unsigned int lowerVertex = NIL;
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (!visited[u] && distance[u] < lowerDistance) {//distance[u] <= lowerValue, verificar
 				lowerDistance = distance[u];
 				lowerVertex = u;
@@ -26,7 +25,7 @@ private:
 		return lowerVertex;
 	}
 
-	inline void relax(const unsigned int& u, const unsigned int& v, const int& w) const {
+	inline void relax(const unsigned int& u, const unsigned int& v, const int& w) {
 		if (distance[v] > distance[u] + w) {
 			distance[v] = distance[u] + w;
 			predecessor[v] = u;
@@ -57,7 +56,7 @@ public:
 	Dijkstra() = delete;
 	Dijkstra(const Graph& graph) : graph(graph) {
 		distance = new int[graph.AMOUNT_VERTEXES];
-		predecessor = new int[graph.AMOUNT_VERTEXES];
+		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
@@ -70,11 +69,11 @@ public:
 		visited = nullptr;
 	}
 
-	void dijkstra(const unsigned int& source) const {
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			distance[u] = MAX_WEIGHT;
-			predecessor[u] = NIL;
-			visited[u] = false;
+	void dijkstra(const unsigned int& source) {
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			distance[i] = INF;
+			predecessor[i] = NIL;
+			visited[i] = false;
 		}
 		distance[source] = 0;
 		unsigned int queue = 0;
@@ -82,10 +81,11 @@ public:
 		while (queue < graph.AMOUNT_VERTEXES) {
 			unsigned int u = extractMin();
 			queue++;
+			visited[u] = true;
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (!visited[u])//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
+				if (!visited[*v])//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
 					relax(u, *v, graph.getWeigthFrom(u, *v));
 		}
 		print();

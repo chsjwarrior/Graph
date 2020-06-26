@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 
 /*
 O algoritmo de DisjointAssebblies serve para avaliar a conexidade em grafos não dirigidos.

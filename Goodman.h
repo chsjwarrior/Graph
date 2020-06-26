@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 
 /*
 O algoritmo de Goodman serve para avaliar a conexidade em grafos não dirigidos.
