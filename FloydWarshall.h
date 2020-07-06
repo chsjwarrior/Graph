@@ -81,6 +81,7 @@ public:
 					predecessor[u][v] = NIL;
 			}
 
+		//esse algoritmo garante a menor distancia
 		for (unsigned int k = 0; k < graph.AMOUNT_VERTEXES; k++)
 			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 				for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++)
@@ -88,6 +89,14 @@ public:
 						costMatrix[i][j] = costMatrix[i][k] + costMatrix[k][j];
 						predecessor[i][j] = predecessor[k][j];
 					}
+
+		//esse algoritmo verifica se o grafo possui ciclo negativo
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
+			if (costMatrix[i][i] < 0){
+				writeln("O Grafo contem ciclo com peso negativo");
+				i = graph.AMOUNT_VERTEXES;
+			}
+
 		print();
 	}
 };

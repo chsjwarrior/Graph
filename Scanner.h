@@ -27,7 +27,7 @@ namespace Scanner {
 	}
 
 	void writeValue(const int& value) {
-		if (value < 10000) {
+		if (value < 10000 && value > -10000) {
 			if (value < 100)
 				std::cout << ' ';
 			std::cout << value;

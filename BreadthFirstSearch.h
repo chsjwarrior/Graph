@@ -51,7 +51,6 @@ private:
 	}
 
 	void print() const {
-		writeln("Busca em largura:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
@@ -99,11 +98,13 @@ public:
 		visited[source] = true;
 		queue.push(source);
 
-		if (isRecursive)
+		if (isRecursive) {
 			bfsRecursive(queue);
-		else
+			writeln("Busca em largura recursiva:");
+		} else {
 			bfsIterative(queue);
-
+			writeln("Busca em largura iterativa:");
+		}
 		print();
 	}
 };

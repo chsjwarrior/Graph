@@ -139,10 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GraphMain.cpp" />
+    <ClCompile Include="GraphMain.cpp">
+      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ShowIncludes>
+      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ShowIncludes>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BellmanFord.h" />
+    <ClInclude Include="Boruvka.h" />
     <ClInclude Include="BreadthFirstSearch.h" />
     <ClInclude Include="CheapestLink.h" />
     <ClInclude Include="CloserNeighbor.h" />

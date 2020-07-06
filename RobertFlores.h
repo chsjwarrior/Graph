@@ -13,7 +13,7 @@ private:
 	bool* visited;
 	unsigned int index;
 
-	void robertFloresR(const unsigned int& u) {
+	void robertFloresRecursive(const unsigned int& u) {
 		array[index++] = u;
 		visited[u] = true;
 		print();
@@ -28,7 +28,7 @@ private:
 					print();
 					break;
 				} else if (!visited[*v])
-					robertFloresR(*v);
+					robertFloresRecursive(*v);
 		}
 
 		if (index > 0) {
@@ -36,6 +36,42 @@ private:
 			visited[u] = false;
 		}
 		print();
+	}
+
+	void robertFloresIterative(unsigned int u) {
+		std::stack<unsigned int> stack;
+
+		stack.push(u);
+		while (!stack.empty()) {
+			u = stack.top();
+
+			if (!visited[u]) {
+				array[index++] = u;
+				visited[u] = true;
+				print();
+
+				std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
+				for (auto v = adjacences.crbegin(); v != adjacences.crend(); ++v)
+					if (*v != u)
+						if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
+							print();
+							writeVertex(*v);
+							write(" achou");
+							print();
+							break;
+						} else if (!visited[*v])
+							stack.push(*v);
+						adjacences.clear();
+
+			} else {
+				stack.pop();
+				if (index > 0) {
+					index--;
+					visited[u] = false;
+				}
+				print();
+			}
+		}
 	}
 
 	void print() const {
@@ -62,12 +98,17 @@ public:
 		index = NULL;
 	}
 
-	void robertFlores(const unsigned int& source) {
+	void robertFlores(const unsigned int& source, const bool& isRecursive) {
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 		index = 0;
 
-		write("Robert-Flores:");
-		robertFloresR(source);
+		if (isRecursive) {
+			write("Robert-Flores recursivo:");
+			robertFloresRecursive(source);
+		} else {
+			write("Robert-Flores iterativo:");
+			robertFloresIterative(source);
+		}
 		write("\n");
 	}
 };

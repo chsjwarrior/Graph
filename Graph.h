@@ -18,10 +18,10 @@ struct Edge {
 	Edge() = delete;
 	Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
 		//write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
-	}	
+	}
 	Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
 		//write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
-	}	
+	}
 	~Edge() {
 		//write("destructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}

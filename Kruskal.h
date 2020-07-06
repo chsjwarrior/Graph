@@ -1,8 +1,16 @@
 #pragma once
 
+/*
+O algoritmo de Kruskal é um algoritmo em teoria dos grafos que busca uma árvore geradora mínima (minimal spanning tree) em um grafo conexo ponderado.
+Isto significa que ele encontra um subconjunto das arestas que forma uma arvore que inclui todos os vertices,
+onde o peso total é dado pela soma dos pesos das arestas da árvore de menor valor.
+Se o grafo não for conexo, então ele encontra uma floresta geradora mínima (uma árvore geradora mínima para cada componente conexo do grafo).
+O algoritmo de Kruskal é um exemplo de um algoritmo guloso (também conhecido como ganancioso ou greedy).
+*/
+
 class Kruskal {
 private:
-	const unsigned int AMOUNT_VERTEXES;
+	const Graph& graph;
 
 	struct LessWeight {
 		const bool operator()(const Edge& lhs, const Edge& rhs) const {
@@ -10,50 +18,51 @@ private:
 		}
 	};
 
-	std::multiset<Edge, LessWeight> edges;
-	std::pair<unsigned int, unsigned int>* subSets;
+	std::pair<unsigned int, unsigned int>* subsets;
 	//pair.first = parent;
 	//pair.second = rank;
 
-	const unsigned int find(const unsigned int& u) const {
-		if (subSets[u].first != u)
-			subSets[u].first = find(subSets[u].first);
-		return subSets[u].first;
+	const unsigned int find(const unsigned int& u) {
+		if (subsets[u].first != u)
+			subsets[u].first = find(subsets[u].first);
+		return subsets[u].first;
 	}
 
-	void makeUnion(const unsigned int& u, const unsigned int& v) const {
+	void makeUnion(const unsigned int& u, const unsigned int& v) {
 		const unsigned int uRoot = find(u);
 		const unsigned int vRoot = find(v);
 
-		if (subSets[uRoot].second < subSets[vRoot].second)
-			subSets[uRoot].first = vRoot;
-		else if (subSets[uRoot].second > subSets[vRoot].second)
-			subSets[vRoot].first = uRoot;
+		if (subsets[uRoot].second < subsets[vRoot].second)
+			subsets[uRoot].first = vRoot;
+		else if (subsets[uRoot].second > subsets[vRoot].second)
+			subsets[vRoot].first = uRoot;
 		else {
-			subSets[vRoot].first = uRoot;
-			subSets[uRoot].second++;
+			subsets[vRoot].first = uRoot;
+			subsets[uRoot].second++;
 		}
 	}
 
 public:
 	Kruskal() = delete;
 	Kruskal(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES) {
-		std::multiset<Edge> set = graph.getEdges();
-		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
-			edges.emplace(e->U, e->V, e->WEIGHT);
-		subSets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
+		subsets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}
 
 	~Kruskal() {
-		delete[] subSets;
-		subSets = nullptr;
+		delete[] subsets;
+		subsets = nullptr;
 	}
 
 	void kruskal() {
-		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-			subSets[u].first = u;
-			subSets[u].second = 0;
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
+			subsets[u].first = u;
+			subsets[u].second = 0;
 		}
+
+		std::multiset<Edge, LessWeight> edges;
+		std::multiset<Edge> set = graph.getEdges();
+		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
+			edges.emplace(e->U, e->V, e->WEIGHT);
 
 		writeln("Kruskal:");
 		while (!edges.empty()) {

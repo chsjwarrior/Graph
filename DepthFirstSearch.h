@@ -53,7 +53,6 @@ private:
 	}
 
 	void print() const {
-		writeln("Busca em profundidade:");
 		write("Vi  |");
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
@@ -101,10 +100,13 @@ public:
 		time = 0;
 		for (unsigned int u = 0, v = source; u < graph.AMOUNT_VERTEXES; u++) {
 			if (visited[v] == false)
-				if (isRecursive)
+				if (isRecursive) {
 					dfsVisitRecursive(v);
-				else
+					writeln("Busca em profundidade recursiva:");
+				} else {
 					dfsVisitIterative(v);
+					writeln("Busca em profundidade iterativa:");
+				}
 			v = u;
 		}
 		print();

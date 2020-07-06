@@ -17,6 +17,7 @@
 #include "Tarjan.h"
 #include "Kruskal.h"
 #include "Prim.h"
+#include "Boruvka.h"
 #include "Coloring.h"
 
 /*
@@ -152,7 +153,8 @@ int main() {
 					"Dgt 22 para Tarjan.",
 					"Dgt 23 para Kruskal.",
 					"Dgt 24 para Prim.",
-					"Dgt 25 para Coloracao.");
+					"Dgt 25 para Boruvka,"
+					"Dgt 26 para Coloracao.");
 		std::cin >> choice;
 		system("CLS");
 
@@ -230,8 +232,9 @@ int main() {
 					break;
 				case 16:
 					{
+						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						RobertFlores robertFlores(*graph);
-						robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."));
+						robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."), isRecursive);
 					}
 					break;
 				case 17:
@@ -287,6 +290,12 @@ int main() {
 					}
 					break;
 				case 25:
+					{
+						Boruvka boruvka(*graph);
+						boruvka.boruvka();
+					}
+					break;
+				case 26:
 					{
 						bool isSequential = read("Dgt 0 para Coloracao sequencial. \nDgt qualquer valor para Coloracao heuristica.");
 						Coloring coloring(*graph);
