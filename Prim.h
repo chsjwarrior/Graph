@@ -13,14 +13,15 @@ private:
 	unsigned int* predecessor;
 	bool* visited;
 
-	const unsigned int extractMin() const {
+	const unsigned int extractMin(std::list<unsigned int>& queue) const {
 		int lowerDistance = INF;
 		unsigned int lowerVertex = NIL;
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			if (!visited[u] && key[u] < lowerDistance) {
-				lowerDistance = key[u];
-				lowerVertex = u;
+		for (auto u = queue.cbegin(); u != queue.cend(); ++u)
+			if (key[*u] < lowerDistance) {
+				lowerDistance = key[*u];
+				lowerVertex = *u;
 			}
+		queue.remove(lowerVertex);
 		return lowerVertex;
 	}
 
@@ -69,17 +70,17 @@ public:
 	}
 
 	void prim(const unsigned int& source) {
+		std::list<unsigned int> queue;
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			key[i] = INF;
 			predecessor[i] = NIL;
 			visited[i] = false;
+			queue.push_back(i);
 		}
 		key[source] = 0;
-		unsigned int queue = 0;
 
-		while (queue < graph.AMOUNT_VERTEXES) {
-			unsigned int u = extractMin();
-			queue++;
+		while (!queue.empty()) {
+			unsigned int u = extractMin(queue);
 			visited[u] = true;
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);

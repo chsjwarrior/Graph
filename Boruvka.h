@@ -11,28 +11,17 @@ Enquanto o algoritmo de Prim e o algorítmo de Kruskal precisam de um grafo conex
 class Boruvka {
 private:
 	const Graph& graph;
-
-	// An array to store index of the cheapest edge of
 	unsigned int* cheapest;
-	// subset to stored index for indexing array edge[]
 	std::pair<unsigned int, unsigned int>* subsets;
 	//pair.first = parent;
 	//pair.second = rank;
 
-	/*
-	A utility function to find set of an element i
-	(uses path compression technique)
-	*/
 	const unsigned int find(const unsigned int& u) {
 		if (subsets[u].first != u)
 			subsets[u].first = find(subsets[u].first);
 		return subsets[u].first;
 	}
 
-	/*
-	A function that does union of two sets of x and y
-	(uses union by rank)
-	*/
 	void makeUnion(const unsigned int& u, const unsigned int& v) {
 		const unsigned int uRoot = find(u);
 		const unsigned int vRoot = find(v);
@@ -72,7 +61,7 @@ public:
 		}
 
 		std::multiset<Edge> set = graph.getEdges();
-		std::vector<Edge> edges(set.size());
+		std::vector<Edge> edges;
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
 			edges.emplace_back(e->U, e->V, e->WEIGHT);
 
@@ -87,7 +76,7 @@ public:
 		while (numTrees > 1) {
 			memset(cheapest, NIL, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
-			for (size_t i = 0; i < edges.size(); i++) {
+			for (unsigned int i = 0; i < edges.size(); i++) {
 				unsigned int set1 = find(edges[i].U);
 				unsigned int set2 = find(edges[i].V);
 
@@ -104,7 +93,7 @@ public:
 
 			// Consider the above picked cheapest edges and add them 
 			// to MST 
-			for (int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 				// Check if cheapest for current set exists 
 				if (cheapest[i] != -1) {
 					int set1 = find(edges[cheapest[i]].U);

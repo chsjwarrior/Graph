@@ -18,6 +18,7 @@ private:
 		}
 	};
 
+	std::multiset<Edge, LessWeight> edges;
 	std::pair<unsigned int, unsigned int>* subsets;
 	//pair.first = parent;
 	//pair.second = rank;
@@ -42,9 +43,15 @@ private:
 		}
 	}
 
+	void makeSet() {
+		std::multiset<Edge> set = graph.getEdges();
+		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
+			edges.emplace(e->U, e->V, e->WEIGHT);
+	}
+
 public:
 	Kruskal() = delete;
-	Kruskal(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES) {
+	Kruskal(const Graph& graph) : graph(graph) {
 		subsets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}
 
@@ -59,14 +66,10 @@ public:
 			subsets[u].second = 0;
 		}
 
-		std::multiset<Edge, LessWeight> edges;
-		std::multiset<Edge> set = graph.getEdges();
-		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
-			edges.emplace(e->U, e->V, e->WEIGHT);
+		makeSet();
 
 		writeln("Kruskal:");
 		while (!edges.empty()) {
-
 			unsigned int x = find(edges.cbegin()->U);
 			unsigned int y = find(edges.cbegin()->V);
 

@@ -61,7 +61,7 @@ public:
 			edges.emplace(e->U, e->V, e->WEIGHT);
 		degrees = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
-		selected.reserve(graph.AMOUNT_VERTEXES);
+		//selected.reserve(edges.size());
 	}
 
 	~CheapestLink() {
@@ -102,7 +102,7 @@ public:
 					write("=", edges.cbegin()->WEIGHT);
 					write(" entry\n");
 					//hasZeroDegree = std::any_of(degrees, degrees + graph.AMOUNT_VERTEXES, [](unsigned int d) { return d == 0; });
-				} else
+				} else					
 					selected.pop_back();
 			}
 

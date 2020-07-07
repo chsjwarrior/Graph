@@ -54,7 +54,7 @@ struct Edge {
 		return false;
 	}
 
-	const Edge& operator=(const Edge&) = delete;
+	Edge& operator=(const Edge&) = delete;
 	/*
 	const Edge& operator=(const Edge& other) {
 		//write("copy Assigment {", U, ",", V, "=", WEIGHT, "} & {", other.U, ",", other.V, "=", other.WEIGHT, "}\n");

@@ -54,31 +54,31 @@ public:
 		visited = nullptr;
 	}
 
-	void fordFulkerson(const unsigned int& source, const unsigned int& destiny) {
+	void fordFulkerson(const unsigned int& source, const unsigned int& sink) {
 		if (!graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
 			return;
 		}
 
 		writeln("Ford-Fulkerson:");
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			predecessor[u] = NIL;
-			for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; v++)
-				costMatrix[u][v] = graph.getWeigthFrom(u, v);
-		}
 
 		unsigned int u, v;
 		int maxFlow = 0;
+		for (u = 0; u < graph.AMOUNT_VERTEXES; u++) {
+			predecessor[u] = NIL;
+			for (v = 0; v < graph.AMOUNT_VERTEXES; v++)
+				costMatrix[u][v] = graph.getWeigthFrom(u, v);
+		}
 
-		while (bfsUtil(source, destiny)) {
+		while (bfsUtil(source, sink)) {
 			int pathFlow = INF;
 
-			for (v = destiny; v != source; v = predecessor[v]) {
+			for (v = sink; v != source; v = predecessor[v]) {
 				u = predecessor[v];
 				pathFlow = std::min(pathFlow, graph.getWeigthFrom(u, v));
 			}
 
-			for (v = destiny; v != source; v = predecessor[v]) {
+			for (v = sink; v != source; v = predecessor[v]) {
 				u = predecessor[v];
 				costMatrix[u][v] -= pathFlow;
 				costMatrix[v][u] += pathFlow;

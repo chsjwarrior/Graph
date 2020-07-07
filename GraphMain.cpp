@@ -136,25 +136,30 @@ int main() {
 					"Dgt 6 para imprimir lista de incidencia.",
 					"Dgt 7 para imprimir Matriz de custo.",
 					"Dgt 8 para imprimir Informacoes do grafo.",
-					"------------------------------------------",
+					"---------------caminhamento---------------",
 					"Dgt 9 para Busca em largura.",
 					"Dgt 10 para Busca em profundidade.",
+					"--------------menor caminho---------------",
 					"Dgt 11 para Dijkstra.",
 					"Dgt 12 para Floyd Warshall.",
 					"Dgt 13 para Bellman-Ford.",
+					"--------------fluxo em rede---------------",
 					"Dgt 14 para Ford-Fulkerson.",
-					"Dgt 15 para Fleury.",
-					"Dgt 16 para Robert Flores.",
-					"Dgt 17 para Vizinho mais proximo.",
-					"Dgt 18 para Ligacao mais economica.",
-					"Dgt 19 para Goodman.",
-					"Dgt 20 para Conjuntos disjuntos.",
-					"Dgt 21 para Kosaraju.",
-					"Dgt 22 para Tarjan.",
-					"Dgt 23 para Kruskal.",
-					"Dgt 24 para Prim.",
-					"Dgt 25 para Boruvka,"
-					"Dgt 26 para Coloracao.");
+					"---------------conexidade-----------------",
+					"Dgt 16 para Fleury.",
+					"Dgt 17 para Robert Flores.",
+					"Dgt 18 para Vizinho mais proximo.",
+					"Dgt 19 para Ligacao mais economica.",
+					"Dgt 20 para Goodman.",
+					"Dgt 21 para Conjuntos disjuntos.",
+					"Dgt 22 para Kosaraju.",
+					"Dgt 23 para Tarjan.",
+					"----------arvore geradora minima----------",
+					"Dgt 24 para Kruskal.",
+					"Dgt 25 para Prim.",
+					"Dgt 26 para Boruvka,"
+					"------------------------------------------",
+					"Dgt 27 para Coloracao.");
 		std::cin >> choice;
 		system("CLS");
 
@@ -189,54 +194,46 @@ int main() {
 						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						BreadthFirstSearch bfs(*graph);
 						bfs.bfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
-					}
-					break;
+					} break;
 				case 10:
 					{
 						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						DepthFirstSearch dfs(*graph);
 						dfs.dfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
-					}
-					break;
+					} break;
 				case 11:
 					{
 						Dijkstra dijkstra(*graph);
 						dijkstra.dijkstra(getVertex("Dgt o numero do vertice de origem."));
-					}
-					break;
+					} break;
 				case 12:
 					{
 						FloydWarshall floydWarshall(*graph);
 						floydWarshall.floydWarshall();
-					}
-					break;
+					} break;
 				case 13:
 					{
 						BellmanFord bellmanFord(*graph);
 						bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
-					}
-					break;
+					} break;
 				case 14:
 					{
+						unsigned int source = getVertex("Dgt o numero do vertice de origem.");
+						unsigned int sink = getVertex("Dgt o numero do vertice de destino.");
 						FordFulkerson fordFulkerson(*graph);
-						unsigned int origin = getVertex("Dgt o numero do vertice de origem.");
-						unsigned int destiny = getVertex("Dgt o numero do vertice de destino.");
-						fordFulkerson.fordFulkerson(origin, destiny);
-					}
-					break;
-				case 15:
+						fordFulkerson.fordFulkerson(source, sink);
+					} break;
+				case 15:					
 					{
 						Fleury fleury(*graph);
 						fleury.fleury();
-					}
-					break;
+					} break;
 				case 16:
 					{
 						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						RobertFlores robertFlores(*graph);
 						robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."), isRecursive);
-					}
-					break;
+					} break;
 				case 17:
 					{
 						bool isRepetitive = read("Dgt 0 para Vizinha mais proximo. \nDgt qualquer valor para Vizinho mais proximo repetivo.");
@@ -245,63 +242,53 @@ int main() {
 							closerNeighbor.closerNeighborRepetitive();
 						else
 							closerNeighbor.closerNeighbor(getVertex("Dgt o numero do vertice de origem."));
-					}
-					break;
+					} break;
 				case 18:
 					{
 						CheapestLink cheapestLink(*graph);
 						cheapestLink.cheapestLink();
-					}
-					break;
+					} break;
 				case 19:
 					{
 						Goodman goodman(*graph);
 						goodman.goodman();
-					}
-					break;
+					} break;
 				case 20:
 					{
 						DisjointAssemblies disjointAssemblies(*graph);
 						disjointAssemblies.connectedComponents();
-					}
-					break;
+					} break;
 				case 21:
 					{
 						Kosaraju kosaraju(*graph);
 						kosaraju.kosaraju();
-					}
-					break;
+					} break;
 				case 22:
 					{
 						Tarjan tarjan(*graph);
 						tarjan.tarjan();
-					}
-					break;
+					} break;
 				case 23:
 					{
 						Kruskal kruskal(*graph);
 						kruskal.kruskal();
-					}
-					break;
+					} break;
 				case 24:
 					{
 						Prim prim(*graph);
 						prim.prim(getVertex("Dgt o numero do vertice de origem."));
-					}
-					break;
+					} break;
 				case 25:
 					{
 						Boruvka boruvka(*graph);
 						boruvka.boruvka();
-					}
-					break;
+					} break;
 				case 26:
 					{
 						bool isSequential = read("Dgt 0 para Coloracao sequencial. \nDgt qualquer valor para Coloracao heuristica.");
 						Coloring coloring(*graph);
 						coloring.coloring(isSequential);
-					}
-					break;
+					} break;
 				default:
 					writeErr("valor invalido, dgt novamente.");
 			}
