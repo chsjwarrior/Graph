@@ -45,7 +45,7 @@ public:
 		predecessor = nullptr;
 	}
 
-	void bellmanFord(const unsigned int& source) const {
+	void bellmanFord(const unsigned int& source) {
 		if (!graph.IS_DIGRAPH) {
 			writeln("O Grafo precisa ser dirigido para o algoritmo Bellman-Ford funcionar.");
 			return;

@@ -13,7 +13,7 @@ private:
 	unsigned int* predecessor;
 	bool* visited;
 
-	const unsigned int extractMin(std::list<unsigned int>& queue) const {
+	const unsigned int extractMin(std::list<unsigned int>& queue) {
 		int lowerDistance = INF;
 		unsigned int lowerVertex = NIL;
 		for (auto u = queue.cbegin(); u != queue.cend(); ++u)

@@ -10,8 +10,9 @@ class CloserNeighbor {
 private:
 	const Graph& graph;
 	bool* visited;
+	int total;
 
-	void closerNeighborR(const unsigned int& u) const {
+	void closerNeighborR(const unsigned int& u) {
 		visited[u] = true;
 		writeVertex(u);
 
@@ -25,6 +26,7 @@ private:
 			}
 		if (lowerVertex != NIL) {
 			write("->");
+			total += graph.getWeigthFrom(u, lowerVertex);
 			closerNeighborR(lowerVertex);
 		}
 	}
@@ -33,38 +35,42 @@ public:
 	CloserNeighbor() = delete;
 	CloserNeighbor(const Graph& graph) : graph(graph) {
 		visited = new bool[graph.AMOUNT_VERTEXES];
+		total = NULL;
 	}
 
 	~CloserNeighbor() {
 		delete[] visited;
 		visited = nullptr;
+		total = NULL;
 	}
 
-	void closerNeighbor(const unsigned int source) const {
+	void closerNeighbor(const unsigned int source) {
 		writeln("Vizinho mais proximo:");
 
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
+		total = 0;
 		closerNeighborR(source);
 
 		if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](const bool& x) { return x == true; })) {
 			write("->");
 			writeVertex(source);
 		}
-		write("\n");
+		write("= ", total, "\n");
 	}
 
-	void closerNeighborRepetitive() const {
+	void closerNeighborRepetitive() {
 		writeln("Vizinho mais proximo repetitivo:");
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
+			total = 0;
 			closerNeighborR(u);
 
 			if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](const bool& x) { return x == true; })) {
 				write("->");
 				writeVertex(u);
 			}
-			write("\n");
+			write("= ", total, "\n");
 		}
 	}
 };

@@ -5,7 +5,7 @@ private:
 	const Graph& graph;
 	unsigned int* color;
 
-	void setValidColor(const unsigned int& u) const {
+	void setValidColor(const unsigned int& u) {
 		unsigned int colorI = 0;
 		bool isValidColor = false;
 
@@ -20,7 +20,7 @@ private:
 		color[u] = colorI;
 	}
 
-	const unsigned int getHigherDegreeNotColored() const {
+	const unsigned int getHigherDegreeNotColored() {
 		unsigned int vertex = graph.AMOUNT_VERTEXES;
 		unsigned int higherDegreeNotColored = 0;
 
@@ -66,7 +66,7 @@ public:
 		color = nullptr;
 	}
 
-	void coloring(const bool& isSequential) const {
+	void coloring(const bool& isSequential) {
 		memset(color, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
 		if (isSequential) {
@@ -84,7 +84,6 @@ public:
 
 			writeln("Coloracao heuristica:");
 		}
-
 		print();
 	}
 };

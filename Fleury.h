@@ -33,7 +33,7 @@ private:
 		return std::make_pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTEXES ? 0 : firstOddVertex);
 	}
 
-	const unsigned int dfsUtil(const unsigned int& u) const {
+	const unsigned int dfsUtil(const unsigned int& u) {
 		visited[u] = true;
 		unsigned int count = 1;
 

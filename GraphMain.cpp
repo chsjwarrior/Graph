@@ -6,11 +6,12 @@
 #include "Dijkstra.h"
 #include "FloydWarshall.h"
 #include "BellmanFord.h"
-#include "FordFulkerson.h"
 #include "Fleury.h"
+#include "Hierholzer.h"
 #include "RobertFlores.h"
 #include "CloserNeighbor.h"
 #include "CheapestLink.h"
+#include "FordFulkerson.h"
 #include "Goodman.h"
 #include "DisjointAssemblies.h"
 #include "Kosaraju.h"
@@ -22,24 +23,13 @@
 
 /*
 https://en.wikipedia.org/wiki/Graph_theory
-Bellman–Ford algorithm
 Boruvka's algorithm
-Breadth-first search
-Depth-first search
-Dijkstra's algorithm
 Edmonds–Karp algorithm
-Floyd–Warshall algorithm
-Ford–Fulkerson algorithm
 Hopcroft–Karp algorithm
 Hungarian algorithm
-Kosaraju's algorithm
-Kruskal's algorithm
-Nearest neighbour algorithm
 Network simplex algorithm
 Planarity testing algorithms
-Prim's algorithm
 Push–relabel maximum flow algorithm
-Tarjan's strongly connected components algorithm
 Topological sorting
 */
 
@@ -143,13 +133,14 @@ int main() {
 					"Dgt 11 para Dijkstra.",
 					"Dgt 12 para Floyd Warshall.",
 					"Dgt 13 para Bellman-Ford.",
+					"Dgt 14 para Fleury.",
+					"Dgt 15 para Hierholzer.",
+					"Dgt 16 para Robert Flores.",
+					"Dgt 17 para Vizinho mais proximo.",
+					"Dgt 18 para Ligacao mais economica.",
 					"--------------fluxo em rede---------------",
-					"Dgt 14 para Ford-Fulkerson.",
+					"Dgt 19 para Ford-Fulkerson.",
 					"---------------conexidade-----------------",
-					"Dgt 16 para Fleury.",
-					"Dgt 17 para Robert Flores.",
-					"Dgt 18 para Vizinho mais proximo.",
-					"Dgt 19 para Ligacao mais economica.",
 					"Dgt 20 para Goodman.",
 					"Dgt 21 para Conjuntos disjuntos.",
 					"Dgt 22 para Kosaraju.",
@@ -157,7 +148,7 @@ int main() {
 					"----------arvore geradora minima----------",
 					"Dgt 24 para Kruskal.",
 					"Dgt 25 para Prim.",
-					"Dgt 26 para Boruvka,"
+					"Dgt 26 para Boruvka,",
 					"------------------------------------------",
 					"Dgt 27 para Coloracao.");
 		std::cin >> choice;
@@ -216,17 +207,16 @@ int main() {
 						BellmanFord bellmanFord(*graph);
 						bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
 					} break;
+
 				case 14:
-					{
-						unsigned int source = getVertex("Dgt o numero do vertice de origem.");
-						unsigned int sink = getVertex("Dgt o numero do vertice de destino.");
-						FordFulkerson fordFulkerson(*graph);
-						fordFulkerson.fordFulkerson(source, sink);
-					} break;
-				case 15:					
 					{
 						Fleury fleury(*graph);
 						fleury.fleury();
+					} break;
+				case 15:
+					{
+						Hierholzer Hierholzer(*graph);
+						Hierholzer.hierholzer(getVertex("Dgt o numero do vertice de origem."));
 					} break;
 				case 16:
 					{
@@ -250,40 +240,47 @@ int main() {
 					} break;
 				case 19:
 					{
+						unsigned int source = getVertex("Dgt o numero do vertice de origem.");
+						unsigned int sink = getVertex("Dgt o numero do vertice de destino.");
+						FordFulkerson fordFulkerson(*graph);
+						fordFulkerson.fordFulkerson(source, sink);
+					} break;
+				case 20:
+					{
 						Goodman goodman(*graph);
 						goodman.goodman();
 					} break;
-				case 20:
+				case 21:
 					{
 						DisjointAssemblies disjointAssemblies(*graph);
 						disjointAssemblies.connectedComponents();
 					} break;
-				case 21:
+				case 22:
 					{
 						Kosaraju kosaraju(*graph);
 						kosaraju.kosaraju();
 					} break;
-				case 22:
+				case 23:
 					{
 						Tarjan tarjan(*graph);
 						tarjan.tarjan();
 					} break;
-				case 23:
+				case 24:
 					{
 						Kruskal kruskal(*graph);
 						kruskal.kruskal();
 					} break;
-				case 24:
+				case 25:
 					{
 						Prim prim(*graph);
 						prim.prim(getVertex("Dgt o numero do vertice de origem."));
 					} break;
-				case 25:
+				case 26:
 					{
 						Boruvka boruvka(*graph);
 						boruvka.boruvka();
 					} break;
-				case 26:
+				case 27:
 					{
 						bool isSequential = read("Dgt 0 para Coloracao sequencial. \nDgt qualquer valor para Coloracao heuristica.");
 						Coloring coloring(*graph);

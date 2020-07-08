@@ -69,7 +69,7 @@ public:
 		predecessor = nullptr;
 	};
 
-	void floydWarshall() const {
+	void floydWarshall() {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; v++) {
 				costMatrix[u][v] = graph.getWeigthFrom(u, v);

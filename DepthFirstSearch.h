@@ -99,7 +99,7 @@ public:
 
 		time = 0;
 		for (unsigned int u = 0, v = source; u < graph.AMOUNT_VERTEXES; u++) {
-			if (visited[v] == false)
+			if (!visited[v])
 				if (isRecursive) {
 					dfsVisitRecursive(v);
 					writeln("Busca em profundidade recursiva:");
