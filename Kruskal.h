@@ -61,6 +61,11 @@ public:
 	}
 
 	void kruskal() {
+		if (graph.IS_DIGRAPH) {
+			writeln("O Grafo precisa ser nao dirigido para o algoritmo Kruskal funcionar.");
+			return;
+		}
+
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			subsets[u].first = u;
 			subsets[u].second = 0;

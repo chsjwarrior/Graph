@@ -70,6 +70,11 @@ public:
 	}
 
 	void prim(const unsigned int& source) {
+		if (graph.IS_DIGRAPH) {
+			writeln("O Grafo precisa ser nao dirigido para o algoritmo Prim funcionar.");
+			return;
+		}
+
 		std::list<unsigned int> queue;
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			key[i] = INF;

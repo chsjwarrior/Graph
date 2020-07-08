@@ -14,6 +14,11 @@ public:
 	~Hierholzer() {}
 
 	void hierholzer(const unsigned int& source) {
+		if (!graph.IS_DIGRAPH) {
+			writeln("O Grafo precisa ser dirigido para o algoritmo Hierholzer funcionar.");
+			return;
+		}
+
 		std::stack<unsigned int> path;
 		std::vector<unsigned int> circuit;
 
