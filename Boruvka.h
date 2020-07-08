@@ -15,6 +15,7 @@ private:
 	std::pair<unsigned int, unsigned int>* subsets;
 	//pair.first = parent;
 	//pair.second = rank;
+	std::vector<Edge> edges;
 
 	const unsigned int find(const unsigned int& u) {
 		if (subsets[u].first != u)
@@ -36,9 +37,19 @@ private:
 		}
 	}
 
+	void makeSet() {
+		std::multiset<Edge> set = graph.getEdges();
+
+		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
+			edges.emplace_back(e->U, e->V, e->WEIGHT);
+	}
+
 public:
 	Boruvka() = delete;
 	Boruvka(const Graph& graph) : graph(graph) {
+		if (graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo Boruvka funcionar.");
+
 		cheapest = new unsigned int[graph.AMOUNT_VERTEXES];
 		subsets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}
@@ -50,28 +61,16 @@ public:
 	}
 
 	void boruvka() {
-		if (graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser nao dirigido para o algoritmo Boruvka funcionar.");
-			return;
-		}
-
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			subsets[u].first = u;
 			subsets[u].second = 0;
 		}
 
-		std::multiset<Edge> set = graph.getEdges();
-		std::vector<Edge> edges;
-		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
-			edges.emplace_back(e->U, e->V, e->WEIGHT);
+		makeSet();
 
-		// Initially there are V different trees. 
-		// Finally there will be one tree that will be MST 
 		int numTrees = graph.AMOUNT_VERTEXES;
 		int MSTweight = 0;
 
-		// Keep combining components (or sets) until all 
-		// compnentes are not combined into single MST. 
 		writeln("Boruvka:");
 		while (numTrees > 1) {
 			memset(cheapest, NIL, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);

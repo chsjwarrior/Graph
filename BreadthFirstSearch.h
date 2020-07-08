@@ -23,7 +23,7 @@ private:
 
 		std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!visited[*v]) {
+			if (visited[*v] == false) {
 				queue.push(*v);
 				discovery[*v] = discovery[u] + 1;
 				predecessor[*v] = u;
@@ -41,7 +41,7 @@ private:
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (!visited[*v]) {
+				if (visited[*v] == false) {
 					queue.push(*v);
 					discovery[*v] = discovery[u] + 1;
 					predecessor[*v] = u;
@@ -52,17 +52,18 @@ private:
 
 	void print() const {
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		unsigned int i;
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(discovery[i]);
 			write('|');
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(predecessor[i]);
 			write('|');
 		}

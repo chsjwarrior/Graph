@@ -15,7 +15,7 @@ private:
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!visited[*v])
+			if (visited[*v] == false)
 				fillOrder(*v);
 
 		stack.push(u);
@@ -32,20 +32,23 @@ private:
 			graph.insertEdge(e->V, e->U, e->WEIGHT);
 	}
 
-	void dfs(int u) {		
+	void dfs(const unsigned int& u) {
 		writeVertex(u);
 		write(' ');
 		visited[u] = true;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!visited[*v])
+			if (visited[*v] == false)
 				dfs(*v);
 	}
 
 public:
 	Kosaraju() = delete;
 	Kosaraju(Graph& graph) : graph(graph) {
+		if (!graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser dirigido para o algoritmo Kosaraju funcionar.");
+
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 	~Kosaraju() {
@@ -54,20 +57,15 @@ public:
 	}
 
 	void kosaraju() {
-		if (!graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser dirigido para o algoritmo Kosaraju funcionar.");
-			return;
-		}
-
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
-			if (!visited[u])
+			if (visited[u] == false)
 				fillOrder(u);
 
 		graphTranspose();
 
-		memset(visited, false, sizeof(visited));
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
 		writeln("Kosaraju:");
 		unsigned int c = 1;

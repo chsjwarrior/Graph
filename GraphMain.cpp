@@ -52,8 +52,13 @@ void openFile(const char path[]) {
 		int w;
 		file >> u >> v >> w;
 		destroyGraph();
-		graph = new Graph(u, w != 0);
-		while (file >> u && file >> v && file >> w && !fail) {
+		try {
+			graph = new Graph(u, w != 0);
+		} catch (std::exception& e) {
+			writeErr(e.what());
+			fail = true;
+		}
+		while (!fail && file >> u && file >> v && file >> w) {
 			line++;
 			u--;
 			v--;
@@ -79,18 +84,24 @@ void createGraph() {
 	unsigned int u = read("Dgt a qtd de Vertices.");
 	unsigned int v = read("Dgt 1: Grafo dirigido.", "Dgt outro valor: Grafo nao dirigido.");
 	destroyGraph();
-	graph = new Graph(u, v == 1);
+	try {
+		graph = new Graph(u, v == 1);
+	} catch (std::exception& e) {
+		writeErr(e.what());
+		return;
+	}
 	int w = read("Dgt 1: Grafo valorado.", "Dgt outro valor: Grafo nao valorado.");
-
+	u = v = NIL;
 	do {
 		graph->printVerticesToSelect();
 		u = read("Selecione o numero do primeiro vertice ou 0 para retornar:");
-		if (u != 0) {
+		if (u != 0 && graph->isValidVertex(u)) {
 			v = read("Selecione o segundo vertice ou 0 para cancelar:");
-			if (v != 0) {
+			if (v != 0 && graph->isValidVertex(v)) {
 				if (w == 1) {// se grafo valorado
 					w = read("Dgt o custo da Aresta:");
-					graph->insertEdge(u - 1, v - 1, w);
+					if (graph->isValidWeight(w))
+						graph->insertEdge(u - 1, v - 1, w);
 					w = 1;
 				} else
 					graph->insertEdge(u - 1, v - 1);
@@ -204,8 +215,12 @@ int main() {
 					} break;
 				case 13:
 					{
-						BellmanFord bellmanFord(*graph);
-						bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
+						try {
+							BellmanFord bellmanFord(*graph);
+							bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 
 				case 14:
@@ -215,8 +230,12 @@ int main() {
 					} break;
 				case 15:
 					{
-						Hierholzer Hierholzer(*graph);
-						Hierholzer.hierholzer(getVertex("Dgt o numero do vertice de origem."));
+						try {
+							Hierholzer Hierholzer(*graph);
+							Hierholzer.hierholzer();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 16:
 					{
@@ -235,20 +254,32 @@ int main() {
 					} break;
 				case 18:
 					{
-						CheapestLink cheapestLink(*graph);
-						cheapestLink.cheapestLink();
+						try {
+							CheapestLink cheapestLink(*graph);
+							cheapestLink.cheapestLink();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 19:
 					{
 						unsigned int source = getVertex("Dgt o numero do vertice de origem.");
 						unsigned int sink = getVertex("Dgt o numero do vertice de destino.");
-						FordFulkerson fordFulkerson(*graph);
-						fordFulkerson.fordFulkerson(source, sink);
+						try {
+							FordFulkerson fordFulkerson(*graph);
+							fordFulkerson.fordFulkerson(source, sink);
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 20:
 					{
-						Goodman goodman(*graph);
-						goodman.goodman();
+						try {
+							Goodman goodman(*graph);
+							goodman.goodman();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 21:
 					{
@@ -257,28 +288,48 @@ int main() {
 					} break;
 				case 22:
 					{
-						Kosaraju kosaraju(*graph);
-						kosaraju.kosaraju();
+						try {
+							Kosaraju kosaraju(*graph);
+							kosaraju.kosaraju();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 23:
 					{
-						Tarjan tarjan(*graph);
-						tarjan.tarjan();
+						try {
+							Tarjan tarjan(*graph);
+							tarjan.tarjan();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 24:
 					{
-						Kruskal kruskal(*graph);
-						kruskal.kruskal();
+						try {
+							Kruskal kruskal(*graph);
+							kruskal.kruskal();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 25:
 					{
-						Prim prim(*graph);
-						prim.prim(getVertex("Dgt o numero do vertice de origem."));
+						try {
+							Prim prim(*graph);
+							prim.prim(getVertex("Dgt o numero do vertice de origem."));
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 26:
 					{
-						Boruvka boruvka(*graph);
-						boruvka.boruvka();
+						try {
+							Boruvka boruvka(*graph);
+							boruvka.boruvka();
+						} catch (std::exception& e) {
+							writeErr(e.what());
+						}
 					} break;
 				case 27:
 					{

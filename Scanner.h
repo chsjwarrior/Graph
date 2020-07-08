@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
+#include <limits>
 
 namespace Scanner {
 	void writeVertex(const unsigned int& vertex) {
-		if (vertex != std::numeric_limits<unsigned int>::max()) {
+		if (vertex != UINT_MAX) {
 			std::cout << 'V';
 			if (vertex < 99)
 				std::cout << '0';
@@ -15,7 +16,7 @@ namespace Scanner {
 	}
 
 	void writeEdge(const unsigned int& edge) {
-		if (edge != std::numeric_limits<unsigned int>::max()) {
+		if (edge != UINT_MAX) {
 			std::cout << 'E';
 			if (edge < 99)
 				std::cout << '0';

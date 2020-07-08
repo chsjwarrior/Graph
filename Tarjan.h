@@ -42,6 +42,9 @@ private:
 public:
 	Tarjan() = delete;
 	Tarjan(const Graph& graph) : graph(graph) {
+		if (!graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser dirigido para o algoritmo Tarjan funcionar.");
+
 		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
 		low = new unsigned int[graph.AMOUNT_VERTEXES];
 		onStack = new bool[graph.AMOUNT_VERTEXES];
@@ -61,11 +64,6 @@ public:
 	}
 
 	void tarjan() {
-		if (!graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser dirigido para o algoritmo Tarjan funcionar.");
-			return;
-		}
-
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = NIL;
 			low[u] = NIL;

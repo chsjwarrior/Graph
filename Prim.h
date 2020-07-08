@@ -35,17 +35,18 @@ private:
 	void print() const {
 		writeln("Prim:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		unsigned int i;
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\nki  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(key[i]);
 			write('|');
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(predecessor[i]);
 			write('|');
 		}
@@ -55,6 +56,9 @@ private:
 public:
 	Prim() = delete;
 	Prim(const Graph& graph) : graph(graph) {
+		if (graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo Prim funcionar.");
+
 		key = new int[graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];
@@ -70,11 +74,6 @@ public:
 	}
 
 	void prim(const unsigned int& source) {
-		if (graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser nao dirigido para o algoritmo Prim funcionar.");
-			return;
-		}
-
 		std::list<unsigned int> queue;
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			key[i] = INF;
@@ -90,7 +89,7 @@ public:
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (!visited[*v])
+				if (visited[*v] == false)
 					relax(u, *v, graph.getWeigthFrom(u, *v));
 		}
 		print();

@@ -38,7 +38,7 @@ private:
 		for (auto e = selected.cbegin(); e != selected.cend() && !cycle_found; ++e) {
 			if (e->U == vertex || e->V == vertex) {
 				const unsigned int neighbour = e->U == vertex ? e->V : e->U;
-				if (!visited[neighbour]) {
+				if (visited[neighbour] == false) {
 					cycle_found = cyclic_recursive(neighbour, vertex);
 				} else if (neighbour != predecessor) {
 					cycle_found = true;
@@ -56,6 +56,9 @@ private:
 public:
 	CheapestLink() = delete;
 	CheapestLink(const Graph& graph) : graph(graph) {
+		if (graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo de da ligacao mais economica funcionar.");
+
 		std::multiset<Edge> set = graph.getEdges();
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
 			edges.emplace(e->U, e->V, e->WEIGHT);
@@ -73,11 +76,6 @@ public:
 	}
 
 	void cheapestLink() {
-		if (graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser nao dirigido para o algoritmo de da ligacao mais economica funcionar.");
-			return;
-		}
-
 		writeln("Ligacao mais economica:");
 
 		memset(degrees, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
@@ -95,14 +93,14 @@ public:
 
 			if (degrees[edges.cbegin()->U] < 2 && degrees[edges.cbegin()->V] < 2) {
 				selected.emplace_back(edges.cbegin()->U, edges.cbegin()->V, edges.cbegin()->WEIGHT);
-				if (!cyclic()) {
+				if (cyclic() == false) {
 					degrees[edges.cbegin()->U]++;
 					degrees[edges.cbegin()->V]++;
 					edges.cbegin()->print();
 					write("=", edges.cbegin()->WEIGHT);
 					write(" entry\n");
 					//hasZeroDegree = std::any_of(degrees, degrees + graph.AMOUNT_VERTEXES, [](unsigned int d) { return d == 0; });
-				} else					
+				} else
 					selected.pop_back();
 			}
 

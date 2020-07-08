@@ -13,12 +13,13 @@ class FloydWarshall {
 	void print() const {
 		writeln("Floyd-Warshall:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		unsigned int i;
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\n");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
@@ -28,12 +29,12 @@ class FloydWarshall {
 			write("\n");
 		}
 		write("\nVi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\n");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {

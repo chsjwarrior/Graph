@@ -20,7 +20,7 @@ private:
 		unsigned int lowerVertex = NIL;
 		std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!visited[*v] && graph.getWeigthFrom(u, *v) < lowerWeight) {
+			if (visited[*v] == false && graph.getWeigthFrom(u, *v) < lowerWeight) {
 				lowerVertex = *v;
 				lowerWeight = graph.getWeigthFrom(u, *v);
 			}

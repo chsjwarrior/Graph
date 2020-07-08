@@ -35,17 +35,18 @@ private:
 	void print() const {
 		writeln("Dijkstra:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		unsigned int i;
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(distance[i]);
 			write('|');
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(predecessor[i]);
 			write('|');
 		}
@@ -85,7 +86,7 @@ public:
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (!visited[*v])//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
+				if (visited[*v] == false)//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
 					relax(u, *v, graph.getWeigthFrom(u, *v));
 		}
 		print();

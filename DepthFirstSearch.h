@@ -21,7 +21,7 @@ private:
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!visited[*v])
+			if (visited[*v] == false)
 				dfsVisitRecursive(*v);
 
 		close[u] = ++time;
@@ -34,13 +34,13 @@ private:
 		while (!stack.empty()) {
 			u = stack.top();
 
-			if (!visited[u]) {
+			if (visited[u] == false) {
 				visited[u] = true;
 				discovery[u] = ++time;
 
 				std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 				for (auto v = adjacences.crbegin(); v != adjacences.crend(); ++v)
-					if (!visited[*v])
+					if (visited[*v] == false)
 						stack.push(*v);
 				adjacences.clear();
 
@@ -54,17 +54,18 @@ private:
 
 	void print() const {
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		unsigned int i;
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(discovery[i]);
 			write('|');
 		}
 		write("\nci  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(close[i]);
 			write('|');
 		}
@@ -99,7 +100,7 @@ public:
 
 		time = 0;
 		for (unsigned int u = 0, v = source; u < graph.AMOUNT_VERTEXES; u++) {
-			if (!visited[v])
+			if (visited[v] == false)
 				if (isRecursive) {
 					dfsVisitRecursive(v);
 					writeln("Busca em profundidade recursiva:");

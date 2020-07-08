@@ -2,7 +2,7 @@
 #include <set>
 
 #ifndef NIL
-#define NIL std::numeric_limits<unsigned int>::max()
+#define NIL UINT_MAX
 #endif //!NIL
 
 #ifndef INF
@@ -16,10 +16,10 @@ struct Edge {
 	const int WEIGHT;
 
 	Edge() = delete;
-	Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
+	explicit Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
 		//write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
-	Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
+	explicit Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
 		//write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
 	~Edge() {
@@ -83,7 +83,12 @@ public:
 
 	Graph() = delete;
 	explicit Graph(const unsigned int& amountVertices, const bool& isDigraph) :
-		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {}
+		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {
+		if (amountVertices == 0)
+			throw std::exception("numero de vertices deve ser maior que zero.");
+		if (amountVertices == NIL)
+			throw std::exception("numero de vertices deve ser menor que " + NIL);
+	}
 	explicit Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DIGRAPH(other.IS_DIGRAPH) {
 		edges = other.getEdges();
 	}
@@ -104,6 +109,10 @@ public:
 
 	const bool isValidVertex(const unsigned int& v) const {
 		return v < AMOUNT_VERTEXES;
+	}
+
+	const bool isValidWeight(const unsigned int& w) const {
+		return w > -INF && w < INF;
 	}
 
 	void insertEdge(const unsigned int& u, const unsigned int& v, const int& weight = 1) {

@@ -3,6 +3,7 @@
 /*
 O algoritmo de Fleury é utilizado para a identificação de um ciclo euleriano em um grafo.
 
+//tem que descobrir se o algoritmo de Fleury funciona em grafo dirigidos ou não.
  funcionando, mas é preciso testar de outras maneiras ainda.
  funcionou com seguinte grafo:
 4 5 0
@@ -19,18 +20,41 @@ private:
 	Graph graph;
 	bool* visited;
 
-	const std::pair<unsigned int, unsigned int> validateGraph() const {
+	const bool isConnected() {
+		unsigned int u;
+		for (u = 0; u < graph.AMOUNT_VERTEXES; u++)
+			if (graph.getOutDegreeFrom(u) != 0)
+				break;
+
+		if (u == graph.AMOUNT_VERTEXES)
+			return true;
+
+		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
+		dfsUtil(u);
+
+		for (u = 0; u < graph.AMOUNT_VERTEXES; u++)
+			if (visited[u] == false && graph.getOutDegreeFrom(u) > 0)
+				return false;
+		return true;
+	}
+
+	const std::pair<unsigned int, unsigned int> validateGraph() {
 		unsigned int degree;
-		unsigned int amountOddVertex = 0, firstOddVertex = graph.AMOUNT_VERTEXES;
+		unsigned int amountOddVertexes = 0;
+		unsigned int firstOddVertex = NIL;
+
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			degree = graph.getOutDegreeFrom(u);//para digrafo tambem usa-se grau de saída
 			if (degree % 2 != 0) {
-				amountOddVertex++;
-				if (firstOddVertex == graph.AMOUNT_VERTEXES)
+				amountOddVertexes++;
+				if (firstOddVertex == NIL)
 					firstOddVertex = u;
 			}
 		}
-		return std::make_pair(amountOddVertex, firstOddVertex == graph.AMOUNT_VERTEXES ? 0 : firstOddVertex);
+
+		if (firstOddVertex == NIL)
+			firstOddVertex = 0;
+		return std::make_pair(amountOddVertexes, firstOddVertex);
 	}
 
 	const unsigned int dfsUtil(const unsigned int& u) {
@@ -39,7 +63,7 @@ private:
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!visited[*v])
+			if (visited[*v] == false)
 				count += dfsUtil(*v);
 		return count;
 	}
@@ -64,7 +88,7 @@ private:
 	void fleuryR(const unsigned int& u) {
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-			if (!isBridge(u, *v)) {
+			if (isBridge(u, *v) == false) {
 				writeVertex(u);
 				write("->");
 				writeVertex(*v);
@@ -88,18 +112,29 @@ public:
 
 	void fleury() {
 		writeln("Fleury:");
-		const std::pair<unsigned int, unsigned int> pair = validateGraph();
 
-		if (pair.first > 2) {
-			write(pair.first);
-			writeln(" vertices tem grau impar", "O Grafo nao e euleriano");
-		}
-		else {
-			if (pair.first == 0)
-				writeln("Todos os vertices tem grau par", "e possivel encontrar um caminho euleriano.");
-			else if (pair.first == 2)
-				writeln("Dois vertices tem grau impar", "e possivel encontrar um caminho semi-euleriano.");
-			fleuryR(pair.second);
-		}
+		/*
+		se o número de vertices com grau impar for:
+		+ maior que 2 entao o grafo nao e euleriano.
+		+ igual a 0 entao o grafo e euleriano.
+		+ igual a 2 entao o grafo e semi-euleriano.
+		Observe que a contagem impar nunca pode ser 1 para grafo nao direcionado.
+		*/
+
+		if (isConnected()) {
+			const std::pair<unsigned int, unsigned int> pair = validateGraph();
+
+			if (pair.first > 2) {
+				write(pair.first);
+				writeln(" vertices tem grau impar", "O Grafo nao e euleriano");
+			} else {
+				if (pair.first == 0)
+					writeln("Todos os vertices tem grau par", "e possivel encontrar um caminho euleriano.");
+				else if (pair.first == 2)
+					writeln("Dois vertices tem grau impar", "e possivel encontrar um caminho semi-euleriano.");
+				fleuryR(pair.second);
+			}
+		} else
+			writeln("O grafo é desconexo e nao e euleriano");
 	}
 };

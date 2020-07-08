@@ -27,7 +27,7 @@ private:
 					write(" achou");
 					print();
 					break;
-				} else if (!visited[*v])
+				} else if (visited[*v] == false)
 					robertFloresRecursive(*v);
 		}
 
@@ -59,7 +59,7 @@ private:
 							write(" achou");
 							print();
 							break;
-						} else if (!visited[*v])
+						} else if (visited[*v] == false)
 							stack.push(*v);
 						adjacences.clear();
 

@@ -14,17 +14,18 @@ private:
 	void print() const {
 		writeln("Bellman-Ford:");
 		write("Vi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		unsigned int i;
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(i);
 			write('|');
 		}
 		write("\ndi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeValue(distance[i]);
 			write('|');
 		}
 		write("\npi  |");
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			writeVertex(predecessor[i]);
 			write('|');
 		}
@@ -34,6 +35,8 @@ private:
 public:
 	BellmanFord() = delete;
 	BellmanFord(const Graph& graph) : graph(graph) {
+		if (!graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser dirigido para o algoritmo Bellman - Ford funcionar.");
 		distance = new int[graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 	}
@@ -46,11 +49,6 @@ public:
 	}
 
 	void bellmanFord(const unsigned int& source) {
-		if (!graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser dirigido para o algoritmo Bellman-Ford funcionar.");
-			return;
-		}
-
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = INF;
 			predecessor[u] = NIL;

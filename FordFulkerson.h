@@ -20,7 +20,7 @@ private:
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v)) {
-				if (!visited[*v]) {
+				if (visited[*v] == false) {
 					queue.push(*v);
 					predecessor[*v] = u;
 					visited[*v] = true;
@@ -34,6 +34,9 @@ private:
 public:
 	FordFulkerson() = delete;
 	FordFulkerson(const Graph& graph) : graph(graph) {
+		if (!graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
+
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			costMatrix[i] = new int[graph.AMOUNT_VERTEXES];
@@ -55,11 +58,6 @@ public:
 	}
 
 	void fordFulkerson(const unsigned int& source, const unsigned int& sink) {
-		if (!graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
-			return;
-		}
-
 		writeln("Ford-Fulkerson:");
 
 		unsigned int u, v;

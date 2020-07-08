@@ -18,10 +18,10 @@ private:
 		}
 	};
 
-	std::multiset<Edge, LessWeight> edges;
 	std::pair<unsigned int, unsigned int>* subsets;
 	//pair.first = parent;
 	//pair.second = rank;
+	std::multiset<Edge, LessWeight> edges;
 
 	const unsigned int find(const unsigned int& u) {
 		if (subsets[u].first != u)
@@ -52,6 +52,9 @@ private:
 public:
 	Kruskal() = delete;
 	Kruskal(const Graph& graph) : graph(graph) {
+		if (graph.IS_DIGRAPH)
+			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo Kruskal funcionar.");
+
 		subsets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}
 
@@ -61,11 +64,6 @@ public:
 	}
 
 	void kruskal() {
-		if (graph.IS_DIGRAPH) {
-			writeln("O Grafo precisa ser nao dirigido para o algoritmo Kruskal funcionar.");
-			return;
-		}
-
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			subsets[u].first = u;
 			subsets[u].second = 0;
@@ -75,10 +73,10 @@ public:
 
 		writeln("Kruskal:");
 		while (!edges.empty()) {
-			unsigned int x = find(edges.cbegin()->U);
-			unsigned int y = find(edges.cbegin()->V);
+			unsigned int u = find(edges.cbegin()->U);
+			unsigned int v = find(edges.cbegin()->V);
 
-			if (x != y) {
+			if (u != v) {
 				makeUnion(edges.cbegin()->U, edges.cbegin()->V);
 				edges.cbegin()->print();
 				write("\n");
