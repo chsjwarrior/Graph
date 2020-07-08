@@ -1,5 +1,8 @@
 #pragma once
-#include <unordered_map>
+
+/*
+O algoritmo de Hierholzer é utilizado para a identificação de um ciclo euleriano em um grafo.
+*/
 
 class Hierholzer {
 private:
@@ -15,22 +18,18 @@ public:
 		std::vector<unsigned int> circuit;
 
 		path.push(source);
-		unsigned int u = source;
+		unsigned int u, v;
 
 		while (!path.empty()) {
-
+			u = path.top();
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
+
 			if (!adjacences.empty()) {
-				path.push(u);
-
-				unsigned int v = *adjacences.crbegin();
-
+				v = *adjacences.crbegin();
 				graph.removeEdge(u, v);
-
-				u = v;
+				path.push(v);
 			} else {
-				circuit.push_back(u);
-				u = path.top();
+				circuit.push_back(path.top());
 				path.pop();
 			}
 		}
