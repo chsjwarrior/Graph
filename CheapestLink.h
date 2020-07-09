@@ -1,5 +1,4 @@
 #pragma once
-
 /*
 O algoritmo da ligação mais economica encontra um ciclo hamiltoniano no grafo passando pelas aresta com menor peso.
 Essa implementação do algoritmo ainda não esta funcionando para grafos semi-hamiltoniano.
@@ -16,7 +15,6 @@ testado e funcionando com o seguinte grafo:
 3 5 120
 4 5 199
 */
-
 class CheapestLink {
 private:
 	const Graph& graph;

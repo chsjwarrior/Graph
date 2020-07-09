@@ -1,6 +1,5 @@
 #pragma once
 #include <list>
-
 /*
 O algoritmo de Goodman serve para avaliar a conexidade em grafos não dirigidos.
 
@@ -15,7 +14,6 @@ falhou no seguinte grafo:
 5 6 1
 5 8 7
 */
-
 class Goodman {
 private:
 	Graph graph;

@@ -1,5 +1,4 @@
 #pragma once
-
 /*
 O algoritmo de Boruvka serve para encontrar a arvore geradora mínima (minimal spanning tree) em um grafo não direcionado e ponderado.
 Isto significa que ele encontra um subconjunto das arestas que forma uma arvore que inclui todos os vertices,
@@ -7,7 +6,6 @@ onde o peso total é dado pela soma dos pesos das arestas da árvore de menor valo
 Outros algoritmos conhecidos para encontrar árvores geradoras mínimas são o algoritmo de Kruskal e algoritmo de Prim.
 Enquanto o algoritmo de Prim e o algorítmo de Kruskal precisam de um grafo conexo para funciona, o algoritmo de Boruvka pode ser empregado em grafos desconexos.
 */
-
 class Boruvka {
 private:
 	const Graph& graph;

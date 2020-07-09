@@ -1,9 +1,7 @@
 #pragma once
-
 /*
 O Algoritmo Kosaraju detecta componentes fortemente conectadas.
 */
-
 class Kosaraju {
 private:
 	Graph graph;

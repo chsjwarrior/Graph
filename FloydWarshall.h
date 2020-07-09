@@ -1,10 +1,8 @@
 #pragma once
-
 /*
 O algoritmo de Floud-Warschall resolver o problema do caminho mínimo com várias origens em um grafo ponderado com valores positivos e negativos.
 cada linha da matriz indica a mesma distancia do algoritmo de Dijkstra.
 */
-
 class FloydWarshall {
 	const Graph& graph;
 	int** costMatrix;

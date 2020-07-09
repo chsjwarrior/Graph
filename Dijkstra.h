@@ -1,11 +1,9 @@
 #pragma once
 #include <list>
-
 /*
 O algoritmo de Dijkstra soluciona o problema do caminho mais curto num grafo dirigido ou não dirigido com arestas de peso não negativo.
 O algoritmo que serve para resolver o mesmo problema em um grafo com pesos negativos é o algoritmo de Bellman-Ford, que possui maior tempo de execução que o Dijkstra.
 */
-
 class Dijkstra {
 private:
 	const Graph& graph;

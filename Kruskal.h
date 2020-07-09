@@ -1,5 +1,4 @@
 #pragma once
-
 /*
 O algoritmo de Kruskal é um algoritmo em teoria dos grafos que busca uma árvore geradora mínima (minimal spanning tree) em um grafo conexo ponderado.
 Isto significa que ele encontra um subconjunto das arestas que forma uma arvore que inclui todos os vertices,
@@ -7,7 +6,6 @@ onde o peso total é dado pela soma dos pesos das arestas da árvore de menor valo
 Se o grafo não for conexo, então ele encontra uma floresta geradora mínima (uma árvore geradora mínima para cada componente conexo do grafo).
 O algoritmo de Kruskal é um exemplo de um algoritmo guloso (também conhecido como ganancioso ou greedy).
 */
-
 class Kruskal {
 private:
 	const Graph& graph;

@@ -1,5 +1,4 @@
 #pragma once
-
 /*
 O algoritmo de Fleury é utilizado para a identificação de um ciclo euleriano em um grafo.
 
@@ -14,7 +13,6 @@ O algoritmo de Fleury é utilizado para a identificação de um ciclo euleriano em 
 2 4 0
 4 4 0
 */
-
 class Fleury {
 private:
 	Graph graph;

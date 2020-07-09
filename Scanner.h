@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <limits>
+//#include <limits>
 
 namespace Scanner {
 	void writeVertex(const unsigned int& vertex) {
@@ -74,7 +74,21 @@ namespace Scanner {
 	}
 
 	template<typename... Types>
-	int read(Types... args) {
+	unsigned int uRead(Types... args) {
+		unsigned int value = NULL;
+		writeln(args...);
+		std::cin >> value;
+		if (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			system("CLS");
+			value = NULL;
+		}
+		return value;
+	}
+
+	template<typename... Types>
+	int iRead(Types... args) {
 		int value = NULL;
 		writeln(args...);
 		std::cin >> value;

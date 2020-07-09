@@ -1,10 +1,8 @@
 #pragma once
-
 /*
 O algoritmo de DisjointAssebblies serve para avaliar a conexidade em grafos não dirigidos.
 funcionando
 */
-
 class DisjointAssemblies {
 private:
 	const unsigned int AMOUNT_VERTEXES;

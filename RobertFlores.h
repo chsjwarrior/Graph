@@ -1,11 +1,9 @@
 #pragma once
-
 /*
 O objetivo do algoritmo Robert e Flores é identificar um ciclo Hamiltoniano,
 e tem como finalidade passar por cada vertices apenas uma vez e voltar a origem.
 funcionando.
 */
-
 class RobertFlores {
 private:
 	const Graph& graph;

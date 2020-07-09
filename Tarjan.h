@@ -1,9 +1,7 @@
 #pragma once
-
 /*
 Parcialmente funcionando
 */
-
 class Tarjan {
 private:
 	const Graph& graph;

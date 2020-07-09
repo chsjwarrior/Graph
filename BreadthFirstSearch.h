@@ -1,12 +1,11 @@
 #pragma once
 #include <queue>
-
 /*
-O algoritmo da busca em largura calcula a distância (menor número de arestas)
-desde o vértice S (raiz) até tdos os vértices acessíveis.
-funcionando.
+O algoritmo da busca em largura (Breadth-First Search - BFS) e utilizado para realizar uma busca em estrutura de dados do tipo arvore.
+O algoritmo começa em um vertice raiz e explora todos os vertices vizinhos antes de avaçar e explorar os proximos vertices vizinhos inexplorados.
+O algoritmo da busca em largura calcula pode calcular a distância (menor número de arestas)
+desde o vértice raiz ate todos os vértices acessiveis.
 */
-
 class BreadthFirstSearch {
 private:
 	const Graph& graph;

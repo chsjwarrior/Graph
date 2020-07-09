@@ -1,12 +1,9 @@
 #pragma once
 #include <stack>
-
 /*
-O algoritmo da busca em profundidade é um algoritmo para caminha no grafo.
-Seu núcleo se concentra em buscar sempre que possível o maif fundo no grafo.
-funcionando.
+O algoritmo da busca em profundidade (Depth-First Search - DFS)  e utilizado para realizar uma busca em estrutura de dados do tipo arvore.
+O algoritmo começa em um vertice raiz e explora tanto quanto possível cada um dos seus ramos, antes de retroceder (backtracking).
 */
-
 class DepthFirstSearch {
 private:
 	const Graph& graph;

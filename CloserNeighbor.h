@@ -1,11 +1,9 @@
 #pragma once
-
 /*
 O algoritmodo do vizinho mais próximo realiza um tipo de uma busca em profundidade escolhendo o vértice de menor custo.
 pode encontrar um ciclo hamiltoniano.
 funcionando.
 */
-
 class CloserNeighbor {
 private:
 	const Graph& graph;

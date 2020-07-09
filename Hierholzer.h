@@ -1,9 +1,7 @@
 #pragma once
-
 /*
 O algoritmo de Hierholzer é utilizado para a identificação de um ciclo euleriano em um grafo.
 */
-
 class Hierholzer {
 private:
 	Graph graph;

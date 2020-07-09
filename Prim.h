@@ -1,11 +1,9 @@
 #pragma once
-
 /*
 O algoritmo de Prim é empregado para encontrar uma arvore geradora minima (minimal spanning tree) num grafo conexo, valorado e não direcionado.
 Isto significa que ele encontra um subgrafo que forma uma arvore que inclui todos os vertices,
 onde o peso total é dado pela soma dos pesos das arestas da árvore de menor valor.
 */
-
 class Prim {
 private:
 	const Graph& graph;

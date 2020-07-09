@@ -45,7 +45,7 @@ void destroyGraph() {
 }
 
 void openFile(const char path[]) {
-	std::ifstream file(path);
+	std::ifstream file(path, std::ios::in);
 	if (file.is_open()) {
 		bool fail = false;
 		unsigned int u, v, line = 1;
@@ -58,17 +58,21 @@ void openFile(const char path[]) {
 			writeErr(e.what());
 			fail = true;
 		}
-		while (!fail && file >> u && file >> v && file >> w) {
+		while (fail == false && file >> u && file >> v && file >> w) {
 			line++;
 			u--;
 			v--;
-			if (!graph->isValidVertex(u)) {
+			if (graph->isValidVertex(u) == false) {
 				fail = true;
 				writeErr("Erro na linha ", line, " vertice U invalido.");
 			}
-			if (!graph->isValidVertex(v)) {
+			if (graph->isValidVertex(v) == false) {
 				fail = true;
 				writeErr("Erro na linha ", line, " vertice V invalido.");
+			}
+			if (graph->isValidWeight(w) == false) {
+				writeErr("Erro na linha ", line, " custo da aresta invalido.");
+				fail = true;
 			}
 			if (!fail)
 				graph->insertEdge(u, v, w);
@@ -81,25 +85,26 @@ void openFile(const char path[]) {
 }
 
 void createGraph() {
-	unsigned int u = read("Dgt a qtd de Vertices.");
-	unsigned int v = read("Dgt 1: Grafo dirigido.", "Dgt outro valor: Grafo nao dirigido.");
+	unsigned int u, v;
+	u = uRead("Dgt a qtd de Vertices.");
+	int w = iRead("Dgt 1: Grafo dirigido.", "Dgt outro valor: Grafo nao dirigido.");
 	destroyGraph();
 	try {
-		graph = new Graph(u, v == 1);
+		graph = new Graph(u, w == 1);
 	} catch (std::exception& e) {
 		writeErr(e.what());
 		return;
 	}
-	int w = read("Dgt 1: Grafo valorado.", "Dgt outro valor: Grafo nao valorado.");
+	w = iRead("Dgt 1: Grafo valorado.", "Dgt outro valor: Grafo nao valorado.");
 	u = v = NIL;
 	do {
 		graph->printVerticesToSelect();
-		u = read("Selecione o numero do primeiro vertice ou 0 para retornar:");
+		u = uRead("Selecione o numero do primeiro vertice ou 0 para retornar:");
 		if (u != 0 && graph->isValidVertex(u)) {
-			v = read("Selecione o segundo vertice ou 0 para cancelar:");
+			v = uRead("Selecione o segundo vertice ou 0 para cancelar:");
 			if (v != 0 && graph->isValidVertex(v)) {
 				if (w == 1) {// se grafo valorado
-					w = read("Dgt o custo da Aresta:");
+					w = iRead("Dgt o custo da Aresta:");
 					if (graph->isValidWeight(w))
 						graph->insertEdge(u - 1, v - 1, w);
 					w = 1;
@@ -114,7 +119,7 @@ unsigned int getVertex(const char msg[]) {
 	unsigned int value;
 	do {
 		graph->printVerticesToSelect();
-		value = read(msg);
+		value = uRead(msg);
 	} while (value > graph->AMOUNT_VERTEXES || value < 1);
 	return --value;
 }
@@ -193,13 +198,13 @@ int main() {
 					break;
 				case 9:
 					{
-						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
+						bool isRecursive = iRead("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						BreadthFirstSearch bfs(*graph);
 						bfs.bfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
 					} break;
 				case 10:
 					{
-						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
+						bool isRecursive = iRead("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						DepthFirstSearch dfs(*graph);
 						dfs.dfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
 					} break;
@@ -239,13 +244,13 @@ int main() {
 					} break;
 				case 16:
 					{
-						bool isRecursive = read("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
+						bool isRecursive = iRead("Dgt 0 para busca iterativa. \nDgt qualquer valor para busca recursiva.");
 						RobertFlores robertFlores(*graph);
 						robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."), isRecursive);
 					} break;
 				case 17:
 					{
-						bool isRepetitive = read("Dgt 0 para Vizinha mais proximo. \nDgt qualquer valor para Vizinho mais proximo repetivo.");
+						bool isRepetitive = iRead("Dgt 0 para Vizinha mais proximo. \nDgt qualquer valor para Vizinho mais proximo repetivo.");
 						CloserNeighbor closerNeighbor(*graph);
 						if (isRepetitive)
 							closerNeighbor.closerNeighborRepetitive();
@@ -333,7 +338,7 @@ int main() {
 					} break;
 				case 27:
 					{
-						bool isSequential = read("Dgt 0 para Coloracao sequencial. \nDgt qualquer valor para Coloracao heuristica.");
+						bool isSequential = iRead("Dgt 0 para Coloracao sequencial. \nDgt qualquer valor para Coloracao heuristica.");
 						Coloring coloring(*graph);
 						coloring.coloring(isSequential);
 					} break;

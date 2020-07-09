@@ -111,7 +111,7 @@ public:
 		return v < AMOUNT_VERTEXES;
 	}
 
-	const bool isValidWeight(const unsigned int& w) const {
+	const bool isValidWeight(const int& w) const {
 		return w > -INF && w < INF;
 	}
 
