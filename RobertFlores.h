@@ -73,7 +73,7 @@ private:
 	}
 
 	void print() const {
-		write("\n");
+		std::cout << std::endl;
 		for (unsigned int* p = array; p != array + index; ++p) {
 			writeVertex(*p);
 			write('-');

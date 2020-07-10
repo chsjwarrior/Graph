@@ -1,9 +1,14 @@
 #pragma once
 #include <iostream>
-//#include <limits>
+#include <string>
 
 namespace Scanner {
 	void writeVertex(const unsigned int& vertex) {
+		if (vertex != UINT_MAX)
+			std::cout << "V" + std::to_string(vertex + 1);
+		else
+			std::cout << "nil";
+		/*
 		if (vertex != UINT_MAX) {
 			std::cout << 'V';
 			if (vertex < 99)
@@ -13,9 +18,15 @@ namespace Scanner {
 			std::cout << vertex + 1;
 		} else
 			std::cout << "nil ";
+			*/
 	}
 
 	void writeEdge(const unsigned int& edge) {
+		if (edge != UINT_MAX)
+			std::cout << "E" + std::to_string(edge + 1);
+		else
+			std::cout << "nil";
+		/*
 		if (edge != UINT_MAX) {
 			std::cout << 'E';
 			if (edge < 99)
@@ -25,9 +36,15 @@ namespace Scanner {
 			std::cout << edge + 1;
 		} else
 			std::cout << "nil ";
+			*/
 	}
 
 	void writeValue(const int& value) {
+		if (value > -10000 && value < 10000)
+			std::cout << value;
+		else
+			std::cout << "inf";
+		/*
 		if (value < 10000 && value > -10000) {
 			if (value < 100)
 				std::cout << ' ';
@@ -38,6 +55,7 @@ namespace Scanner {
 				std::cout << ' ';
 		} else
 			std::cout << "inf ";
+			*/
 	}
 
 	template<typename T>

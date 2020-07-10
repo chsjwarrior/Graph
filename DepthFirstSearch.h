@@ -50,23 +50,29 @@ private:
 	}
 
 	void print() const {
-		write("Vi  |");
+		std::cout << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
-		write("\ndi  |");
+		std::cout << std::endl << std::left << std::setw(4);
+		write("di");
+		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeValue(discovery[i]);
-			write('|');
 		}
-		write("\nci  |");
+		std::cout << std::endl << std::left << std::setw(4);
+		write("ci");
+		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeValue(close[i]);
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 public:

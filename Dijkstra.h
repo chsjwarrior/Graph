@@ -32,23 +32,29 @@ private:
 
 	void print() const {
 		writeln("Dijkstra:");
-		write("Vi  |");
+		std::cout << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
-		write("\ndi  |");
+		std::cout << std::endl << std::left << std::setw(4);
+		write("di");
+		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeValue(distance[i]);
-			write('|');
 		}
-		write("\npi  |");
+		std::cout << std::endl << std::left << std::setw(4);
+		write("pi");
+		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(predecessor[i]);
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 public:

@@ -160,15 +160,6 @@ public:
 				degree++;
 			else if (!IS_DIGRAPH && e->V == u)
 				degree++;
-
-		/*
-		getAdjacencesFrom(u);
-		for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
-			degree++;
-			if (!IS_DIGRAPH && u == *v)
-				degree++;
-		}
-		*/
 		return degree;
 	}
 
@@ -193,49 +184,56 @@ public:
 
 	void printAdjacencematrix() const {
 		writeln("Matriz de adjacencia:");
-		write("Vi  |");
+		std::cout << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
+		size_t count;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
+			std::cout << std::left << std::setw(4);
 			writeVertex(u);
-			write('|');
+			std::cout << std::right;
 			getAdjacencesFrom(u);
-			for (unsigned int v = 0, count = 0; v < AMOUNT_VERTEXES; v++, count = 0) {
-				for (auto vv = adjacences.cbegin(); vv != adjacences.cend(); ++vv)
-					if (*vv == v)
-						count++;
-				writeValue(count);
-				write('|');
+			for (unsigned int v = 0; v < AMOUNT_VERTEXES; v++) {
+				count = std::count(adjacences.begin(), adjacences.end(), v);
+				//for (auto vv = adjacences.cbegin(); vv != adjacences.cend(); ++vv)
+					//if (*vv == v)
+						//count++;
+				std::cout << '|' << std::setw(4) << count;
 			}
-			write("\n");
+			std::cout << std::endl;
 		}
 	}
 
 	void printIncidenceMatrix() const {
 		writeln("Matriz de incidencia:");
-		write("V\\E |");
+		std::cout << std::left << std::setw(4);
+		write("V\\E");
+		std::cout << std::right;
 		for (unsigned int i = 0; i < edges.size(); i++) {
+			std::cout << '|' << std::setw(4);
 			writeEdge(i);
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
 		int value;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
+			std::cout << std::left << std::setw(4);
 			writeVertex(u);
-			write('|');
+			std::cout << std::right;
 			for (auto e = edges.cbegin(); e != edges.cend(); e++) {
 				value = 0;
 				if (IS_DIGRAPH && e->U == u)
 					value = -1;
 				else if (e->U == u || e->V == u)
 					value = 1;
+				std::cout << '|' << std::setw(4);
 				writeValue(value);
-				write('|');
 			}
-			write("\n");
+			std::cout << std::endl;
 		}
 	}
 
@@ -248,7 +246,7 @@ public:
 				write("->");
 				writeVertex(*v);
 			}
-			write("\n");
+			std::cout << std::endl;
 		}
 	}
 
@@ -260,25 +258,29 @@ public:
 			writeVertex(e->V);
 			write("->");
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 	void printCostMatrix() const {
 		writeln("Matriz de custo:");
-		write("Vi  |");
-		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
+		std::cout << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
+		unsigned int i;
+		for (i = 0; i < AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
-		write("\n");
-		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
+		std::cout << std::endl;
+		for (i = 0; i < AMOUNT_VERTEXES; i++) {
+			std::cout << std::left << std::setw(4);
 			writeVertex(i);
-			write('|');
+			std::cout << std::right;
 			for (unsigned int j = 0; j < AMOUNT_VERTEXES; j++) {
+				std::cout << '|' << std::setw(4);
 				writeValue(getWeigthFrom(i, j));
-				write('|');
 			}
-			write("\n");
+			std::cout << std::endl;
 		}
 	}
 
@@ -305,24 +307,32 @@ public:
 				write("\n");
 		}
 		writeln('}', "Graus dos vertices:");
-		write("Vi  |");
+		std::cout << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
+		std::cout << std::endl;
 		if (IS_DIGRAPH) {
-			write("\nin  |");
+			std::cout << std::left << std::setw(4);
+			write("\nin");
+			std::cout << std::right;
 			for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
+				std::cout << '|' << std::setw(4);
 				writeValue(getInDegreeFrom(u));
-				write('|');
 			}
+			std::cout << std::endl;
 		}
-		write("\nout |");
+		std::cout << std::left << std::setw(4);
+		write("out");
+		std::cout << std::right;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
+			std::cout << '|' << std::setw(4);
 			writeValue(getOutDegreeFrom(u));
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 	void printVerticesToSelect() {

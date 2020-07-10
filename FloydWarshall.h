@@ -10,36 +10,42 @@ class FloydWarshall {
 
 	void print() const {
 		writeln("Floyd-Warshall:");
-		write("Vi  |");
+		std::cout << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << std::left << std::setw(4);
 			writeVertex(i);
-			write('|');
+			std::cout << std::right;
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
+				std::cout << '|' << std::setw(4);
 				writeValue(costMatrix[i][j]);
-				write('|');
 			}
-			write("\n");
+			std::cout << std::endl;
 		}
-		write("\nVi  |");
+		std::cout << std::endl << std::left << std::setw(4);
+		write("Vi");
+		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << '|' << std::setw(4);
 			writeVertex(i);
-			write('|');
 		}
-		write("\n");
+		std::cout << std::endl;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			std::cout << std::left << std::setw(4);
 			writeVertex(i);
-			write('|');
+			std::cout << std::right;
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
+				std::cout << '|' << std::setw(4);
 				writeVertex(predecessor[i][j]);
-				write('|');
 			}
-			write("\n");
+			std::cout << std::endl;
 		}
 	}
 
@@ -89,7 +95,7 @@ public:
 
 		//esse algoritmo verifica se o grafo possui ciclo negativo
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			if (costMatrix[i][i] < 0){
+			if (costMatrix[i][i] < 0) {
 				writeln("O Grafo contem ciclo com peso negativo");
 				i = graph.AMOUNT_VERTEXES;
 			}
