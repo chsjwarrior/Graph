@@ -50,27 +50,24 @@ private:
 	}
 
 	void print() const {
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("di");
+		std::cout << std::endl << std::left << std::setw(4) << "di";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeValue(discovery[i]);
+			graph.writeValue(discovery[i]);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("pi");
+		std::cout << std::endl << std::left << std::setw(4) << "pi";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(predecessor[i]);
+			graph.writeVertex(predecessor[i]);
 		}
 		std::cout << std::endl;
 	}
@@ -106,10 +103,10 @@ public:
 
 		if (isRecursive) {
 			bfsRecursive(queue);
-			writeln("Busca em largura recursiva:");
+			std::cout << "Busca em largura recursiva:" << std::endl;
 		} else {
 			bfsIterative(queue);
-			writeln("Busca em largura iterativa:");
+			std::cout << "Busca em largura iterativa:" << std::endl;
 		}
 		print();
 	}

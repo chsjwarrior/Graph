@@ -69,15 +69,15 @@ public:
 
 		makeSet();
 
-		writeln("Kruskal:");
+		std::cout << "Kruskal:" << std::endl;
 		while (!edges.empty()) {
 			unsigned int u = find(edges.cbegin()->U);
 			unsigned int v = find(edges.cbegin()->V);
 
 			if (u != v) {
 				makeUnion(edges.cbegin()->U, edges.cbegin()->V);
-				edges.cbegin()->print();
-				write("\n");
+				graph.writeEdge(*edges.cbegin());
+				std::cout << std::endl;
 			}
 
 			edges.erase(edges.cbegin());

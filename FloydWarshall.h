@@ -9,41 +9,38 @@ class FloydWarshall {
 	unsigned int** predecessor;
 
 	void print() const {
-		writeln("Floyd-Warshall:");
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 		}
 		std::cout << std::endl;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << std::left << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 			std::cout << std::right;
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
 				std::cout << '|' << std::setw(4);
-				writeValue(costMatrix[i][j]);
+				graph.writeValue(costMatrix[i][j]);
 			}
 			std::cout << std::endl;
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("Vi");
+		std::cout << std::endl << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 		}
 		std::cout << std::endl;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << std::left << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 			std::cout << std::right;
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
 				std::cout << '|' << std::setw(4);
-				writeVertex(predecessor[i][j]);
+				graph.writeVertex(predecessor[i][j]);
 			}
 			std::cout << std::endl;
 		}
@@ -93,10 +90,11 @@ public:
 						predecessor[i][j] = predecessor[k][j];
 					}
 
+		std::cout << "Floyd-Warshall:" << std::endl;
 		//esse algoritmo verifica se o grafo possui ciclo negativo
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			if (costMatrix[i][i] < 0) {
-				writeln("O Grafo contem ciclo com peso negativo");
+				std::cout << "O Grafo contem ciclo com peso negativo" << std::endl;
 				i = graph.AMOUNT_VERTEXES;
 			}
 

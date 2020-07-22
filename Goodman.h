@@ -29,14 +29,14 @@ private:
 	void print() const {
 		unsigned int i = 0;
 		for (auto set = sets.cbegin(); set != sets.cend(); set++) {
-			write("Conjunto ", ++i, ':');
+			std::cout << "Conjunto " << ++i << ": ";
 			for (auto u = set->cbegin(); u != set->cend(); u++) {
-				writeVertex(*u);
-				write('+');
+				graph.writeVertex(*u);
+				std::cout << '+';
 			}
-			write('|');
+			std::cout << '|';
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 public:
@@ -54,7 +54,7 @@ public:
 	}
 
 	void goodman() {
-		writeln("Goodman:");
+		std::cout << "Goodman:" << std::endl;
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			vertices.insert(u);
 

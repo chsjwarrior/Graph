@@ -69,7 +69,7 @@ public:
 		int numTrees = graph.AMOUNT_VERTEXES;
 		int MSTweight = 0;
 
-		writeln("Boruvka:");
+		std::cout << "Boruvka:" << std::endl;
 		while (numTrees > 1) {
 			memset(cheapest, NIL, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
@@ -98,8 +98,8 @@ public:
 
 					if (set1 != set2) {
 						MSTweight += edges[cheapest[i]].WEIGHT;
-						edges[cheapest[i]].print();
-						write("\n");
+						graph.writeEdge(edges[cheapest[i]]);
+						std::cout << std::endl;
 						// Do a union of set1 and set2 and decrease number 
 						// of trees 
 						makeUnion(set1, set2);
@@ -108,7 +108,7 @@ public:
 				}
 			}
 		}
-		write("Weight of MST is ", MSTweight, "\n");
+		std::cout << "Weight of MST is " << MSTweight << std::endl;
 		return;
 	}
 };

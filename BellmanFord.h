@@ -12,28 +12,24 @@ private:
 	unsigned int* predecessor;
 
 	void print() const {
-		writeln("Bellman-Ford:");
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("di");
+		std::cout << std::endl << std::left << std::setw(4) << "di";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeValue(distance[i]);
+			graph.writeValue(distance[i]);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("pi");
+		std::cout << std::endl << std::left << std::setw(4) << "pi";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(predecessor[i]);
+			graph.writeVertex(predecessor[i]);
 		}
 		std::cout << std::endl;
 	}
@@ -70,10 +66,11 @@ public:
 					predecessor[e->V] = e->U;
 				}
 
+		std::cout << "Bellman-Ford:" << std::endl;
 		//esse algoritmo verifica se o grafo possui ciclo negativo
 		for (auto e = edges.cbegin(); e != edges.cend(); e++)
 			if (distance[e->U] != INF && distance[e->U] + e->WEIGHT < distance[e->V]) {
-				writeln("O Grafo contem ciclo com peso negativo");
+				std::cout << "O Grafo contem ciclo com peso negativo" << std::endl;
 				e = edges.cend();
 			}
 

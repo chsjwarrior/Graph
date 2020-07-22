@@ -87,10 +87,10 @@ private:
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (isBridge(u, *v) == false) {
-				writeVertex(u);
-				write("->");
-				writeVertex(*v);
-				write("\n");
+				graph.writeVertex(u);
+				std::cout << "->";
+				graph.writeVertex(*v);
+				std::cout << std::endl;
 				graph.removeEdge(u, *v);
 				fleuryR(*v);
 				break;
@@ -109,7 +109,7 @@ public:
 	}
 
 	void fleury() {
-		writeln("Fleury:");
+		std::cout << "Fleury:" << std::endl;
 
 		/*
 		se o número de vertices com grau impar for:
@@ -123,16 +123,15 @@ public:
 			const std::pair<unsigned int, unsigned int> pair = validateGraph();
 
 			if (pair.first > 2) {
-				write(pair.first);
-				writeln(" vertices tem grau impar", "O Grafo nao e euleriano");
+				std::cout << pair.first << " vertices tem grau impar" << std::endl << "O Grafo nao e euleriano" << std::endl;
 			} else {
 				if (pair.first == 0)
-					writeln("Todos os vertices tem grau par", "e possivel encontrar um caminho euleriano.");
+					std::cout << "Todos os vertices tem grau par" << std::endl << "E possivel encontrar um caminho euleriano." << std::endl;
 				else if (pair.first == 2)
-					writeln("Dois vertices tem grau impar", "e possivel encontrar um caminho semi-euleriano.");
+					std::cout << "Dois vertices tem grau impar" << std::endl << "E possivel encontrar um caminho semi-euleriano." << std::endl;
 				fleuryR(pair.second);
 			}
 		} else
-			writeln("O grafo é desconexo e nao e euleriano");
+			std::cout << "O grafo é desconexo e nao e euleriano" << std::endl;
 	}
 };

@@ -50,27 +50,24 @@ private:
 	}
 
 	void print() const {
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("di");
+		std::cout << std::endl << std::left << std::setw(4) << "di";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeValue(discovery[i]);
+			graph.writeValue(discovery[i]);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("ci");
+		std::cout << std::endl << std::left << std::setw(4) << "ci";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeValue(close[i]);
+			graph.writeValue(close[i]);
 		}
 		std::cout << std::endl;
 	}
@@ -104,15 +101,18 @@ public:
 		time = 0;
 		for (unsigned int u = 0, v = source; u < graph.AMOUNT_VERTEXES; u++) {
 			if (visited[v] == false)
-				if (isRecursive) {
+				if (isRecursive)
 					dfsVisitRecursive(v);
-					writeln("Busca em profundidade recursiva:");
-				} else {
+				else
 					dfsVisitIterative(v);
-					writeln("Busca em profundidade iterativa:");
-				}
 			v = u;
 		}
+
+		if (isRecursive)
+			std::cout << "Busca em profundidade recursiva:" << std::endl;
+		else
+			std::cout << "Busca em profundidade iterativa:" << std::endl;
+
 		print();
 	}
 };

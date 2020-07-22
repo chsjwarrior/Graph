@@ -47,18 +47,20 @@ private:
 	}
 
 	void print() const {
-		write("Vi  |");
+		std::cout << std::left << std::setw(4) << "Vi";
+		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			writeVertex(i);
-			write('|');
+			std::cout << '|' << std::setw(4);
+			graph.writeVertex(i);
 		}
-		write("\nci  |");
+		std::cout << std::endl << std::left << std::setw(4) << "ci";
+		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			writeValue(color[i]);
-			write('|');
+			std::cout << '|' << std::setw(4);
+			graph.writeValue(color[i]);
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 public:
@@ -80,7 +82,7 @@ public:
 				if (color[u] == 0)
 					setValidColor(u);
 
-			writeln("Coloracao seguencial:");
+			std::cout << "Coloracao seguencial:" << std::endl;
 		} else {
 			unsigned int u = getHigherDegreeNotColored();
 			while (u != graph.AMOUNT_VERTEXES) {
@@ -88,7 +90,7 @@ public:
 				u = getHigherDegreeNotColored();
 			}
 
-			writeln("Coloracao heuristica:");
+			std::cout << "Coloracao heuristica:" << std::endl;
 		}
 		print();
 	}

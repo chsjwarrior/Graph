@@ -54,9 +54,9 @@ private:
 		}
 
 		for (auto i = circuit.crbegin(); i != circuit.crend(); ++i) {
-			writeVertex(*i);
+			graph.writeVertex(*i);
 			if ((i + 1) != circuit.crend())
-				write("->");
+				std::cout << "->";
 		}
 	}
 
@@ -69,7 +69,7 @@ public:
 	~Hierholzer() {}
 
 	void hierholzer() {
-		writeln("Hierholzer:");
+		std::cout << "Hierholzer:" << std::endl;
 
 		/*
 		Deve haver um unico vértice no grafo que tenha (inDegree + 1 == outDegree), este é o vertice inicial do caminho euleriano
@@ -81,15 +81,14 @@ public:
 		const std::pair<unsigned int, std::pair<unsigned int, unsigned int>> pair = validateGraph();
 
 		if (pair.first > 2) {
-			write(pair.first);
-			writeln(" vertices tem grau de entrada e saida diferentes", "O Grafo nao e euleriano");
+			std::cout << pair.first << " vertices tem grau de entrada e saida diferentes" << std::endl << "O Grafo nao e euleriano" << std::endl;
 		} else {
 			if (pair.first == 0)
-				writeln("Todos os vertices tem grau par", "e possivel encontrar um caminho euleriano.");
+				std::cout << "Todos os vertices tem grau par" << std::endl << "E possivel encontrar um caminho euleriano." << std::endl;
 			else if (pair.first == 2)
-				writeln("Dois vertices tem grau impar", "e possivel encontrar um caminho semi-euleriano.");
+				std::cout << "Dois vertices tem grau impar" << std::endl << "E possivel encontrar um caminho semi-euleriano." << std::endl;
 			hierholzer(pair.second.first, pair.second.second);
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 };

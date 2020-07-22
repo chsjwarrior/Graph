@@ -5,7 +5,7 @@ funcionando
 */
 class DisjointAssemblies {
 private:
-	const unsigned int AMOUNT_VERTEXES;
+	const Graph& graph;
 	std::multiset<Edge> edges;
 	std::list<std::set<unsigned int>> sets;
 
@@ -23,9 +23,9 @@ private:
 			setU->insert(setV->cbegin(), setV->cend());
 			sets.erase(setV);
 		}
-		writeVertex(u);
-		writeVertex(v);
-		write('|');
+		graph.writeVertex(u);
+		graph.writeVertex(v);
+		std::cout << '|';
 		print();
 	}
 
@@ -38,15 +38,15 @@ private:
 	void print() const {
 		for (auto set = sets.cbegin(); set != sets.cend(); set++) {
 			for (auto u = set->cbegin(); u != set->cend(); u++)
-				writeVertex(*u);
-			write("\t");;
+				graph.writeVertex(*u);
+			std::cout << '\t';
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 
 public:
 	DisjointAssemblies() = delete;
-	DisjointAssemblies(const Graph& graph) : AMOUNT_VERTEXES(graph.AMOUNT_VERTEXES) {
+	DisjointAssemblies(const Graph& graph) : graph(graph) {
 		edges = graph.getEdges();
 	}
 
@@ -58,14 +58,14 @@ public:
 	}
 
 	void connectedComponents() {
-		writeln("Conjuntos disjuntos:");
-		write("\t", '|');
-		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
+		std::cout << "Conjuntos disjuntos:" << std::endl;
+		std::cout << '\t' << '|';
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			makeSet(u);
-			writeVertex(u);
-			write("\t");
+			graph.writeVertex(u);
+			std::cout << '\t';
 		}
-		write("\n");
+		std::cout << std::endl;
 		for (auto e = edges.cbegin(); !edges.empty(); e = edges.erase(e))
 			sameComponent(e->U, e->V);
 	}

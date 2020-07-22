@@ -31,8 +31,8 @@ private:
 	}
 
 	void dfs(const unsigned int& u) {
-		writeVertex(u);
-		write(' ');
+		graph.writeVertex(u);
+		std::cout << ' ';
 		visited[u] = true;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
@@ -65,16 +65,16 @@ public:
 
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
-		writeln("Kosaraju:");
+		std::cout << "Kosaraju:" << std::endl;
 		unsigned int c = 1;
 		while (!stack.empty()) {
 			int u = stack.top();
 			stack.pop();
 
 			if (!visited[u]) {
-				write("C", c++, ": { ");
+				std::cout << "Conjunto " << c++ << ": {";
 				dfs(u);
-				write("}\n");
+				std::cout << '}' << std::endl;
 			}
 		}
 	}

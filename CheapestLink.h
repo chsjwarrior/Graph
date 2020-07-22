@@ -74,16 +74,16 @@ public:
 	}
 
 	void cheapestLink() {
-		writeln("Ligacao mais economica:");
+		std::cout << "Ligacao mais economica:" << std::endl;
 
 		memset(degrees, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
 		selected.emplace_back(edges.cbegin()->U, edges.cbegin()->V, edges.cbegin()->WEIGHT);
 		degrees[edges.cbegin()->U]++;
 		degrees[edges.cbegin()->V]++;
-		edges.cbegin()->print();
-		write("=", edges.cbegin()->WEIGHT);
-		write(" entry\n");
+		graph.writeEdge(*edges.cbegin());
+		std::cout << '=' << edges.cbegin()->WEIGHT;
+		std::cout << " entry" << std::endl;
 		edges.erase(edges.cbegin());
 
 		//bool hasZeroDegree = true;
@@ -94,9 +94,9 @@ public:
 				if (cyclic() == false) {
 					degrees[edges.cbegin()->U]++;
 					degrees[edges.cbegin()->V]++;
-					edges.cbegin()->print();
-					write("=", edges.cbegin()->WEIGHT);
-					write(" entry\n");
+					graph.writeEdge(*edges.cbegin());
+					std::cout << '=' << edges.cbegin()->WEIGHT;
+					std::cout << " entry" << std::endl;
 					//hasZeroDegree = std::any_of(degrees, degrees + graph.AMOUNT_VERTEXES, [](unsigned int d) { return d == 0; });
 				} else
 					selected.pop_back();

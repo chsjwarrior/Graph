@@ -30,7 +30,7 @@ private:
 			int w;
 			do {
 				w = stack.top();
-				writeVertex(w);
+				graph.writeVertex(w);
 				onStack[w] = false;
 				stack.pop();
 			} while (w != u);
@@ -68,7 +68,7 @@ public:
 			onStack[u] = false;
 		}
 
-		writeln("Tajan:");
+		std::cout << "Tajan:" << std::endl;
 		time = 0;
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 			if (discovery[u] == NIL)

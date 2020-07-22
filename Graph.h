@@ -9,13 +9,12 @@
 #define INF 10000
 #endif //!INF
 
-using namespace Scanner;
-
 struct Edge {
 	const unsigned int U, V;
 	const int WEIGHT;
 
 	Edge() = delete;
+
 	explicit Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
 		//write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
@@ -24,14 +23,6 @@ struct Edge {
 	}
 	~Edge() {
 		//write("destructor {", U, ",", V, "=", WEIGHT, "}\n");
-	}
-
-	void print() const {
-		write('{');
-		writeVertex(U);
-		write(',');
-		writeVertex(V);
-		write('}');
 	}
 
 	const bool operator>(const Edge& other) const {
@@ -183,9 +174,8 @@ public:
 	}
 
 	void printAdjacencematrix() const {
-		writeln("Matriz de adjacencia:");
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << "Matriz de adjacencia:" << std::endl;
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
@@ -200,9 +190,6 @@ public:
 			getAdjacencesFrom(u);
 			for (unsigned int v = 0; v < AMOUNT_VERTEXES; v++) {
 				count = std::count(adjacences.begin(), adjacences.end(), v);
-				//for (auto vv = adjacences.cbegin(); vv != adjacences.cend(); ++vv)
-					//if (*vv == v)
-						//count++;
 				std::cout << '|' << std::setw(4) << count;
 			}
 			std::cout << std::endl;
@@ -210,9 +197,8 @@ public:
 	}
 
 	void printIncidenceMatrix() const {
-		writeln("Matriz de incidencia:");
-		std::cout << std::left << std::setw(4);
-		write("V\\E");
+		std::cout << "Matriz de incidencia:" << std::endl;
+		std::cout << std::left << std::setw(4) << "V\\E";
 		std::cout << std::right;
 		for (unsigned int i = 0; i < edges.size(); i++) {
 			std::cout << '|' << std::setw(4);
@@ -238,12 +224,12 @@ public:
 	}
 
 	void printAdjacenceList() const {
-		writeln("Lista de adjacencia:");
+		std::cout << "Lista de adjacencia:" << std::endl;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
-				write("->");
+				std::cout << "->";
 				writeVertex(*v);
 			}
 			std::cout << std::endl;
@@ -251,20 +237,19 @@ public:
 	}
 
 	void printIncidenceList() const {
-		writeln("Lista de incidencia:");
+		std::cout << "Lista de incidencia:" << std::endl;
 		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
 			writeVertex(e->U);
-			write(',');
+			std::cout << ',';
 			writeVertex(e->V);
-			write("->");
+			std::cout << "->";
 		}
 		std::cout << std::endl;
 	}
 
 	void printCostMatrix() const {
-		writeln("Matriz de custo:");
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << "Matriz de custo:" << std::endl;
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < AMOUNT_VERTEXES; i++) {
@@ -285,30 +270,32 @@ public:
 	}
 
 	void printGraphInfo() const {
-		writeln("Conjunto de vertices:");
-		write("V={");
+		std::cout << "Conjunto de vertices:" << std::endl;
+		std::cout << "V={";
 		unsigned int i = 0;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			writeVertex(u);
 			if (u + 1 < AMOUNT_VERTEXES) {
-				write(',');
+				std::cout << ',';
 				if (++i % 20 == 0)
-					write("\n");
+					std::cout << std::endl;
 			}
 		}
-		writeln('}', "Conjunto de arestas:");
-		write("E={");
+		std::cout << '}' << std::endl;
+		std::cout << "Conjunto de arestas:" << std::endl;
+		std::cout << "E={";
 		i = 0;
 		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
-			e->print();
-			if ((e) != --edges.cend())
-				write(',');
-			if (++i % 12 == 0)
-				write("\n");
+			writeEdge(*e);
+			if ((e) != --edges.cend()) {
+				std::cout << ',';
+				if (++i % 12 == 0)
+					std::cout << std::endl;
+			}
 		}
-		writeln('}', "Graus dos vertices:");
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << '}' << std::endl;
+		std::cout << "Graus dos vertices:" << std::endl;
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
@@ -316,8 +303,7 @@ public:
 		}
 		std::cout << std::endl;
 		if (IS_DIGRAPH) {
-			std::cout << std::left << std::setw(4);
-			write("\nin");
+			std::cout << std::left << std::setw(4) << "in";
 			std::cout << std::right;
 			for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 				std::cout << '|' << std::setw(4);
@@ -325,8 +311,7 @@ public:
 			}
 			std::cout << std::endl;
 		}
-		std::cout << std::left << std::setw(4);
-		write("out");
+		std::cout << std::left << std::setw(4) << "out";
 		std::cout << std::right;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
 			std::cout << '|' << std::setw(4);
@@ -335,14 +320,43 @@ public:
 		std::cout << std::endl;
 	}
 
-	void printVerticesToSelect() {
+	void printVerticesToSelect() const {
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-			write(u + 1, "= [");
+			std::cout << u + 1 << "= [";
 			writeVertex(u);
-			write("] ");
+			std::cout << "] ";
 			if (u + 1 % 10 == 0)
-				write("\n");
+				std::cout << std::endl;
 		}
-		write("\n");
+		std::cout << std::endl;
+	}
+
+	void writeVertex(const unsigned int& vertex) const {
+		if (vertex != UINT_MAX)
+			std::cout << "V" + std::to_string(vertex + 1);
+		else
+			std::cout << "nil";
+	}
+
+	void writeEdge(const Edge& edge) const {
+		std::cout << '{';
+		writeVertex(edge.U);
+		std::cout << ',';
+		writeVertex(edge.V);
+		std::cout << '}';
+	}
+
+	void writeEdge(const unsigned int& edge) const {
+		if (edge != UINT_MAX)
+			std::cout << "E" + std::to_string(edge + 1);
+		else
+			std::cout << "nil";
+	}
+
+	void writeValue(const int& value) const {
+		if (value > -10000 && value < 10000)
+			std::cout << value;
+		else
+			std::cout << "inf";
 	}
 };

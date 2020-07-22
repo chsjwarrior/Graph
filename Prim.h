@@ -31,28 +31,25 @@ private:
 	}
 
 	void print() const {
-		writeln("Prim:");
-		std::cout << std::left << std::setw(4);
-		write("Vi");
+		std::cout << "Prim:" << std::endl;
+		std::cout << std::left << std::setw(4) << "Vi";
 		std::cout << std::right;
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(i);
+			graph.writeVertex(i);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("ki");
+		std::cout << std::endl << std::left << std::setw(4) << "ki";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeValue(key[i]);
+			graph.writeValue(key[i]);
 		}
-		std::cout << std::endl << std::left << std::setw(4);
-		write("pi");
+		std::cout << std::endl << std::left << std::setw(4) << "pi";
 		std::cout << std::right;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			std::cout << '|' << std::setw(4);
-			writeVertex(predecessor[i]);
+			graph.writeVertex(predecessor[i]);
 		}
 		std::cout << std::endl;
 	}

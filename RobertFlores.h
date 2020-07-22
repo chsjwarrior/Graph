@@ -21,8 +21,8 @@ private:
 			if (*v != u)
 				if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
 					print();
-					writeVertex(*v);
-					write(" achou");
+					graph.writeVertex(*v);
+					std::cout << " achou";
 					print();
 					break;
 				} else if (visited[*v] == false)
@@ -53,8 +53,8 @@ private:
 					if (*v != u)
 						if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
 							print();
-							writeVertex(*v);
-							write(" achou");
+							graph.writeVertex(*v);
+							std::cout << " achou";
 							print();
 							break;
 						} else if (visited[*v] == false)
@@ -75,8 +75,8 @@ private:
 	void print() const {
 		std::cout << std::endl;
 		for (unsigned int* p = array; p != array + index; ++p) {
-			writeVertex(*p);
-			write('-');
+			graph.writeVertex(*p);
+			std::cout << '-';
 		}
 	}
 
@@ -101,12 +101,12 @@ public:
 		index = 0;
 
 		if (isRecursive) {
-			write("Robert-Flores recursivo:");
+			std::cout << "Robert-Flores recursivo:" << std::endl;
 			robertFloresRecursive(source);
 		} else {
-			write("Robert-Flores iterativo:");
+			std::cout << "Robert-Flores iterativo:" << std::endl;
 			robertFloresIterative(source);
 		}
-		write("\n");
+		std::cout << std::endl;
 	}
 };

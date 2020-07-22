@@ -58,7 +58,7 @@ public:
 	}
 
 	void fordFulkerson(const unsigned int& source, const unsigned int& sink) {
-		writeln("Ford-Fulkerson:");
+		std::cout << "Ford-Fulkerson:" << std::endl;
 
 		unsigned int u, v;
 		int maxFlow = 0;
@@ -84,7 +84,6 @@ public:
 
 			maxFlow += pathFlow;
 		}
-
-		write("O fluxo maximo possivel e: ", maxFlow, "\n");
+		std::cout << "O fluxo maximo possivel e: " << maxFlow << std::endl;
 	}
 };
