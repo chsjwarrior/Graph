@@ -25,17 +25,13 @@ struct Edge {
 		//write("destructor {", U, ",", V, "=", WEIGHT, "}\n");
 	}
 
-	const bool operator>(const Edge& other) const {
-		if (U > other.U) return true;
-		if (other.U > U) return false;
-		if (V > other.V) return true;
-		if (other.V > V) return false;
-		if (WEIGHT > other.WEIGHT) return true;
-		if (other.WEIGHT > WEIGHT) return false;
-		return false;
-	}
-
 	const bool operator<(const Edge& other) const {
+		return U < other.U ||
+			U == other.U && V < other.V ||
+			U == other.U && V == other.V &&
+			WEIGHT < other.WEIGHT;
+
+		/*general pattern to compare is:
 		if (U < other.U) return true;
 		if (other.U < U) return false;
 		if (V < other.V) return true;
@@ -43,6 +39,11 @@ struct Edge {
 		if (WEIGHT < other.WEIGHT) return true;
 		if (other.WEIGHT < WEIGHT) return false;
 		return false;
+		*/
+	}
+
+	const bool operator>(const Edge& other) const {
+		return !(*this < other);
 	}
 
 	Edge& operator=(const Edge&) = delete;
@@ -73,16 +74,19 @@ public:
 	const bool IS_DIGRAPH;
 
 	Graph() = delete;
+
 	explicit Graph(const unsigned int& amountVertices, const bool& isDigraph) :
 		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {
 		if (amountVertices == 0)
-			throw std::exception("numero de vertices deve ser maior que zero.");
+			throw std::range_error("numero de vertices deve ser maior que zero.");
 		if (amountVertices == NIL)
-			throw std::exception("numero de vertices deve ser menor que " + NIL);
+			throw std::range_error("numero de vertices deve ser menor que " + NIL);
 	}
+
 	explicit Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DIGRAPH(other.IS_DIGRAPH) {
 		edges = other.getEdges();
 	}
+
 	~Graph() {
 		adjacences.clear();
 		edges.clear();

@@ -5,6 +5,53 @@
 #include <iostream>
 #include <iomanip> 
 
+class Cell {
+public:
+	Cell(const Cell&) = delete;
+	Cell& operator=(const Cell&) = delete;
+	Cell(const Cell&&) = delete;
+	Cell& operator=(const Cell&&) = delete;
+
+	Cell() {}
+	~Cell() {}
+
+	Cell& operator=(const std::string& v) {
+		value = v;
+		return *this;
+	}
+
+	Cell& operator=(const char* v) {
+		value = v;
+		return *this;
+	}
+
+	Cell& operator=(const char& v) {
+		value = std::string(1, v);
+		return *this;
+	}
+
+	Cell& operator=(const bool v) {
+		value = v ? "true" : "false";
+	}
+
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>::type>
+	Cell& operator=(const T& v) {
+		value = std::to_string(v);
+		return *this;
+	}
+
+	const size_t size() const { return value.size(); }
+
+	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
+private:
+	std::string value;
+};
+
+std::ostream& operator<<(std::ostream& os, const Cell& cell) {
+	std::cout << cell.value;
+	return os;
+}
+
 class PageTable {
 private:
 	bool columnsAutoResize = true;
@@ -26,6 +73,7 @@ private:
 	std::vector<size_t> columnsWidth;
 	std::vector<std::string> rowHeader, columnHeader;
 	std::vector<std::vector<std::string>> data;
+	std::vector<Cell*> cells;
 
 	void columnsWidthResize(const size_t index) {
 		if (columnsWidth.empty())
@@ -81,18 +129,23 @@ private:
 	}
 
 public:
+	PageTable(const PageTable&) = delete;
+	PageTable operator=(const PageTable&) = delete;
+	PageTable(const PageTable&&) = delete;
+	PageTable operator=(const PageTable&&) = delete;
+
 	explicit PageTable() {}
 
 	explicit PageTable(const std::string title) : title(title) {}
 
 	~PageTable() {
 		title.clear();
+		columnsWidth.clear();
 		rowHeader.clear();
 		columnHeader.clear();
-		columnsWidth.clear();
-		for (auto& r : data)
-			r.clear();
-		data.clear();
+		for (auto r = data.begin(); data.empty() == false; r = data.erase(r)) {
+			r->clear();
+		}
 	}
 
 	const bool getColumnsAutoResize() const { return columnsAutoResize; }
@@ -137,7 +190,7 @@ public:
 		updateColumsWidth(columnHeader.size(), description.size());
 	}
 
-	void addRow(std::vector<std::string>& row) {
+	void addRow(const std::vector<std::string>& row) {
 		data.emplace_back(row.size());
 		columnsWidthResize(row.size());
 
@@ -166,7 +219,7 @@ public:
 			updateColumsWidth(i + 1, data.back()[i].size());
 		}
 	}
-
+	
 	void printPage(const size_t page) {
 		size_t startIndex = page * columnsPage;
 
@@ -218,4 +271,9 @@ public:
 
 		printBorderSide(startIndex, endIndex + 1, border.botton);
 	}
+	/*
+	void show() {
+		
+	}
+	*/
 };

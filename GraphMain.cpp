@@ -76,7 +76,7 @@ void openFile(const char path[]) {
 		destroyGraph();
 		try {
 			graph = new Graph(u, w != 0);
-		} catch (std::exception& e) {
+		} catch (std::range_error& e) {
 			std::cerr << e.what() << std::endl;
 			fail = true;
 		}
@@ -115,7 +115,7 @@ void createGraph() {
 	destroyGraph();
 	try {
 		graph = new Graph(u, w == 1);
-	} catch (std::exception& e) {
+	} catch (std::range_error& e) {
 		std::cerr << e.what() << std::endl;
 		return;
 	}
@@ -153,12 +153,22 @@ unsigned int getVertex(const char msg[]) {
 	return --value;
 }
 
+void clearScreen() {
+#if defined(_WIN32)
+	system("cls");
+#endif
+
+#if defined(_linux)
+	system("clear");
+#endif
+}
+
 int main() {
 	system("COLOR 1F");
 	graph = nullptr;
 	std::cout << "Desenvolvido por Carlos Henrique Stapait Junior." << std::endl;
 	int choice = 0;
-
+	
 	PageTable table("Busca em largura recursiva: ");
 	table.addRowHeader("Vi");
 	table.addRowHeader("di");
@@ -219,7 +229,7 @@ int main() {
 			<< "------------------------------------------"
 			<< "Dgt 27 para Coloracao." << std::endl;
 		choice = uRead();
-		system("CLS");
+		clearScreen();
 
 		if (choice == 1)
 			createGraph();
@@ -400,8 +410,10 @@ int main() {
 				default:
 					std::cerr << "valor invalido, dgt novamente." << std::endl;
 			}
-			system("PAUSE");
-			system("CLS");
+			std::cout << "pressione qualquer tecla para continuar...";
+			std::cin.ignore();
+			std::cin.get();
+			clearScreen();
 		}
 	} while (choice != 0);
 
