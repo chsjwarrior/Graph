@@ -168,11 +168,14 @@ int main() {
 	graph = nullptr;
 	std::cout << "Desenvolvido por Carlos Henrique Stapait Junior." << std::endl;
 	int choice = 0;
-	
+
 	PageTable table("Busca em largura recursiva: ");
 	table.addRowHeader("Vi");
-	table.addRowHeader("di");
-	table.addRowHeader("pi");
+	table.addRowHeader("int");
+	table.addRowHeader("float");
+	table.addRowHeader("char");
+	table.addRowHeader("bool");
+	table.addRowHeader("std::string");
 
 	table.addColumnHeader("V1");
 	table.addColumnHeader("V2");
@@ -187,8 +190,15 @@ int main() {
 	table.addColumnHeader("V11");
 	table.addColumnHeader("V12");
 
-	table.addRow({"0", "1", "2", "1", "2", "2", "1", "2", "2", "1", "2", "1"});
+	int i[] = {0, 1, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1};
+	table.addRow(i, 12);
+	float f[] = {0.0, 1.0, 2.0, 1.0, 2.0, 2.0, 1.0, 2.0, 2.0, 1.0, 2.0, 1.0};
+	table.addRow(f, 12);
+	char c[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'};
+	table.addRow(c , 12);
+	table.addRow({false, true, false, true, false, true, false, true, false, true, false, true});
 	table.addRow({"nil", "V1", "V2", "V1", "V12", "V7", "V1", "V7", "V2", "V1", "V10", "V1"});
+
 	table.printPage(0);
 
 	do {

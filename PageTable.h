@@ -3,28 +3,39 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <iomanip> 
+#include <iomanip>
+
+/*
+Essa classe deve montar uma matriz no console e
+deve mostrar os valores divididos em páginas.
+*/
 
 class Cell {
+private:
+	std::string value;
+
 public:
 	Cell(const Cell&) = delete;
 	Cell& operator=(const Cell&) = delete;
 	Cell(const Cell&&) = delete;
 	Cell& operator=(const Cell&&) = delete;
 
-	Cell() {}
-	~Cell() {}
+	explicit Cell() = default;
+	~Cell() { value.clear(); }
 
+	/*this function works for std::vector<std::string>*/
 	Cell& operator=(const std::string& v) {
 		value = v;
 		return *this;
 	}
 
+	/*this function works for std::initializer_list<char*>*/
 	Cell& operator=(const char* v) {
 		value = v;
 		return *this;
 	}
 
+	/*this function works for char[]*/
 	Cell& operator=(const char& v) {
 		value = std::string(1, v);
 		return *this;
@@ -32,19 +43,20 @@ public:
 
 	Cell& operator=(const bool v) {
 		value = v ? "true" : "false";
+		return *this;
 	}
 
-	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>::type>
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>::type>
 	Cell& operator=(const T& v) {
 		value = std::to_string(v);
 		return *this;
 	}
 
-	const size_t size() const { return value.size(); }
+	void clear() { value.clear(); }
+
+	const size_t getSize() const { return value.size(); }
 
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
-private:
-	std::string value;
 };
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell) {
@@ -72,8 +84,7 @@ private:
 	std::string title;
 	std::vector<size_t> columnsWidth;
 	std::vector<std::string> rowHeader, columnHeader;
-	std::vector<std::vector<std::string>> data;
-	std::vector<Cell*> cells;
+	std::vector<std::vector<Cell>> data;
 
 	void columnsWidthResize(const size_t index) {
 		if (columnsWidth.empty())
@@ -111,13 +122,13 @@ private:
 		std::cout << side.right << std::endl;
 	}
 
-	void printRow(const size_t startIndex, const size_t endIndex, const std::vector < std::string> row) const {
+	void printRow(const size_t startIndex, const size_t endIndex, const std::vector<Cell>& row) const {
 		std::cout << border.vertical;
 
 		for (size_t c = startIndex; c < endIndex; ++c) {
 			if (c < row.size()) {
 				std::cout << row[c];
-				printFill(' ', columnsWidth[c + 1] - row[c].size());
+				printFill(' ', columnsWidth[c + 1] - row[c].getSize());
 			} else
 				printFill(' ', columnsWidth[c + 1]);
 
@@ -190,36 +201,39 @@ public:
 		updateColumsWidth(columnHeader.size(), description.size());
 	}
 
-	void addRow(const std::vector<std::string>& row) {
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	void addRow(const std::vector<T>& row) {
 		data.emplace_back(row.size());
 		columnsWidthResize(row.size());
 
 		for (size_t i = 0; i < row.size(); i++) {
-			data.back()[i] = row[i];
-			updateColumsWidth(i + 1, data.back()[i].size());
+			data.back().at(i) = row[i];
+			updateColumsWidth(i + 1, data.back().at(i).getSize());
 		}
 	}
-
-	void addRow(const std::string row[], const size_t size) {
+		
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	void addRow(const T row, const size_t size) {
 		data.emplace_back(size);
 		columnsWidthResize(size);
 
 		for (size_t i = 0; i < size; i++) {
-			data.back()[i] = row[i];
-			updateColumsWidth(i + 1, data.back()[i].size());
+			data.back().at(i) = row[i];
+			updateColumsWidth(i + 1, data.back().at(i).getSize());
 		}
 	}
 
-	void addRow(const std::initializer_list<std::string>& row) {
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	void addRow(const std::initializer_list<T>& row) {
 		data.emplace_back(row.size());
 		columnsWidthResize(row.size());
 
 		for (size_t i = 0; i < row.size(); i++) {
-			data.back()[i] = *(row.begin() + i);
-			updateColumsWidth(i + 1, data.back()[i].size());
+			data.back().at(i) = *(row.begin() + i);
+			updateColumsWidth(i + 1, data.back().at(i).getSize());
 		}
 	}
-	
+
 	void printPage(const size_t page) {
 		size_t startIndex = page * columnsPage;
 
@@ -249,7 +263,22 @@ public:
 				printFill(' ', columnsWidth[0] - rowHeader[0].size());
 			}
 
-			printRow(startIndex, endIndex, columnHeader);
+			/*igual a print row mas com lista string*/
+			std::cout << border.vertical;
+
+			for (size_t c = startIndex; c < endIndex; ++c) {
+				if (c < columnHeader.size()) {
+					std::cout << columnHeader[c];
+					printFill(' ', columnsWidth[c + 1] - columnHeader[c].size());
+				} else
+					printFill(' ', columnsWidth[c + 1]);
+
+				if (c != endIndex - 1)
+					std::cout << border.vertical;
+			}
+
+			std::cout << border.vertical << std::endl;
+			/*igual a print row mas com lista de string*/
 
 			if (data.empty() == false)
 				printBorderSide(startIndex, endIndex + 1, border.middle);
@@ -273,7 +302,7 @@ public:
 	}
 	/*
 	void show() {
-		
+
 	}
 	*/
 };

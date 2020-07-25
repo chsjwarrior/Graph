@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <time.h>
 /*
 O algoritmo de Dijkstra soluciona o problema do caminho mais curto num grafo dirigido ou não dirigido com arestas de peso não negativo.
 O algoritmo que serve para resolver o mesmo problema em um grafo com pesos negativos é o algoritmo de Bellman-Ford, que possui maior tempo de execução que o Dijkstra.
@@ -72,6 +73,8 @@ public:
 	}
 
 	void dijkstra(const unsigned int& source) {
+		time_t ini = time(NULL);
+
 		std::list<unsigned int> queue;
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			distance[i] = INF;
@@ -90,6 +93,9 @@ public:
 				if (visited[*v] == false)//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
 					relax(u, *v, graph.getWeigthFrom(u, *v));
 		}
+
+		time_t fim = time(NULL);
+		std::cout << "Tempo: " << difftime(fim, ini) << std::endl;
 		print();
 	}
 };
