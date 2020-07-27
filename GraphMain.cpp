@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iomanip>
 #include "PageTable.h"
 #include "Graph.h"
 #include "BreadthFirstSearch.h"
@@ -146,6 +147,7 @@ void createGraph() {
 unsigned int getVertex(const char msg[]) {
 	unsigned int value;
 	do {
+
 		graph->printVerticesToSelect();
 		std::cout << msg << std::endl;
 		value = uRead();

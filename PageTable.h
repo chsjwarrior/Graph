@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 
 /*
 Essa classe deve montar uma matriz no console e
@@ -13,6 +12,7 @@ deve mostrar os valores divididos em páginas.
 class Cell {
 private:
 	std::string value;
+	friend class PageTable;
 
 public:
 	Cell(const Cell&) = delete;
@@ -51,18 +51,7 @@ public:
 		value = std::to_string(v);
 		return *this;
 	}
-
-	void clear() { value.clear(); }
-
-	const size_t getSize() const { return value.size(); }
-
-	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
 };
-
-std::ostream& operator<<(std::ostream& os, const Cell& cell) {
-	std::cout << cell.value;
-	return os;
-}
 
 //0====================TABLE_CLASS====================0
 class PageTable {
@@ -133,9 +122,9 @@ private:
 
 		for (size_t c = startIndex; c < endIndex; ++c) {
 			if (c < row.size()) {
-				std::cout << *row[c];
-				if (row[c]->getSize() <= columnsWidth[c + 1])
-					printFill(' ', columnsWidth[c + 1] - row[c]->getSize());
+				std::cout << row[c]->value;
+				if (row[c]->value.size() <= columnsWidth[c + 1])
+					printFill(' ', columnsWidth[c + 1] - row[c]->value.size());
 			} else
 				printFill(' ', columnsWidth[c + 1]);
 
@@ -148,18 +137,19 @@ private:
 
 	void printPage(const size_t page) {
 		size_t startIndex = page * columnsPage;
-
 		size_t endIndex = std::min(startIndex + columnsPage, columnsWidth.size() - 1);
+
+		if (startIndex >= columnsWidth.size() - 1)
+			return;
+
 		//0==========================================================================0
 
 		if (title.empty() == false) {
 			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
 			std::cout << border.vertical << title;
 
-			size_t count = columnsWidth.size();
-			for (size_t i = startIndex; i < endIndex; ++i)
-				count += columnsWidth[i];
-			printFill(' ', count - title.size());
+			for (size_t i = 1 + startIndex; i < endIndex; ++i)
+				printFill(' ', columnsWidth[i]);
 
 			std::cout << border.vertical << std::endl;
 			printBorderSide(startIndex, endIndex + 1, {border.middle.left,border.top.middle,border.middle.right});
@@ -269,6 +259,18 @@ public:
 				r.erase(r.cbegin() + index);
 	}
 
+	void addRow(size_t size = 0) {
+		if (size == 0)
+			size = columnsWidth.size() - 1;
+		else
+			resizeColumnsWidth(size);
+		data.emplace_back(size);
+		auto& newRow = data.back();
+
+		for (size_t i = 0; i < size; i++)
+			newRow[i] = std::make_unique<Cell>();
+	}
+
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
 	void addRow(const T row, const size_t size) {
 		data.emplace_back(size);
@@ -278,7 +280,7 @@ public:
 		for (size_t i = 0; i < size; i++) {
 			newRow[i] = std::make_unique<Cell>();
 			*newRow[i] = row[i];
-			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->getSize());
+			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->value.size());
 		}
 	}
 
@@ -291,7 +293,7 @@ public:
 		for (size_t i = 0; i < row.size(); i++) {
 			newRow[i] = std::make_unique<Cell>();
 			*newRow[i] = *(row.begin() + i);
-			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->getSize());
+			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->value.size());
 		}
 	}
 
@@ -317,7 +319,7 @@ public:
 			for (const auto& r : data) {
 				if (autoResizeColumns)
 					for (size_t c = 0; c < r.size(); ++c)
-						updateColumWidth(c + 1, r.at(c)->getSize());
+						updateColumWidth(c + 1, r.at(c)->value.size());
 				if (columnsCount < r.size())
 					columnsCount = r.size();
 			}
@@ -346,11 +348,9 @@ public:
 		*dRow[column] = value;
 	}
 
-	void show() {
+	void print() {
 		size_t numPages = (columnsWidth.size() - 1) / columnsPage;
-		for (size_t i = 0; i <= numPages; ++i) {
+		for (size_t i = 0; i <= numPages; ++i)
 			printPage(i);
-			std::cout << std::endl;
-		}
 	}
 };

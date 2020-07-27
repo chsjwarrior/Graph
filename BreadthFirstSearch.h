@@ -49,27 +49,25 @@ private:
 		}
 	}
 
-	void print() const {
-		std::cout << std::left << std::setw(4) << "Vi";
-		std::cout << std::right;
-		unsigned int i;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeVertex(i);
+	void print(const std::string& title) const {
+		PageTable table(title);
+		table.setAutoResizeColumns(false);
+		table.setColumnsOfPage(20);
+		table.addRowHeader("Vi");
+		table.addRowHeader("Di");
+		table.addRowHeader("Pi");
+
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			table.addColumnHeader(graph.getVertexName(i));
+			table.setColumnWidth(i, 4);
 		}
-		std::cout << std::endl << std::left << std::setw(4) << "di";
-		std::cout << std::right;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeValue(discovery[i]);
-		}
-		std::cout << std::endl << std::left << std::setw(4) << "pi";
-		std::cout << std::right;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeVertex(predecessor[i]);
-		}
-		std::cout << std::endl;
+
+		table.addRow(discovery, graph.AMOUNT_VERTEXES);
+		table.addRow();
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
+			table.setValueAt(1, i, graph.getVertexName(predecessor[i]));
+
+		table.print();
 	}
 
 public:
@@ -103,11 +101,10 @@ public:
 
 		if (isRecursive) {
 			bfsRecursive(queue);
-			std::cout << "Busca em largura recursiva:" << std::endl;
+			print("Busca em largura recursiva:");
 		} else {
 			bfsIterative(queue);
-			std::cout << "Busca em largura iterativa:" << std::endl;
+			print("Busca em largura iterativa:");
 		}
-		print();
 	}
 };

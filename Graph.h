@@ -281,7 +281,7 @@ public:
 			writeVertex(u);
 			if (u + 1 < AMOUNT_VERTEXES) {
 				std::cout << ',';
-				if (++i % 20 == 0)
+				if (++i % 15 == 0)
 					std::cout << std::endl;
 			}
 		}
@@ -293,35 +293,33 @@ public:
 			writeEdge(*e);
 			if ((e) != --edges.cend()) {
 				std::cout << ',';
-				if (++i % 12 == 0)
+				if (++i % 10 == 0)
 					std::cout << std::endl;
 			}
 		}
 		std::cout << '}' << std::endl;
-		std::cout << "Graus dos vertices:" << std::endl;
-		std::cout << std::left << std::setw(4) << "Vi";
-		std::cout << std::right;
-		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			writeVertex(i);
-		}
-		std::cout << std::endl;
+		PageTable table("Graus dos vertices:");
+		table.setAutoResizeColumns(false);
+		table.setColumnsOfPage(20);
+
+		table.addRow(AMOUNT_VERTEXES);
+		table.addRowHeader("Vi");
+		size_t rowsCount = 0;
 		if (IS_DIGRAPH) {
-			std::cout << std::left << std::setw(4) << "in";
-			std::cout << std::right;
-			for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-				std::cout << '|' << std::setw(4);
-				writeValue(getInDegreeFrom(u));
-			}
-			std::cout << std::endl;
+			rowsCount++;
+			table.addRow(AMOUNT_VERTEXES);
+			table.addRowHeader("in");
 		}
-		std::cout << std::left << std::setw(4) << "out";
-		std::cout << std::right;
-		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-			std::cout << '|' << std::setw(4);
-			writeValue(getOutDegreeFrom(u));
+		table.addRowHeader("out");
+
+		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
+			table.setColumnWidth(i, 4);
+			table.addColumnHeader(getVertexName(i));
+			if (IS_DIGRAPH)
+				table.setValueAt(0, i, getInDegreeFrom(i));
+			table.setValueAt(rowsCount, i, getOutDegreeFrom(i));
 		}
-		std::cout << std::endl;
+		table.print();
 	}
 
 	void printVerticesToSelect() const {
@@ -335,11 +333,15 @@ public:
 		std::cout << std::endl;
 	}
 
-	void writeVertex(const unsigned int& vertex) const {
-		if (vertex != UINT_MAX)
-			std::cout << "V" + std::to_string(vertex + 1);
+	const std::string getVertexName(const unsigned int vertex) const {
+		if (vertex != NIL)
+			return "V" + std::to_string(vertex + 1);
 		else
-			std::cout << "nil";
+			return "nil";
+	}
+
+	void writeVertex(const unsigned int& vertex) const {
+		std::cout << getVertexName(vertex);
 	}
 
 	void writeEdge(const Edge& edge) const {
