@@ -278,7 +278,7 @@ public:
 		for (size_t i = 0; i < size; ++i) {
 			newRow.at(i) = std::make_unique<Cell>();
 			*newRow.at(i) = row[i];
-			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->value.size());
+			ifAutoResizingColumnsUpdateColumnWidth(i + 1, newRow.at(i)->value.size());
 		}
 	}
 
@@ -291,7 +291,7 @@ public:
 		for (size_t i = 0; i < row.size(); ++i) {
 			newRow.at(i) = std::make_unique<Cell>();
 			*newRow.at(i) = *(row.begin() + i);
-			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->value.size());
+			ifAutoResizingColumnsUpdateColumnWidth(i + 1, newRow.at(i)->value.size());
 		}
 	}
 

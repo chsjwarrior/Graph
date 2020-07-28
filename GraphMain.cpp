@@ -383,9 +383,9 @@ int main() {
 				case 27:
 					{
 						std::cout << "Dgt 0 para Coloracao sequencial.\nDgt qualquer valor para Coloracao heuristica." << std::endl;
-						bool isSequential = iRead();
+						bool isHeuristic = iRead();
 						Coloring coloring(*graph);
-						coloring.coloring(isSequential);
+						coloring.coloring(isHeuristic);
 					} break;
 				default:
 					std::cerr << "valor invalido, dgt novamente." << std::endl;

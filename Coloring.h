@@ -46,21 +46,20 @@ private:
 		return vertex;
 	}
 
-	void print() const {
-		std::cout << std::left << std::setw(4) << "Vi";
-		std::cout << std::right;
-		unsigned int i;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeVertex(i);
+	void print(const std::string& title) const {
+		PageTable table(title);
+		table.setAutoResizeColumns(false);
+		table.setColumnsOfPage(20);
+		table.addRowHeader("Vi");
+		table.addRowHeader("Ci");
+
+		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+			table.addColumnHeader(graph.getVertexName(i));
+			table.setColumnWidth(i, 4);
 		}
-		std::cout << std::endl << std::left << std::setw(4) << "ci";
-		std::cout << std::right;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeValue(color[i]);
-		}
-		std::cout << std::endl;
+
+		table.addRow(color, graph.AMOUNT_VERTEXES);
+		table.print();
 	}
 
 public:
@@ -74,15 +73,15 @@ public:
 		color = nullptr;
 	}
 
-	void coloring(const bool& isSequential) {
+	void coloring(const bool& isHeuristic) {
 		memset(color, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
-		if (isSequential) {
+		if (isHeuristic == false) {
 			for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
 				if (color[u] == 0)
 					setValidColor(u);
 
-			std::cout << "Coloracao seguencial:" << std::endl;
+			print("Coloracao seguencial:");
 		} else {
 			unsigned int u = getHigherDegreeNotColored();
 			while (u != graph.AMOUNT_VERTEXES) {
@@ -90,8 +89,7 @@ public:
 				u = getHigherDegreeNotColored();
 			}
 
-			std::cout << "Coloracao heuristica:" << std::endl;
+			print("Coloracao heuristica:");
 		}
-		print();
 	}
 };
