@@ -107,7 +107,6 @@ private:
 			printFill(border.horizontal, columnsWidth[0]);
 			std::cout << side.middle;
 		}
-
 		for (size_t i = 1 + startIndex; i < endIndex; ++i) {
 			printFill(border.horizontal, columnsWidth[i]);
 			if (i != endIndex - 1)
@@ -117,15 +116,20 @@ private:
 		std::cout << side.right << std::endl;
 	}
 
+	void printCell(const std::string& value, size_t cellWidth) const {
+		std::cout << value;
+		if (value.size() <= cellWidth)
+			cellWidth = cellWidth - value.size();
+		printFill(' ', cellWidth);
+	}
+
 	void printRow(const size_t startIndex, const size_t endIndex, const Row& row) const {
 		std::cout << border.vertical;
 
-		for (size_t c = startIndex; c < endIndex; ++c) {
-			if (c < row.size()) {
-				std::cout << row[c]->value;
-				if (row[c]->value.size() <= columnsWidth[c + 1])
-					printFill(' ', columnsWidth[c + 1] - row[c]->value.size());
-			} else
+		for (size_t c = startIndex, fill; c < endIndex; ++c) {
+			if (c < row.size())
+				printCell(row[c]->value, columnsWidth.at(c + 1));
+			else
 				printFill(' ', columnsWidth[c + 1]);
 
 			if (c != endIndex - 1)
@@ -144,7 +148,7 @@ private:
 
 		//0==========================================================================0
 
-		if (title.empty() == false) {
+		if (page == 0 && title.empty() == false) {
 			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
 			std::cout << border.vertical << title;
 
@@ -160,18 +164,16 @@ private:
 			if (rowHeader.empty() == false) {
 				std::cout << border.vertical;
 
-				std::cout << rowHeader[0];
-				printFill(' ', columnsWidth[0] - rowHeader[0].size());
+				printCell(rowHeader[0], columnsWidth.front());
 			}
 
 			/*igual a print row mas com lista string*/
 			std::cout << border.vertical;
 
-			for (size_t c = startIndex; c < endIndex; ++c) {
-				if (c < columnHeader.size()) {
-					std::cout << columnHeader[c];
-					printFill(' ', columnsWidth[c + 1] - columnHeader[c].size());
-				} else
+			for (size_t c = startIndex, fill; c < endIndex; ++c) {
+				if (c < columnHeader.size())
+					printCell(columnHeader[c], columnsWidth[c + 1]);
+				else
 					printFill(' ', columnsWidth[c + 1]);
 
 				//if (c != endIndex - 1)
@@ -190,8 +192,7 @@ private:
 			if (r < rowHeader.size()) {
 				std::cout << border.vertical;
 
-				std::cout << rowHeader[rHeader];
-				printFill(' ', columnsWidth[0] - rowHeader[rHeader].size());
+				printCell(rowHeader[rHeader], columnsWidth.front());
 			}
 			printRow(startIndex, endIndex, data[r]);
 

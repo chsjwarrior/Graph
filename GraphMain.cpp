@@ -206,7 +206,7 @@ int main() {
 			<< "Dgt 24 para Kruskal." << std::endl
 			<< "Dgt 25 para Prim." << std::endl
 			<< "Dgt 26 para Boruvka," << std::endl
-			<< "------------------------------------------"
+			<< "------------------------------------------" << std::endl
 			<< "Dgt 27 para Coloracao." << std::endl;
 		choice = uRead();
 		clearScreen();
