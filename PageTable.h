@@ -4,10 +4,6 @@
 #include <algorithm>
 #include <iostream>
 
-/*
-Essa classe deve montar uma matriz no console e
-deve mostrar os valores divididos em páginas.
-*/
 //0====================CELL_CLASS====================0
 class Cell {
 private:
@@ -24,31 +20,31 @@ public:
 	~Cell() { value.clear(); }
 
 	/*this function works for std::vector<std::string>*/
-	Cell& operator=(const std::string& v) {
-		value = v;
+	Cell& operator=(const std::string& s) {
+		value = s;
 		return *this;
 	}
 
 	/*this function works for std::initializer_list<char*>*/
-	Cell& operator=(const char* v) {
-		value = v;
+	Cell& operator=(const char* c) {
+		value = c;
 		return *this;
 	}
 
 	/*this function works for char[]*/
-	Cell& operator=(const char& v) {
-		value = std::string(1, v);
+	Cell& operator=(const char& c) {
+		value = std::string(1, c);
 		return *this;
 	}
 
-	Cell& operator=(const bool v) {
-		value = v ? "true" : "false";
+	Cell& operator=(const bool b) {
+		value = b ? "true" : "false";
 		return *this;
 	}
 
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>::type>
-	Cell& operator=(const T& v) {
-		value = std::to_string(v);
+	Cell& operator=(const T& t) {
+		value = std::to_string(t);
 		return *this;
 	}
 };
@@ -80,19 +76,19 @@ private:
 	void resizeColumnsWidth(const size_t index) {
 		if (columnsWidth.empty())
 			columnsWidth.push_back(0);
-		if (index > columnsWidth.size())
-			columnsWidth.resize(index, 0);
 		if (index == columnsWidth.size())
 			columnsWidth.push_back(0);
+		else if (index > columnsWidth.size())
+			columnsWidth.resize(index, 0);
 	}
 
-	inline void updateColumWidth(const size_t index, const size_t width) {
+	inline void updateColumnWidth(const size_t index, const size_t width) {
 		columnsWidth[index] = std::max(columnsWidth[index], width);
 	}
 
-	inline void ifAutoResizingColumnsUpdateColumWidth(const size_t index, const size_t width) {
+	inline void ifAutoResizingColumnsUpdateColumnWidth(const size_t index, const size_t width) {
 		if (columnsWidth[index] == 0 || autoResizeColumns)
-			updateColumWidth(index, width);
+			updateColumnWidth(index, width);
 	}
 
 	inline void printFill(const char value, const size_t lenght) const {
@@ -132,11 +128,10 @@ private:
 			else
 				printFill(' ', columnsWidth[c + 1]);
 
-			if (c != endIndex - 1)
-				std::cout << border.vertical;
+			std::cout << border.vertical;
 		}
 
-		std::cout << border.vertical << std::endl;
+		std::cout << std::endl;
 	}
 
 	void printPage(const size_t page) {
@@ -146,13 +141,12 @@ private:
 		if (startIndex >= columnsWidth.size() - 1)
 			return;
 
-		//0==========================================================================0
-
+		//0==============================TITLE============================================0
 		if (page == 0 && title.empty() == false) {
 			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
 			std::cout << border.vertical << title;
 
-			for (size_t i = 1 + startIndex; i < endIndex; ++i)
+			for (size_t i = startIndex; i < endIndex; ++i)
 				printFill(' ', columnsWidth[i]);
 
 			std::cout << border.vertical << std::endl;
@@ -160,43 +154,41 @@ private:
 		} else
 			printBorderSide(startIndex, endIndex + 1, border.top);
 
+		//0=============================COLUMN+HEADER=====================================0
 		if (columnHeader.empty() == false) {
 			if (rowHeader.empty() == false) {
 				std::cout << border.vertical;
-
 				printCell(rowHeader[0], columnsWidth.front());
 			}
-
-			/*igual a print row mas com lista string*/
+			//igual a print row mas com lista string
 			std::cout << border.vertical;
 
-			for (size_t c = startIndex, fill; c < endIndex; ++c) {
+			for (size_t c = startIndex; c < endIndex; ++c) {
 				if (c < columnHeader.size())
 					printCell(columnHeader[c], columnsWidth[c + 1]);
 				else
 					printFill(' ', columnsWidth[c + 1]);
 
-				//if (c != endIndex - 1)
 				std::cout << border.vertical;
 			}
-			//std::cout << border.vertical << std::endl;
+
 			std::cout << std::endl;
-			/*igual a print row mas com lista de string*/
+			//igual a print row mas com lista string
 
 			if (data.empty() == false)
 				printBorderSide(startIndex, endIndex + 1, border.middle);
 		}
 
+		//0==================================ROWS=========================================0
 		size_t rHeader = columnHeader.empty() ? 0 : 1;
-		for (size_t r = 0; r < data.size(); ++r, ++rHeader) {
-			if (r < rowHeader.size()) {
+		for (size_t r = 0; r < data.size(); ++r) {
+			if (rHeader < rowHeader.size()) {
 				std::cout << border.vertical;
-
-				printCell(rowHeader[rHeader], columnsWidth.front());
+				printCell(rowHeader[rHeader++], columnsWidth.front());
 			}
 			printRow(startIndex, endIndex, data[r]);
 
-			if (r != data.size() - 1)
+			if (r < data.size() - 1)
 				printBorderSide(startIndex, endIndex + 1, border.middle);
 		}
 
@@ -239,48 +231,53 @@ public:
 	void addRowHeader(const std::string& description) {
 		rowHeader.emplace_back(description);
 		resizeColumnsWidth(0);
-		ifAutoResizingColumnsUpdateColumWidth(0, description.size());
+		ifAutoResizingColumnsUpdateColumnWidth(0, description.size());
 	}
 
 	void addColumnHeader(const std::string& description) {
 		columnHeader.emplace_back(description);
 		resizeColumnsWidth(columnHeader.size());
-		ifAutoResizingColumnsUpdateColumWidth(columnHeader.size(), description.size());
+		ifAutoResizingColumnsUpdateColumnWidth(columnHeader.size(), description.size());
 	}
 
 	void removeColumn(const size_t index) {
-		if (index + 1 >= columnsWidth.size())
+		if (index >= columnsWidth.size() - 1)
 			throw std::out_of_range("Error - column index is out of range.");
 
 		columnsWidth.erase(columnsWidth.cbegin() + index + 1);
-		if (columnHeader.empty() == false)
+		if (index < columnHeader.size())
 			columnHeader.erase(columnHeader.cbegin() + index);
-		for (auto& r : data)
-			if (index < r.size())
-				r.erase(r.cbegin() + index);
+		for (auto r = data.begin(); r != data.end();) {
+			if (index < r->size())
+				r->erase(r->cbegin() + index);
+			if (r->empty())
+				r = data.erase(r);
+			else
+				r++;
+		}
 	}
 
-	void addRow(size_t size = 0) {
-		if (size == 0)
-			size = columnsWidth.size() - 1;
+	void addRow(size_t columnsCount = 0) {
+		if (columnsCount == 0)
+			columnsCount = columnsWidth.size() - 1;
 		else
-			resizeColumnsWidth(size);
-		data.emplace_back(size);
-		auto& newRow = data.back();
+			resizeColumnsWidth(columnsCount);
+		data.emplace_back(columnsCount);
+		Row& newRow = data.back();
 
-		for (size_t i = 0; i < size; i++)
-			newRow[i] = std::make_unique<Cell>();
+		for (auto c = newRow.begin(); c != newRow.end(); ++c)
+			*c = std::make_unique<Cell>();
 	}
 
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
 	void addRow(const T row, const size_t size) {
 		data.emplace_back(size);
 		resizeColumnsWidth(size);
-		auto& newRow = data.back();
+		Row& newRow = data.back();
 
-		for (size_t i = 0; i < size; i++) {
-			newRow[i] = std::make_unique<Cell>();
-			*newRow[i] = row[i];
+		for (size_t i = 0; i < size; ++i) {
+			newRow.at(i) = std::make_unique<Cell>();
+			*newRow.at(i) = row[i];
 			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->value.size());
 		}
 	}
@@ -289,11 +286,11 @@ public:
 	void addRow(const std::initializer_list<T>& row) {
 		data.emplace_back(row.size());
 		resizeColumnsWidth(row.size());
-		auto& newRow = data.back();
+		Row& newRow = data.back();
 
-		for (size_t i = 0; i < row.size(); i++) {
-			newRow[i] = std::make_unique<Cell>();
-			*newRow[i] = *(row.begin() + i);
+		for (size_t i = 0; i < row.size(); ++i) {
+			newRow.at(i) = std::make_unique<Cell>();
+			*newRow.at(i) = *(row.begin() + i);
 			ifAutoResizingColumnsUpdateColumWidth(i + 1, newRow.at(i)->value.size());
 		}
 	}
@@ -308,8 +305,8 @@ public:
 			if (rowHeader.empty())
 				columnsWidth.front() = 0;
 			else if (autoResizeColumns)
-				for (const auto& s : rowHeader)
-					updateColumWidth(0, s.size());
+				for (const auto& h : rowHeader)
+					updateColumnWidth(0, h.size());
 		}
 
 		if (index < data.size()) {
@@ -317,18 +314,18 @@ public:
 			data.erase(data.cbegin() + index);
 
 			size_t columnsCount = 0;
-			for (const auto& r : data) {
-				if (autoResizeColumns)
-					for (size_t c = 0; c < r.size(); ++c)
-						updateColumWidth(c + 1, r.at(c)->value.size());
+			for (const Row& r : data) {
 				if (columnsCount < r.size())
 					columnsCount = r.size();
+				if (autoResizeColumns)
+					for (size_t c = 0; c < r.size(); ++c)
+						updateColumnWidth(c + 1, r.at(c)->value.size());
 			}
 			if (columnsCount < columnsWidth.size() - 1)
-				columnsWidth.pop_back();
+				removeColumn(columnsCount + 1);
 			if (autoResizeColumns)
 				for (size_t c = 0; c < columnHeader.size(); ++c)
-					updateColumWidth(c + 1, columnHeader.at(c).size());
+					updateColumnWidth(c + 1, columnHeader.at(c).size());
 		}
 	}
 
@@ -339,7 +336,7 @@ public:
 		if (column >= columnsWidth.size() - 1)
 			throw std::out_of_range("Error - column index is out of range.");
 
-		auto& dRow = data.at(row);
+		Row& dRow = data.at(row);
 
 		if (column >= dRow.size()) {
 			dRow.reserve(columnsWidth.size() - 1);
