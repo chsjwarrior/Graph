@@ -137,35 +137,25 @@ public:
 	}
 
 	const unsigned int getInDegreeFrom(const unsigned int& u) const {
-		if (!IS_DIGRAPH)
+		if (IS_DIGRAPH == false)
 			return getOutDegreeFrom(u);
 
-		unsigned int degree = 0;
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
-			if (e->V == u)
-				degree++;
-		return degree;
+		return std::count_if(edges.cbegin(), edges.cend(), [&u](const Edge& e) {return e.V == u; });
 	}
 
 	//esse método tambem é usuado para grafos não dirigidos
 	const unsigned int getOutDegreeFrom(const unsigned int& u) const {
-		unsigned int degree = 0;
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
-			if (e->U == u)
-				degree++;
-			else if (!IS_DIGRAPH && e->V == u)
-				degree++;
-		return degree;
+		return std::count_if(edges.cbegin(), edges.cend(), [&IS_DIGRAPH = IS_DIGRAPH, &u](const Edge& e) {return e.U == u || !IS_DIGRAPH && e.V == u; });
 	}
 
 	std::multiset<unsigned int>& getAdjacencesFrom(const unsigned int& u) const {
 		if (!adjacences.empty())
 			adjacences.clear();
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
-			if (e->U == u)
-				adjacences.insert(e->V);
-			else if (!IS_DIGRAPH && e->V == u)
-				adjacences.insert(e->U);
+		for (const Edge& e : edges)
+			if (e.U == u)
+				adjacences.insert(e.V);
+			else if (!IS_DIGRAPH && e.V == u)
+				adjacences.insert(e.U);
 		return adjacences;
 	}
 
@@ -274,30 +264,16 @@ public:
 	}
 
 	void printGraphInfo() const {
-		std::cout << "Conjunto de vertices:" << std::endl;
-		std::cout << "V={";
-		unsigned int i = 0;
-		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-			writeVertex(u);
-			if (u + 1 < AMOUNT_VERTEXES) {
-				std::cout << ',';
-				if (++i % 15 == 0)
-					std::cout << std::endl;
-			}
-		}
-		std::cout << '}' << std::endl;
-		std::cout << "Conjunto de arestas:" << std::endl;
-		std::cout << "E={";
-		i = 0;
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
-			writeEdge(*e);
-			if ((e) != --edges.cend()) {
-				std::cout << ',';
-				if (++i % 10 == 0)
-					std::cout << std::endl;
-			}
-		}
-		std::cout << '}' << std::endl;
+		std::cout << "Total de vertices: " << AMOUNT_VERTEXES << std::endl;
+		std::cout << "Total de arestas: " << edges.size() << std::endl;
+		std::cout << "Grafo ";
+		if (IS_DIGRAPH == false)
+			std::cout << " nao ";
+		std::cout << "dirigido e ";
+		if (std::all_of(edges.cbegin(), edges.cend(), [](const Edge& e) {return e.WEIGHT == 1; }))
+			std::cout << "nao ";
+		std::cout << "valorado" << std::endl;
+
 		PageTable table("Graus dos vertices:");
 		table.setAutoResizeColumns(false);
 		table.setColumnsOfPage(20);

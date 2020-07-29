@@ -73,13 +73,11 @@ private:
 	std::vector<std::string> rowHeader, columnHeader;
 	std::vector<Row> data;
 
-	void resizeColumnsWidth(const size_t index) {
+	void resizeColumnsWidth(const size_t size) {
 		if (columnsWidth.empty())
 			columnsWidth.push_back(0);
-		if (index == columnsWidth.size())
-			columnsWidth.push_back(0);
-		else if (index > columnsWidth.size())
-			columnsWidth.resize(index, 0);
+		if (size > columnsWidth.size())
+			columnsWidth.resize(size, 0);
 	}
 
 	inline void updateColumnWidth(const size_t index, const size_t width) {
@@ -99,7 +97,7 @@ private:
 	void printBorderSide(const size_t startIndex, const size_t endIndex, const BorderSide& side) const {
 		std::cout << side.left;
 
-		if (columnsWidth[0] > 0) {
+		if (columnsWidth.front() > 0) {
 			printFill(border.horizontal, columnsWidth[0]);
 			std::cout << side.middle;
 		}
@@ -146,8 +144,12 @@ private:
 			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
 			std::cout << border.vertical << title;
 
-			for (size_t i = startIndex; i < endIndex; ++i)
-				printFill(' ', columnsWidth[i]);
+			size_t fill = endIndex - startIndex;
+			for (size_t i = startIndex; i < endIndex + 1; ++i)
+				fill += columnsWidth.at(i);
+			if (rowHeader.empty())
+				fill++;
+			printFill(' ', fill - title.size());
 
 			std::cout << border.vertical << std::endl;
 			printBorderSide(startIndex, endIndex + 1, {border.middle.left,border.top.middle,border.middle.right});
@@ -185,7 +187,11 @@ private:
 			if (rHeader < rowHeader.size()) {
 				std::cout << border.vertical;
 				printCell(rowHeader[rHeader++], columnsWidth.front());
+			} else if (rowHeader.empty() == false) {
+				std::cout << border.vertical;
+				printFill(' ', columnsWidth.front());
 			}
+
 			printRow(startIndex, endIndex, data[r]);
 
 			if (r < data.size() - 1)
@@ -230,13 +236,13 @@ public:
 
 	void addRowHeader(const std::string& description) {
 		rowHeader.emplace_back(description);
-		resizeColumnsWidth(0);
+		resizeColumnsWidth(1);
 		ifAutoResizingColumnsUpdateColumnWidth(0, description.size());
 	}
 
 	void addColumnHeader(const std::string& description) {
 		columnHeader.emplace_back(description);
-		resizeColumnsWidth(columnHeader.size());
+		resizeColumnsWidth(columnHeader.size() + 1);
 		ifAutoResizingColumnsUpdateColumnWidth(columnHeader.size(), description.size());
 	}
 
@@ -272,7 +278,7 @@ public:
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
 	void addRow(const T row, const size_t size) {
 		data.emplace_back(size);
-		resizeColumnsWidth(size);
+		resizeColumnsWidth(size + 1);
 		Row& newRow = data.back();
 
 		for (size_t i = 0; i < size; ++i) {
@@ -285,7 +291,7 @@ public:
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
 	void addRow(const std::initializer_list<T>& row) {
 		data.emplace_back(row.size());
-		resizeColumnsWidth(row.size());
+		resizeColumnsWidth(row.size() + 1);
 		Row& newRow = data.back();
 
 		for (size_t i = 0; i < row.size(); ++i) {
