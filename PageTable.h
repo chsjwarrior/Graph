@@ -51,10 +51,200 @@ public:
 
 //0====================TABLE_CLASS====================0
 class PageTable {
+public:
+	enum class HeaderOrientation : bool { COLUMN, ROW };
+
+	PageTable(const PageTable&) = delete;
+	PageTable operator=(const PageTable&) = delete;
+	PageTable(const PageTable&&) = delete;
+	PageTable operator=(const PageTable&&) = delete;
+
+	explicit PageTable(const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : HEADER_ORIENTATION(headerOrientation) {}
+
+	explicit PageTable(const std::string title, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : title(title), HEADER_ORIENTATION(headerOrientation) {}
+
+	~PageTable() {
+		title.clear();
+		columnsWidth.clear();
+		header.clear();
+		for (auto r = data.begin(); data.empty() == false; r = data.erase(r))
+			r->clear();
+	}
+
+	void setColumnWidth(const size_t index, const size_t width) {
+		if (index >= columnsWidth.size() - 1)
+			throw std::out_of_range("Error - column index is out of range.");
+
+		columnsWidth[index + 1] = width;
+	}
+
+	void addHeader(const std::string& description) {
+		header.emplace_back(description);
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN) {
+			resizeColumnsWidth(header.size() + 1);
+			ifAutoResizingColumnsUpdateColumnWidth(header.size(), description.size());
+		} else {
+			resizeColumnsWidth(1);
+			updateColumnWidth(0, description.size());
+		}
+	}
+
+	void addheader(const std::string descriptions[], const size_t size) {
+		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? size + 1 : 1);
+
+		for (size_t i = 0; i < size; ++i) {
+			header.emplace_back(descriptions[i]);
+			if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+				ifAutoResizingColumnsUpdateColumnWidth(header.size(), descriptions[i].size());
+			else
+				updateColumnWidth(0, descriptions[i].size());
+		}
+	}
+
+	void addheader(const std::initializer_list<std::string>& descriptions) {
+		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? descriptions.size() + 1 : 1);
+
+		for (const std::string& i : header) {
+			header.emplace_back(i);
+			if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+				ifAutoResizingColumnsUpdateColumnWidth(header.size(), i.size());
+			else
+				updateColumnWidth(0, i.size());
+		}
+	}
+
+	void removeColumn(const size_t index) {
+		if (index >= columnsWidth.size() - 1)
+			throw std::out_of_range("Error - column index is out of range.");
+
+		columnsWidth.erase(columnsWidth.cbegin() + index + 1);
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+			if (index < header.size())
+				header.erase(header.cbegin() + index);
+		for (auto r = data.begin(); r != data.end();) {
+			if (index < r->size())
+				r->erase(r->cbegin() + index);
+			if (r->empty())
+				r = data.erase(r);
+			else
+				r++;
+		}
+	}
+
+	void addRow(size_t columnsCount) {
+		if (columnsCount == 0)
+			columnsCount = columnsWidth.size() - 1;
+		else
+			resizeColumnsWidth(columnsCount + 1);
+		data.emplace_back(columnsCount);
+		Row& newRow = data.back();
+
+		for (auto c = newRow.begin(); c != newRow.end(); ++c)
+			*c = std::make_unique<Cell>();
+	}
+
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	void addRow(const T row, const size_t size) {
+		data.emplace_back(size);
+		resizeColumnsWidth(size + 1);
+		Row& newRow = data.back();
+
+		for (size_t i = 0; i < size; ++i) {
+			newRow.at(i) = std::make_unique<Cell>();
+			*newRow.at(i) = row[i];
+			ifAutoResizingColumnsUpdateColumnWidth(i + 1, newRow.at(i)->value.size());
+		}
+	}
+
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	void addRow(const std::initializer_list<T>& row) {
+		data.emplace_back(row.size());
+		resizeColumnsWidth(row.size() + 1);
+		Row& newRow = data.back();
+
+		for (size_t i = 0; i < row.size(); ++i) {
+			newRow.at(i) = std::make_unique<Cell>();
+			*newRow.at(i) = *(row.begin() + i);
+			ifAutoResizingColumnsUpdateColumnWidth(i + 1, newRow.at(i)->value.size());
+		}
+	}
+
+	/*esse metodo precisa ser verificado
+	void removeRow(const size_t index) {
+		if (HEADER_ORIENTATION == HeaderOrientation::ROW && index < header.size()) {
+			header.erase(header.cbegin() + index);
+			if (header.empty())
+				columnsWidth.front() = 0;
+			else if (autoResizeColumns)
+				for (const auto& h : header)
+					updateColumnWidth(0, h.size());
+		}
+
+		if (index < data.size()) {
+			data[index].clear();
+			data.erase(data.cbegin() + index);
+
+			size_t columnsCount = 0;
+			for (const Row& r : data) {
+				if (columnsCount < r.size())
+					columnsCount = r.size();
+				if (autoResizeColumns)
+					for (size_t c = 0; c < r.size(); ++c)
+						updateColumnWidth(c + 1, r.at(c)->value.size());
+			}
+			if (columnsCount < columnsWidth.size() - 1)
+				removeColumn(columnsCount + 1);
+			if (autoResizeColumns)
+				for (size_t c = 0; c < columnHeader.size(); ++c)
+					updateColumnWidth(c + 1, columnHeader.at(c).size());
+		}else if (index >= data.size())
+			throw std::out_of_range("Error - row index is out of range.");
+	}*/
+
+	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	void setValueAt(const size_t row, const size_t column, const T value) {
+		if (row >= data.size())
+			throw std::out_of_range("Error - row index is out of range.");
+		if (column >= columnsWidth.size() - 1)
+			throw std::out_of_range("Error - column index is out of range.");
+
+		Row& dRow = data.at(row);
+
+		if (column >= dRow.size()) {
+			dRow.reserve(columnsWidth.size() - 1);
+			for (size_t i = dRow.size(); i < columnsWidth.size() - 1; ++i)
+				dRow.emplace_back(new Cell());
+		}
+		*dRow[column] = value;
+	}
+
+	void print() {
+		size_t numPages = (columnsWidth.size() - 1) / columnsPage;
+		for (size_t i = 0; i <= numPages; ++i)
+			printPage(i);
+	}
+	//0====================GET=AND=SET====================0
+	const bool isAutoResizeColumns() const {
+		return autoResizeColumns;
+	}
+	void setAutoResizeColumns(const bool autoResizeColumns) {
+		this->autoResizeColumns = autoResizeColumns;
+	}
+	const size_t getColumnsOfPage() const {
+		return columnsPage;
+	}
+	void setColumnsOfPage(const size_t columnsPage) {
+		this->columnsPage = columnsPage;
+	}
+	void setTitle(const std::string& title) {
+		this->title = title;
+	}
+	const std::string getTitle() const {
+		return title;
+	}
+
 private:
-	typedef std::vector<std::unique_ptr<Cell>> Row;
-	bool autoResizeColumns = true;
-	size_t columnsPage = 10;
+	const HeaderOrientation HEADER_ORIENTATION;
 
 	struct BorderSide {
 		const unsigned char left, middle, right;
@@ -65,17 +255,18 @@ private:
 		const BorderSide botton{192, 193, 217};
 		const unsigned char horizontal = 196;
 		const unsigned char vertical = 179;
-	};
+	} border;
 
-	Border border;
+	typedef std::vector<std::unique_ptr<Cell>> Row;
+
+	bool autoResizeColumns = true;
+	size_t columnsPage = 10;
 	std::string title;
-	std::vector<size_t> columnsWidth;
-	std::vector<std::string> rowHeader, columnHeader;
+	std::vector<size_t> columnsWidth;//the first element (columnsWidth[0]) belongs to header as Row Orientation
+	std::vector<std::string> header;
 	std::vector<Row> data;
 
-	void resizeColumnsWidth(const size_t size) {
-		if (columnsWidth.empty())
-			columnsWidth.push_back(0);
+	inline void resizeColumnsWidth(const size_t size) {
 		if (size > columnsWidth.size())
 			columnsWidth.resize(size, 0);
 	}
@@ -120,7 +311,7 @@ private:
 	void printRow(const size_t startIndex, const size_t endIndex, const Row& row) const {
 		std::cout << border.vertical;
 
-		for (size_t c = startIndex, fill; c < endIndex; ++c) {
+		for (size_t c = startIndex; c < endIndex; ++c) {
 			if (c < row.size())
 				printCell(row[c]->value, columnsWidth.at(c + 1));
 			else
@@ -147,7 +338,7 @@ private:
 			size_t fill = endIndex - startIndex;
 			for (size_t i = startIndex; i < endIndex + 1; ++i)
 				fill += columnsWidth.at(i);
-			if (rowHeader.empty())
+			if (HEADER_ORIENTATION == HeaderOrientation::ROW && header.empty())
 				fill++;
 			printFill(' ', fill - title.size());
 
@@ -157,17 +348,13 @@ private:
 			printBorderSide(startIndex, endIndex + 1, border.top);
 
 		//0=============================COLUMN+HEADER=====================================0
-		if (columnHeader.empty() == false) {
-			if (rowHeader.empty() == false) {
-				std::cout << border.vertical;
-				printCell(rowHeader[0], columnsWidth.front());
-			}
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN && header.empty() == false) {
 			//igual a print row mas com lista string
 			std::cout << border.vertical;
 
 			for (size_t c = startIndex; c < endIndex; ++c) {
-				if (c < columnHeader.size())
-					printCell(columnHeader[c], columnsWidth[c + 1]);
+				if (c < header.size())
+					printCell(header[c], columnsWidth[c + 1]);
 				else
 					printFill(' ', columnsWidth[c + 1]);
 
@@ -182,12 +369,11 @@ private:
 		}
 
 		//0==================================ROWS=========================================0
-		size_t rHeader = columnHeader.empty() ? 0 : 1;
 		for (size_t r = 0; r < data.size(); ++r) {
-			if (rHeader < rowHeader.size()) {
+			if (HEADER_ORIENTATION == HeaderOrientation::ROW && r < header.size()) {
 				std::cout << border.vertical;
-				printCell(rowHeader[rHeader++], columnsWidth.front());
-			} else if (rowHeader.empty() == false) {
+				printCell(header[r], columnsWidth.front());
+			} else if (header.empty() == false) {
 				std::cout << border.vertical;
 				printFill(' ', columnsWidth.front());
 			}
@@ -199,162 +385,5 @@ private:
 		}
 
 		printBorderSide(startIndex, endIndex + 1, border.botton);
-	}
-
-public:
-	PageTable(const PageTable&) = delete;
-	PageTable operator=(const PageTable&) = delete;
-	PageTable(const PageTable&&) = delete;
-	PageTable operator=(const PageTable&&) = delete;
-
-	explicit PageTable() {}
-
-	explicit PageTable(const std::string title) : title(title) {}
-
-	~PageTable() {
-		title.clear();
-		columnsWidth.clear();
-		rowHeader.clear();
-		columnHeader.clear();
-		for (auto r = data.begin(); data.empty() == false; r = data.erase(r))
-			r->clear();
-	}
-
-	const bool isAutoResizeColumns() const { return autoResizeColumns; }
-	void setAutoResizeColumns(const bool autoResizeColumns) { this->autoResizeColumns = autoResizeColumns; }
-	const size_t getColumnsOfPage() const { return columnsPage; }
-	void setColumnsOfPage(const size_t columnsPage) { this->columnsPage = columnsPage; }
-	void setTitle(const std::string& title) { this->title = title; }
-	const std::string getTitle() const { return title; }
-
-	void setColumnWidth(const size_t index, const size_t width) {
-		if (index >= columnsWidth.size())
-			throw std::out_of_range("Error - column index is out of range.");
-
-		columnsWidth[index] = width;
-	}
-
-	void addRowHeader(const std::string& description) {
-		rowHeader.emplace_back(description);
-		resizeColumnsWidth(1);
-		ifAutoResizingColumnsUpdateColumnWidth(0, description.size());
-	}
-
-	void addColumnHeader(const std::string& description) {
-		columnHeader.emplace_back(description);
-		resizeColumnsWidth(columnHeader.size() + 1);
-		ifAutoResizingColumnsUpdateColumnWidth(columnHeader.size(), description.size());
-	}
-
-	void removeColumn(const size_t index) {
-		if (index >= columnsWidth.size() - 1)
-			throw std::out_of_range("Error - column index is out of range.");
-
-		columnsWidth.erase(columnsWidth.cbegin() + index + 1);
-		if (index < columnHeader.size())
-			columnHeader.erase(columnHeader.cbegin() + index);
-		for (auto r = data.begin(); r != data.end();) {
-			if (index < r->size())
-				r->erase(r->cbegin() + index);
-			if (r->empty())
-				r = data.erase(r);
-			else
-				r++;
-		}
-	}
-
-	void addRow(size_t columnsCount = 0) {
-		if (columnsCount == 0)
-			columnsCount = columnsWidth.size() - 1;
-		else
-			resizeColumnsWidth(columnsCount);
-		data.emplace_back(columnsCount);
-		Row& newRow = data.back();
-
-		for (auto c = newRow.begin(); c != newRow.end(); ++c)
-			*c = std::make_unique<Cell>();
-	}
-
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
-	void addRow(const T row, const size_t size) {
-		data.emplace_back(size);
-		resizeColumnsWidth(size + 1);
-		Row& newRow = data.back();
-
-		for (size_t i = 0; i < size; ++i) {
-			newRow.at(i) = std::make_unique<Cell>();
-			*newRow.at(i) = row[i];
-			ifAutoResizingColumnsUpdateColumnWidth(i + 1, newRow.at(i)->value.size());
-		}
-	}
-
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
-	void addRow(const std::initializer_list<T>& row) {
-		data.emplace_back(row.size());
-		resizeColumnsWidth(row.size() + 1);
-		Row& newRow = data.back();
-
-		for (size_t i = 0; i < row.size(); ++i) {
-			newRow.at(i) = std::make_unique<Cell>();
-			*newRow.at(i) = *(row.begin() + i);
-			ifAutoResizingColumnsUpdateColumnWidth(i + 1, newRow.at(i)->value.size());
-		}
-	}
-
-	/*esse metodo precisa ser verificado*/
-	void removeRow(const size_t index) {
-		if (index >= rowHeader.size() && index >= data.size())
-			throw std::out_of_range("Error - row index is out of range.");
-
-		if (index < rowHeader.size()) {
-			rowHeader.erase(rowHeader.cbegin() + index);
-			if (rowHeader.empty())
-				columnsWidth.front() = 0;
-			else if (autoResizeColumns)
-				for (const auto& h : rowHeader)
-					updateColumnWidth(0, h.size());
-		}
-
-		if (index < data.size()) {
-			data[index].clear();
-			data.erase(data.cbegin() + index);
-
-			size_t columnsCount = 0;
-			for (const Row& r : data) {
-				if (columnsCount < r.size())
-					columnsCount = r.size();
-				if (autoResizeColumns)
-					for (size_t c = 0; c < r.size(); ++c)
-						updateColumnWidth(c + 1, r.at(c)->value.size());
-			}
-			if (columnsCount < columnsWidth.size() - 1)
-				removeColumn(columnsCount + 1);
-			if (autoResizeColumns)
-				for (size_t c = 0; c < columnHeader.size(); ++c)
-					updateColumnWidth(c + 1, columnHeader.at(c).size());
-		}
-	}
-
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
-	void setValueAt(const size_t row, const size_t column, const T value) {
-		if (row >= data.size())
-			throw std::out_of_range("Error - row index is out of range.");
-		if (column >= columnsWidth.size() - 1)
-			throw std::out_of_range("Error - column index is out of range.");
-
-		Row& dRow = data.at(row);
-
-		if (column >= dRow.size()) {
-			dRow.reserve(columnsWidth.size() - 1);
-			for (size_t i = dRow.size(); i < columnsWidth.size() - 1; ++i)
-				dRow.emplace_back(new Cell());
-		}
-		*dRow[column] = value;
-	}
-
-	void print() {
-		size_t numPages = (columnsWidth.size() - 1) / columnsPage;
-		for (size_t i = 0; i <= numPages; ++i)
-			printPage(i);
 	}
 };

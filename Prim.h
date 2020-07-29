@@ -31,22 +31,22 @@ private:
 	}
 
 	void print() const {
-		PageTable table("Prim:");
+		PageTable table("Prim:", PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
 		table.setColumnsOfPage(20);
-		table.addRowHeader("Vi");
-		table.addRowHeader("Ki");
-		table.addRowHeader("Pi");
+		table.addHeader("Vi");
+		table.addHeader("Ki");
+		table.addHeader("Pi");
 
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			table.addColumnHeader(graph.getVertexName(i));
+			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnWidth(i, 4);
 		}
 
 		table.addRow(key, graph.AMOUNT_VERTEXES);
-		table.addRow();
+		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			table.setValueAt(1, i, graph.getVertexName(predecessor[i]));
+			table.setValueAt(2, i, graph.getVertexName(predecessor[i]));
 
 		table.print();
 	}

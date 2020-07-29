@@ -47,14 +47,15 @@ private:
 	}
 
 	void print(const std::string& title) const {
-		PageTable table(title);
+		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
 		table.setColumnsOfPage(20);
-		table.addRowHeader("Vi");
-		table.addRowHeader("Ci");
+		table.addHeader("Vi");
+		table.addHeader("Ci");
 
+		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			table.addColumnHeader(graph.getVertexName(i));
+			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnWidth(i, 4);
 		}
 

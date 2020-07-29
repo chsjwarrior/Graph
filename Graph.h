@@ -274,25 +274,26 @@ public:
 			std::cout << "nao ";
 		std::cout << "valorado" << std::endl;
 
-		PageTable table("Graus dos vertices:");
+		PageTable table("Graus dos vertices:", PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
 		table.setColumnsOfPage(20);
 
 		table.addRow(AMOUNT_VERTEXES);
-		table.addRowHeader("Vi");
-		size_t rowsCount = 0;
+		table.addHeader("Vi");
+		size_t rowsCount = 1;
 		if (IS_DIGRAPH) {
 			rowsCount++;
 			table.addRow(AMOUNT_VERTEXES);
-			table.addRowHeader("in");
+			table.addHeader("in");
 		}
-		table.addRowHeader("out");
+		table.addRow(AMOUNT_VERTEXES);
+		table.addHeader("out");
 
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			table.setColumnWidth(i, 4);
-			table.addColumnHeader(getVertexName(i));
+			table.setValueAt(0, i, getVertexName(i));
 			if (IS_DIGRAPH)
-				table.setValueAt(0, i, getInDegreeFrom(i));
+				table.setValueAt(1, i, getInDegreeFrom(i));
 			table.setValueAt(rowsCount, i, getOutDegreeFrom(i));
 		}
 		table.print();

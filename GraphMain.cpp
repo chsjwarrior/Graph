@@ -392,7 +392,7 @@ int main() {
 			}
 			std::cout << "pressione qualquer tecla para continuar..." << std::flush;
 			std::cin.get();
-			std::cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			clearScreen();
 		}
 	} while (choice != 0);

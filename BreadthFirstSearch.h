@@ -50,22 +50,23 @@ private:
 	}
 
 	void print(const std::string& title) const {
-		PageTable table(title);
+		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
 		table.setColumnsOfPage(20);
-		table.addRowHeader("Vi");
-		table.addRowHeader("Di");
-		table.addRowHeader("Pi");
+		table.addHeader("Vi");
+		table.addHeader("Di");
+		table.addHeader("Pi");
 
+		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			table.addColumnHeader(graph.getVertexName(i));
+			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnWidth(i, 4);
 		}
 
 		table.addRow(discovery, graph.AMOUNT_VERTEXES);
-		table.addRow();
+		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			table.setValueAt(1, i, graph.getVertexName(predecessor[i]));
+			table.setValueAt(2, i, graph.getVertexName(predecessor[i]));
 
 		table.print();
 	}
