@@ -19,25 +19,25 @@ public:
 	explicit Cell() = default;
 	~Cell() { value.clear(); }
 
-	/*this function works for std::vector<std::string>*/
+	//this function works for setValueAt
 	Cell& operator=(const std::string& s) {
-		value = s;
+		value = std::move(s);
 		return *this;
 	}
 
-	/*this function works for std::initializer_list<char*>*/
+	//this function works for std::initializer_list<char*>
 	Cell& operator=(const char* c) {
 		value = c;
 		return *this;
 	}
 
-	/*this function works for char[]*/
+	//this function works for char[]
 	Cell& operator=(const char& c) {
 		value = std::string(1, c);
 		return *this;
 	}
 
-	Cell& operator=(const bool b) {
+	Cell& operator=(const bool& b) {
 		value = b ? "true" : "false";
 		return *this;
 	}
@@ -61,7 +61,7 @@ public:
 
 	explicit PageTable(const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : HEADER_ORIENTATION(headerOrientation) {}
 
-	explicit PageTable(const std::string title, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : title(title), HEADER_ORIENTATION(headerOrientation) {}
+	explicit PageTable(const std::string& title, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : title(std::move(title)), HEADER_ORIENTATION(headerOrientation) {}
 
 	~PageTable() {
 		title.clear();
@@ -71,7 +71,7 @@ public:
 			r->clear();
 	}
 
-	void setColumnWidth(const size_t index, const size_t width) {
+	void setColumnWidth(const size_t& index, const size_t& width) {
 		if (index >= columnsWidth.size() - 1)
 			throw std::out_of_range("Error - column index is out of range.");
 
@@ -89,7 +89,7 @@ public:
 		}
 	}
 
-	void addheader(const std::string descriptions[], const size_t size) {
+	void addheader(const std::string descriptions[], const size_t& size) {
 		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? size + 1 : 1);
 
 		for (size_t i = 0; i < size; ++i) {
@@ -126,7 +126,7 @@ public:
 	}
 
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
-	void addRow(const T row, const size_t size) {
+	void addRow(const T& row, const size_t& size) {
 		data.emplace_back(size);
 		resizeColumnsWidth(size + 1);
 		Row& newRow = data.back();
@@ -152,7 +152,7 @@ public:
 	}
 
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
-	void setValueAt(const size_t row, const size_t column, const T value) {
+	void setValueAt(const size_t& row, const size_t& column, const T& value) {
 		if (row >= data.size())
 			throw std::out_of_range("Error - row index is out of range.");
 		if (column >= columnsWidth.size() - 1)
@@ -177,13 +177,13 @@ public:
 	const bool isAutoResizeColumns() const {
 		return autoResizeColumns;
 	}
-	void setAutoResizeColumns(const bool autoResizeColumns) {
+	void setAutoResizeColumns(const bool& autoResizeColumns) {
 		this->autoResizeColumns = autoResizeColumns;
 	}
 	const size_t getColumnsForPage() const {
 		return columnsPage;
 	}
-	void setColumnsForPage(const size_t columnsPage) {
+	void setColumnsForPage(const size_t& columnsPage) {
 		this->columnsPage = columnsPage;
 	}
 	void setTitle(const std::string& title) {
@@ -216,26 +216,26 @@ private:
 	std::vector<std::string> header;
 	std::vector<Row> data;
 
-	inline void resizeColumnsWidth(const size_t size) {
+	inline void resizeColumnsWidth(const size_t& size) {
 		if (size > columnsWidth.size())
 			columnsWidth.resize(size, 0);
 	}
 
-	inline void updateColumnWidth(const size_t index, const size_t width) {
+	inline void updateColumnWidth(const size_t& index, const size_t& width) {
 		columnsWidth[index] = std::max(columnsWidth[index], width);
 	}
 
-	inline void ifAutoResizingColumnsUpdateColumnWidth(const size_t index, const size_t width) {
+	inline void ifAutoResizingColumnsUpdateColumnWidth(const size_t& index, const size_t& width) {
 		if (columnsWidth.at(index) == 0 || autoResizeColumns)
 			updateColumnWidth(index, width);
 	}
 
-	inline void printFill(const char value, const size_t lenght) const {
+	inline void printFill(const char& value, const size_t& lenght) const {
 		for (size_t i = 0; i < lenght; i++)
 			std::cout << value;
 	}
 
-	void printBorderSide(const size_t startIndex, const size_t endIndex, const BorderSide& side) const {
+	void printBorderSide(const size_t& startIndex, const size_t& endIndex, const BorderSide& side) const {
 		std::cout << side.left;
 
 		if (columnsWidth.front() > 0) {
@@ -258,7 +258,7 @@ private:
 		printFill(' ', cellWidth);
 	}
 
-	void printRow(const size_t startIndex, const size_t endIndex, const Row& row) const {
+	void printRow(const size_t& startIndex, const size_t& endIndex, const Row& row) const {
 		std::cout << border.vertical;
 
 		for (size_t c = startIndex; c < endIndex; ++c) {
@@ -273,7 +273,7 @@ private:
 		std::cout << std::endl;
 	}
 
-	void printPage(const size_t page) {
+	void printPage(const size_t& page) {
 		size_t startIndex = page * columnsPage;
 		size_t endIndex = std::min(startIndex + columnsPage, columnsWidth.size() - 1);
 
