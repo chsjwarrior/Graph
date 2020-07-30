@@ -49,7 +49,7 @@ private:
 	void print(const std::string& title) const {
 		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
-		table.setColumnsOfPage(20);
+		table.setColumnsForPage(20);
 		table.addHeader("Vi");
 		table.addHeader("Ci");
 
@@ -58,7 +58,6 @@ private:
 			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnWidth(i, 4);
 		}
-
 		table.addRow(color, graph.AMOUNT_VERTEXES);
 		table.print();
 	}

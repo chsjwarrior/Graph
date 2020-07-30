@@ -88,8 +88,7 @@ public:
 				}
 			}
 
-			// Consider the above picked cheapest edges and add them 
-			// to MST 
+			// Consider the above picked cheapest edges and add them to MST 
 			for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 				// Check if cheapest for current set exists 
 				if (cheapest[i] != -1) {

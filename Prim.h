@@ -33,7 +33,7 @@ private:
 	void print() const {
 		PageTable table("Prim:", PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
-		table.setColumnsOfPage(20);
+		table.setColumnsForPage(20);
 		table.addHeader("Vi");
 		table.addHeader("Ki");
 		table.addHeader("Pi");

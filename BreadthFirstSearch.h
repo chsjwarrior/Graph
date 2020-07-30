@@ -52,7 +52,7 @@ private:
 	void print(const std::string& title) const {
 		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
-		table.setColumnsOfPage(20);
+		table.setColumnsForPage(20);
 		table.addHeader("Vi");
 		table.addHeader("Di");
 		table.addHeader("Pi");

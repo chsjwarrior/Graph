@@ -14,7 +14,7 @@ private:
 	void print() const {
 		PageTable table("Bellman-Ford:", PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
-		table.setColumnsOfPage(20);
+		table.setColumnsForPage(20);
 		table.addHeader("Vi");
 		table.addHeader("Di");
 		table.addHeader("Pi");
@@ -24,7 +24,6 @@ private:
 			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnWidth(i, 4);
 		}
-
 		table.addRow(distance, graph.AMOUNT_VERTEXES);
 		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)

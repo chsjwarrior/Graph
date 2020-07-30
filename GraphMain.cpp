@@ -49,7 +49,6 @@ unsigned int uRead() {
 	if (std::cin.fail()) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		//system("CLS");
 		std::cin >> value;
 	}
 	return value;
@@ -61,7 +60,6 @@ int iRead() {
 	while (std::cin.fail()) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		//system("CLS");
 		std::cin >> value;
 	}
 	return value;
@@ -147,7 +145,6 @@ void createGraph() {
 unsigned int getVertex(const char msg[]) {
 	unsigned int value;
 	do {
-
 		graph->printVerticesToSelect();
 		std::cout << msg << std::endl;
 		value = uRead();

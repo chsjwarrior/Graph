@@ -113,24 +113,6 @@ public:
 		}
 	}
 
-	void removeColumn(const size_t index) {
-		if (index >= columnsWidth.size() - 1)
-			throw std::out_of_range("Error - column index is out of range.");
-
-		columnsWidth.erase(columnsWidth.cbegin() + index + 1);
-		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
-			if (index < header.size())
-				header.erase(header.cbegin() + index);
-		for (auto r = data.begin(); r != data.end();) {
-			if (index < r->size())
-				r->erase(r->cbegin() + index);
-			if (r->empty())
-				r = data.erase(r);
-			else
-				r++;
-		}
-	}
-
 	void addRow(size_t columnsCount) {
 		if (columnsCount == 0)
 			columnsCount = columnsWidth.size() - 1;
@@ -169,38 +151,6 @@ public:
 		}
 	}
 
-	/*esse metodo precisa ser verificado
-	void removeRow(const size_t index) {
-		if (HEADER_ORIENTATION == HeaderOrientation::ROW && index < header.size()) {
-			header.erase(header.cbegin() + index);
-			if (header.empty())
-				columnsWidth.front() = 0;
-			else if (autoResizeColumns)
-				for (const auto& h : header)
-					updateColumnWidth(0, h.size());
-		}
-
-		if (index < data.size()) {
-			data[index].clear();
-			data.erase(data.cbegin() + index);
-
-			size_t columnsCount = 0;
-			for (const Row& r : data) {
-				if (columnsCount < r.size())
-					columnsCount = r.size();
-				if (autoResizeColumns)
-					for (size_t c = 0; c < r.size(); ++c)
-						updateColumnWidth(c + 1, r.at(c)->value.size());
-			}
-			if (columnsCount < columnsWidth.size() - 1)
-				removeColumn(columnsCount + 1);
-			if (autoResizeColumns)
-				for (size_t c = 0; c < columnHeader.size(); ++c)
-					updateColumnWidth(c + 1, columnHeader.at(c).size());
-		}else if (index >= data.size())
-			throw std::out_of_range("Error - row index is out of range.");
-	}*/
-
 	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
 	void setValueAt(const size_t row, const size_t column, const T value) {
 		if (row >= data.size())
@@ -230,10 +180,10 @@ public:
 	void setAutoResizeColumns(const bool autoResizeColumns) {
 		this->autoResizeColumns = autoResizeColumns;
 	}
-	const size_t getColumnsOfPage() const {
+	const size_t getColumnsForPage() const {
 		return columnsPage;
 	}
-	void setColumnsOfPage(const size_t columnsPage) {
+	void setColumnsForPage(const size_t columnsPage) {
 		this->columnsPage = columnsPage;
 	}
 	void setTitle(const std::string& title) {
@@ -262,7 +212,7 @@ private:
 	bool autoResizeColumns = true;
 	size_t columnsPage = 10;
 	std::string title;
-	std::vector<size_t> columnsWidth;//the first element (columnsWidth[0]) belongs to header as Row Orientation
+	std::vector<size_t> columnsWidth;//o primeiro elemento (columnsWidth[0]) indica a largura do header como linha.
 	std::vector<std::string> header;
 	std::vector<Row> data;
 
@@ -276,7 +226,7 @@ private:
 	}
 
 	inline void ifAutoResizingColumnsUpdateColumnWidth(const size_t index, const size_t width) {
-		if (columnsWidth[index] == 0 || autoResizeColumns)
+		if (columnsWidth.at(index) == 0 || autoResizeColumns)
 			updateColumnWidth(index, width);
 	}
 
@@ -349,7 +299,6 @@ private:
 
 		//0=============================COLUMN+HEADER=====================================0
 		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN && header.empty() == false) {
-			//igual a print row mas com lista string
 			std::cout << border.vertical;
 
 			for (size_t c = startIndex; c < endIndex; ++c) {
@@ -362,8 +311,6 @@ private:
 			}
 
 			std::cout << std::endl;
-			//igual a print row mas com lista string
-
 			if (data.empty() == false)
 				printBorderSide(startIndex, endIndex + 1, border.middle);
 		}
@@ -379,7 +326,6 @@ private:
 			}
 
 			printRow(startIndex, endIndex, data[r]);
-
 			if (r < data.size() - 1)
 				printBorderSide(startIndex, endIndex + 1, border.middle);
 		}

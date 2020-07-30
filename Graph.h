@@ -115,19 +115,18 @@ public:
 	}
 
 	void removeEdge(const unsigned int& u, const unsigned int& v) {
-		auto edge = edges.cend();
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
-			if (e->U == u && e->V == v || !IS_DIGRAPH && (e->U == v && e->V == u))
-				edge = e;
+		auto edge = edges.find(Edge(u, v, 1));
+		if (edge == edges.cend() && IS_DIGRAPH == false)
+			edge = edges.find(Edge(v, u, 1));
+
 		if (edge != edges.cend())
 			edges.erase(edge);
 	}
 
 	const int getWeigthFrom(const unsigned int& u, const unsigned int& v) const {
-		auto edge = edges.cend();
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e)
-			if (e->U == u && e->V == v || !IS_DIGRAPH && (e->U == v && e->V == u))
-				edge = e;
+		auto edge = edges.find(Edge(u, v, 1));
+		if (edge == edges.cend() && IS_DIGRAPH == false)
+			edge = edges.find(Edge(v, u, 1));
 
 		if (edge != edges.cend())
 			return edge->WEIGHT;
@@ -232,10 +231,10 @@ public:
 
 	void printIncidenceList() const {
 		std::cout << "Lista de incidencia:" << std::endl;
-		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
-			writeVertex(e->U);
+		for (const Edge& e : edges) {
+			writeVertex(e.U);
 			std::cout << ',';
-			writeVertex(e->V);
+			writeVertex(e.V);
 			std::cout << "->";
 		}
 		std::cout << std::endl;
@@ -276,7 +275,7 @@ public:
 
 		PageTable table("Graus dos vertices:", PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
-		table.setColumnsOfPage(20);
+		table.setColumnsForPage(20);
 
 		table.addRow(AMOUNT_VERTEXES);
 		table.addHeader("Vi");
