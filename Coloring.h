@@ -50,8 +50,7 @@ private:
 		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
 		table.setColumnsForPage(20);
-		table.addHeader("Vi");
-		table.addHeader("Ci");
+		table.addHeader({"Vi", "Ci"});
 
 		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {

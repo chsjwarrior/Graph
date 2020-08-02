@@ -16,13 +16,13 @@ struct Edge {
 	Edge() = delete;
 
 	explicit Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
-		//write("constructor {", U, ",", V, "=", WEIGHT, "}\n");
+		//std::cout << "constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 	explicit Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
-		//write("copy constructor {", U, ",", V, "=", WEIGHT, "}\n");
+		//std::cout << "copy constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 	~Edge() {
-		//write("destructor {", U, ",", V, "=", WEIGHT, "}\n");
+		//std::cout << "destructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 
 	const bool operator<(const Edge& other) const {
@@ -43,7 +43,7 @@ struct Edge {
 	}
 
 	const bool operator>(const Edge& other) const {
-		return !(*this < other);
+		return other < *this;
 	}
 
 	Edge& operator=(const Edge&) = delete;
@@ -75,12 +75,12 @@ public:
 
 	Graph() = delete;
 
-	explicit Graph(const unsigned int& amountVertices, const bool& isDigraph) :
-		AMOUNT_VERTEXES(amountVertices), IS_DIGRAPH(isDigraph) {
-		if (amountVertices == 0)
-			throw std::range_error("numero de vertices deve ser maior que zero.");
-		if (amountVertices == NIL)
-			throw std::range_error("numero de vertices deve ser menor que " + NIL);
+	explicit Graph(const unsigned int& amountVertexes, const bool& isDigraph) noexcept(false) :
+		AMOUNT_VERTEXES(amountVertexes), IS_DIGRAPH(isDigraph) {
+		if (amountVertexes == 0)
+			throw std::length_error("numero de vertices deve ser maior que zero");
+		if (amountVertexes == NIL)
+			throw std::length_error("numero de vertices deve ser menor que " + NIL);
 	}
 
 	explicit Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DIGRAPH(other.IS_DIGRAPH) {
@@ -94,39 +94,64 @@ public:
 
 	const Graph& operator=(const Graph& other) {
 		if (this != &other) {
-			(unsigned int&) AMOUNT_VERTEXES = other.AMOUNT_VERTEXES;
-			(bool&) IS_DIGRAPH = other.IS_DIGRAPH;
+			(unsigned int&)AMOUNT_VERTEXES = other.AMOUNT_VERTEXES;
+			(bool&)IS_DIGRAPH = other.IS_DIGRAPH;
 			edges.clear();
 			edges = other.edges;
 		}
 		return *this;
 	}
 
-	const bool isValidVertex(const unsigned int& v) const {
+	const bool isValidVertex(const unsigned int& v) {
 		return v < AMOUNT_VERTEXES;
 	}
 
-	const bool isValidWeight(const int& w) const {
+	const bool isValidWeight(const int& w) {
 		return w > -INF && w < INF;
 	}
 
-	void insertEdge(const unsigned int& u, const unsigned int& v, const int& weight = 1) {
+	void insertEdge(const unsigned int& u, const unsigned int& v, const int& weight = 1) noexcept(false) {
+		if (u >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice u deve ser menor que " + AMOUNT_VERTEXES);
+		if (v >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice v deve ser menor que " + AMOUNT_VERTEXES);
+		if (weight <= -INF)
+			throw std::range_error("o custo de u e v deve ser maior que " + -INF);
+		if (weight >= INF)
+			throw std::range_error("o custo de u e v deve ser menor que " + -INF);
 		edges.emplace(u, v, weight);
 	}
 
-	void removeEdge(const unsigned int& u, const unsigned int& v) {
+	void removeEdge(const unsigned int& u, const unsigned int& v) noexcept(false) {
+		if (u >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice u deve ser menor que " + AMOUNT_VERTEXES);
+		if (v >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice v deve ser menor que " + AMOUNT_VERTEXES);
+
+		auto edge = edges.cend();
+		for (auto e = edges.cbegin(); e != edges.cend() && edge == edges.cend(); e++)
+			if (e->U == u && e->V == u || !IS_DIGRAPH && e->V == u && e->U == v)
+				edge = e;
+		/*
 		auto edge = edges.find(Edge(u, v, 1));
 		if (edge == edges.cend() && IS_DIGRAPH == false)
 			edge = edges.find(Edge(v, u, 1));
+			*/
 
 		if (edge != edges.cend())
 			edges.erase(edge);
 	}
 
-	const int getWeigthFrom(const unsigned int& u, const unsigned int& v) const {
-		auto edge = edges.find(Edge(u, v, 1));
-		if (edge == edges.cend() && IS_DIGRAPH == false)
-			edge = edges.find(Edge(v, u, 1));
+	const int getWeigthFrom(const unsigned int& u, const unsigned int& v) const noexcept(false) {
+		if (u >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice u deve ser menor que " + AMOUNT_VERTEXES);
+		if (v >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice v deve ser menor que " + AMOUNT_VERTEXES);
+
+		auto edge = edges.cend();
+		for (auto e = edges.cbegin(); e != edges.cend() && edge == edges.cend(); e++)
+			if (e->U == u && e->V == v || !IS_DIGRAPH && e->V == u && e->U == v)
+				edge = e;
 
 		if (edge != edges.cend())
 			return edge->WEIGHT;
@@ -135,25 +160,34 @@ public:
 		return INF;
 	}
 
-	const unsigned int getInDegreeFrom(const unsigned int& u) const {
-		if (IS_DIGRAPH == false)
-			return getOutDegreeFrom(u);
+	const unsigned int getInDegreeFrom(const unsigned int& v) const noexcept(false) {
+		if (v >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice deve ser menor que " + AMOUNT_VERTEXES);
 
-		return std::count_if(edges.cbegin(), edges.cend(), [&u](const Edge& e) {return e.V == u; });
+		if (IS_DIGRAPH == false)
+			return getOutDegreeFrom(v);
+
+		return std::count_if(edges.cbegin(), edges.cend(), [&v](const Edge& e) {return e.V == v; });
 	}
 
 	//esse método tambem é usuado para grafos não dirigidos
-	const unsigned int getOutDegreeFrom(const unsigned int& u) const {
-		return std::count_if(edges.cbegin(), edges.cend(), [&IS_DIGRAPH = IS_DIGRAPH, &u](const Edge& e) {return e.U == u || !IS_DIGRAPH && e.V == u; });
+	const unsigned int getOutDegreeFrom(const unsigned int& v) const noexcept(false) {
+		if (v >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice deve ser menor que " + AMOUNT_VERTEXES);
+
+		return std::count_if(edges.cbegin(), edges.cend(), [&IS_DIGRAPH = IS_DIGRAPH, &v](const Edge& e) {return e.U == v || !IS_DIGRAPH && e.V == v; });
 	}
 
-	std::multiset<unsigned int>& getAdjacencesFrom(const unsigned int& u) const {
+	std::multiset<unsigned int>& getAdjacencesFrom(const unsigned int& v) const noexcept(false) {
+		if (v >= AMOUNT_VERTEXES)
+			throw std::range_error("vertice deve ser menor que " + AMOUNT_VERTEXES);
+
 		if (!adjacences.empty())
 			adjacences.clear();
 		for (const Edge& e : edges)
-			if (e.U == u)
+			if (e.U == v)
 				adjacences.insert(e.V);
-			else if (!IS_DIGRAPH && e.V == u)
+			else if (!IS_DIGRAPH && e.V == v)
 				adjacences.insert(e.U);
 		return adjacences;
 	}

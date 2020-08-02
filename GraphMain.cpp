@@ -43,6 +43,37 @@ void destroyGraph() {
 	graph = nullptr;
 }
 
+void openFile(const char path[]) {
+	std::ifstream file(path, std::ios::in);
+	if (file.is_open()) {
+		bool fail = false;
+		unsigned int u, v, line = 1;
+		int w;
+		file >> u >> v >> w;
+		destroyGraph();
+		try {
+			graph = new Graph(u, w != 0);
+
+			while (fail == false && file >> u && file >> v && file >> w) {
+				line++;
+				u--;
+				v--;
+				graph->insertEdge(u, v, w);
+			}
+		} catch (std::length_error& e) {
+			std::cerr << e.what() << std::endl;
+			fail = true;
+		} catch (std::range_error& e) {
+			std::cerr << "Erro na linha " << line << ' ' << e.what() << std::endl;
+			fail = true;
+		}
+		file.close();
+		if (fail)
+			destroyGraph();
+	} else
+		std::cerr << "Nao foi possivel abrir o arquivo." << std::endl;
+}
+
 unsigned int uRead() {
 	unsigned int value = NULL;
 	std::cin >> value;
@@ -65,46 +96,6 @@ int iRead() {
 	return value;
 }
 
-void openFile(const char path[]) {
-	std::ifstream file(path, std::ios::in);
-	if (file.is_open()) {
-		bool fail = false;
-		unsigned int u, v, line = 1;
-		int w;
-		file >> u >> v >> w;
-		destroyGraph();
-		try {
-			graph = new Graph(u, w != 0);
-		} catch (std::range_error& e) {
-			std::cerr << e.what() << std::endl;
-			fail = true;
-		}
-		while (fail == false && file >> u && file >> v && file >> w) {
-			line++;
-			u--;
-			v--;
-			if (graph->isValidVertex(u) == false) {
-				fail = true;
-				std::cerr << "Erro na linha " << line << " vertice U invalido." << std::endl;
-			}
-			if (graph->isValidVertex(v) == false) {
-				fail = true;
-				std::cerr << "Erro na linha " << line << " vertice V invalido." << std::endl;
-			}
-			if (graph->isValidWeight(w) == false) {
-				fail = true;
-				std::cerr << "Erro na linha " << line << " custo da aresta invalido." << std::endl;
-			}
-			if (!fail)
-				graph->insertEdge(u, v, w);
-		}
-		file.close();
-		if (fail)
-			destroyGraph();
-	} else
-		std::cerr << "Nao foi possivel abrir o arquivo." << std::endl;
-}
-
 void createGraph() {
 	unsigned int u, v;
 	std::cout << "Dgt a qtd de Vertices." << std::endl;
@@ -114,7 +105,7 @@ void createGraph() {
 	destroyGraph();
 	try {
 		graph = new Graph(u, w == 1);
-	} catch (std::range_error& e) {
+	} catch (std::length_error& e) {
 		std::cerr << e.what() << std::endl;
 		return;
 	}
@@ -235,155 +226,155 @@ int main() {
 					graph->printGraphInfo();
 					break;
 				case 9:
-					{
-						std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
-						bool isRecursive = iRead();
-						BreadthFirstSearch bfs(*graph);
-						bfs.bfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
-					} break;
+				{
+					std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
+					bool isRecursive = iRead();
+					BreadthFirstSearch bfs(*graph);
+					bfs.bfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
+				} break;
 				case 10:
-					{
-						std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
-						bool isRecursive = iRead();
-						DepthFirstSearch dfs(*graph);
-						dfs.dfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
-					} break;
+				{
+					std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
+					bool isRecursive = iRead();
+					DepthFirstSearch dfs(*graph);
+					dfs.dfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
+				} break;
 				case 11:
-					{
-						Dijkstra dijkstra(*graph);
-						dijkstra.dijkstra(getVertex("Dgt o numero do vertice de origem."));
-					} break;
+				{
+					Dijkstra dijkstra(*graph);
+					dijkstra.dijkstra(getVertex("Dgt o numero do vertice de origem."));
+				} break;
 				case 12:
-					{
-						FloydWarshall floydWarshall(*graph);
-						floydWarshall.floydWarshall();
-					} break;
+				{
+					FloydWarshall floydWarshall(*graph);
+					floydWarshall.floydWarshall();
+				} break;
 				case 13:
-					{
-						try {
-							BellmanFord bellmanFord(*graph);
-							bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						BellmanFord bellmanFord(*graph);
+						bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 14:
-					{
-						Fleury fleury(*graph);
-						fleury.fleury();
-					} break;
+				{
+					Fleury fleury(*graph);
+					fleury.fleury();
+				} break;
 				case 15:
-					{
-						try {
-							Hierholzer Hierholzer(*graph);
-							Hierholzer.hierholzer();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Hierholzer Hierholzer(*graph);
+						Hierholzer.hierholzer();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 16:
-					{
-						std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
-						bool isRecursive = iRead();
-						RobertFlores robertFlores(*graph);
-						robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."), isRecursive);
-					} break;
+				{
+					std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
+					bool isRecursive = iRead();
+					RobertFlores robertFlores(*graph);
+					robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."), isRecursive);
+				} break;
 				case 17:
-					{
-						std::cout << "Dgt 0 para Vizinha mais proximo.\nDgt qualquer valor para Vizinho mais proximo repetivo." << std::endl;
-						bool isRepetitive = iRead();
-						CloserNeighbor closerNeighbor(*graph);
-						if (isRepetitive)
-							closerNeighbor.closerNeighborRepetitive();
-						else
-							closerNeighbor.closerNeighbor(getVertex("Dgt o numero do vertice de origem."));
-					} break;
+				{
+					std::cout << "Dgt 0 para Vizinha mais proximo.\nDgt qualquer valor para Vizinho mais proximo repetivo." << std::endl;
+					bool isRepetitive = iRead();
+					CloserNeighbor closerNeighbor(*graph);
+					if (isRepetitive)
+						closerNeighbor.closerNeighborRepetitive();
+					else
+						closerNeighbor.closerNeighbor(getVertex("Dgt o numero do vertice de origem."));
+				} break;
 				case 18:
-					{
-						try {
-							CheapestLink cheapestLink(*graph);
-							cheapestLink.cheapestLink();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						CheapestLink cheapestLink(*graph);
+						cheapestLink.cheapestLink();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 19:
-					{
-						unsigned int source = getVertex("Dgt o numero do vertice de origem.");
-						unsigned int sink = getVertex("Dgt o numero do vertice de destino.");
-						try {
-							FordFulkerson fordFulkerson(*graph);
-							fordFulkerson.fordFulkerson(source, sink);
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					unsigned int source = getVertex("Dgt o numero do vertice de origem.");
+					unsigned int sink = getVertex("Dgt o numero do vertice de destino.");
+					try {
+						FordFulkerson fordFulkerson(*graph);
+						fordFulkerson.fordFulkerson(source, sink);
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 20:
-					{
-						try {
-							Goodman goodman(*graph);
-							goodman.goodman();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Goodman goodman(*graph);
+						goodman.goodman();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 21:
-					{
-						DisjointAssemblies disjointAssemblies(*graph);
-						disjointAssemblies.connectedComponents();
-					} break;
+				{
+					DisjointAssemblies disjointAssemblies(*graph);
+					disjointAssemblies.connectedComponents();
+				} break;
 				case 22:
-					{
-						try {
-							Kosaraju kosaraju(*graph);
-							kosaraju.kosaraju();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Kosaraju kosaraju(*graph);
+						kosaraju.kosaraju();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 23:
-					{
-						try {
-							Tarjan tarjan(*graph);
-							tarjan.tarjan();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Tarjan tarjan(*graph);
+						tarjan.tarjan();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 24:
-					{
-						try {
-							Kruskal kruskal(*graph);
-							kruskal.kruskal();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Kruskal kruskal(*graph);
+						kruskal.kruskal();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 25:
-					{
-						try {
-							Prim prim(*graph);
-							prim.prim(getVertex("Dgt o numero do vertice de origem."));
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Prim prim(*graph);
+						prim.prim(getVertex("Dgt o numero do vertice de origem."));
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 26:
-					{
-						try {
-							Boruvka boruvka(*graph);
-							boruvka.boruvka();
-						} catch (std::exception& e) {
-							std::cerr << e.what() << std::endl;
-						}
-					} break;
+				{
+					try {
+						Boruvka boruvka(*graph);
+						boruvka.boruvka();
+					} catch (std::exception& e) {
+						std::cerr << e.what() << std::endl;
+					}
+				} break;
 				case 27:
-					{
-						std::cout << "Dgt 0 para Coloracao sequencial.\nDgt qualquer valor para Coloracao heuristica." << std::endl;
-						bool isHeuristic = iRead();
-						Coloring coloring(*graph);
-						coloring.coloring(isHeuristic);
-					} break;
+				{
+					std::cout << "Dgt 0 para Coloracao sequencial.\nDgt qualquer valor para Coloracao heuristica." << std::endl;
+					bool isHeuristic = iRead();
+					Coloring coloring(*graph);
+					coloring.coloring(isHeuristic);
+				} break;
 				default:
 					std::cerr << "valor invalido, dgt novamente." << std::endl;
 			}

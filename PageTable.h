@@ -21,7 +21,7 @@ public:
 
 	//this function works for setValueAt
 	Cell& operator=(const std::string& s) {
-		value = std::move(s);
+		value = s;
 		return *this;
 	}
 
@@ -42,7 +42,7 @@ public:
 		return *this;
 	}
 
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>::type>
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
 	Cell& operator=(const T& t) {
 		value = std::to_string(t);
 		return *this;
@@ -61,14 +61,16 @@ public:
 
 	explicit PageTable(const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : HEADER_ORIENTATION(headerOrientation) {}
 
-	explicit PageTable(const std::string& title, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : title(std::move(title)), HEADER_ORIENTATION(headerOrientation) {}
+	explicit PageTable(const std::string& title, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : title(title), HEADER_ORIENTATION(headerOrientation) {}
 
 	~PageTable() {
 		title.clear();
 		columnsWidth.clear();
 		header.clear();
-		for (auto r = data.begin(); data.empty() == false; r = data.erase(r))
-			r->clear();
+		while (data.empty() == false) {
+			data.back().clear();
+			data.pop_back();
+		}
 	}
 
 	void setColumnWidth(const size_t& index, const size_t& width) {
@@ -89,7 +91,7 @@ public:
 		}
 	}
 
-	void addheader(const std::string descriptions[], const size_t& size) {
+	void addHeader(const std::string descriptions[], const size_t& size) {
 		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? size + 1 : 1);
 
 		for (size_t i = 0; i < size; ++i) {
@@ -101,15 +103,15 @@ public:
 		}
 	}
 
-	void addheader(const std::initializer_list<std::string>& descriptions) {
+	void addHeader(const std::initializer_list<std::string> descriptions) {
 		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? descriptions.size() + 1 : 1);
 
-		for (const std::string& i : header) {
-			header.emplace_back(i);
+		for (auto s = descriptions.begin(); s != descriptions.end(); ++s) {
+			header.emplace_back(*s);
 			if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
-				ifAutoResizingColumnsUpdateColumnWidth(header.size(), i.size());
+				ifAutoResizingColumnsUpdateColumnWidth(header.size(), s->size());
 			else
-				updateColumnWidth(0, i.size());
+				updateColumnWidth(0, s->size());
 		}
 	}
 
@@ -125,7 +127,7 @@ public:
 			*c = std::make_unique<Cell>();
 	}
 
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	template<class T, class = typename std::enable_if<std::is_arithmetic<typename std::remove_pointer<T>::type>::value>>
 	void addRow(const T& row, const size_t& size) {
 		data.emplace_back(size);
 		resizeColumnsWidth(size + 1);
@@ -138,7 +140,7 @@ public:
 		}
 	}
 
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
 	void addRow(const std::initializer_list<T>& row) {
 		data.emplace_back(row.size());
 		resizeColumnsWidth(row.size() + 1);
@@ -151,7 +153,7 @@ public:
 		}
 	}
 
-	template<class T, class = typename std::enable_if<std::is_fundamental<T>::value>>
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
 	void setValueAt(const size_t& row, const size_t& column, const T& value) {
 		if (row >= data.size())
 			throw std::out_of_range("Error - row index is out of range.");
@@ -200,9 +202,9 @@ private:
 		const unsigned char left, middle, right;
 	};
 	struct Border {
-		const BorderSide top{218, 194, 191};
-		const BorderSide middle{195, 197, 180};
-		const BorderSide botton{192, 193, 217};
+		const BorderSide top{ 218, 194, 191 };
+		const BorderSide middle{ 195, 197, 180 };
+		const BorderSide botton{ 192, 193, 217 };
 		const unsigned char horizontal = 196;
 		const unsigned char vertical = 179;
 	} border;
@@ -282,7 +284,7 @@ private:
 
 		//0==============================TITLE============================================0
 		if (page == 0 && title.empty() == false) {
-			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
+			printBorderSide(startIndex, endIndex + 1, { border.top.left, border.horizontal, border.top.right });
 			std::cout << border.vertical << title;
 
 			size_t fill = endIndex - startIndex;
@@ -293,7 +295,7 @@ private:
 			printFill(' ', fill - title.size());
 
 			std::cout << border.vertical << std::endl;
-			printBorderSide(startIndex, endIndex + 1, {border.middle.left,border.top.middle,border.middle.right});
+			printBorderSide(startIndex, endIndex + 1, { border.middle.left,border.top.middle,border.middle.right });
 		} else
 			printBorderSide(startIndex, endIndex + 1, border.top);
 

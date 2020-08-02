@@ -15,9 +15,7 @@ private:
 		PageTable table("Bellman-Ford:", PageTable::HeaderOrientation::ROW);
 		table.setAutoResizeColumns(false);
 		table.setColumnsForPage(20);
-		table.addHeader("Vi");
-		table.addHeader("Di");
-		table.addHeader("Pi");
+		table.addHeader({"Vi","Di","Pi"});
 
 		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
@@ -36,7 +34,7 @@ public:
 	BellmanFord() = delete;
 	BellmanFord(const Graph& graph) : graph(graph) {
 		if (!graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser dirigido para o algoritmo Bellman - Ford funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Bellman - Ford funcionar.");
 		distance = new int[graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 	}
