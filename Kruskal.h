@@ -19,7 +19,6 @@ private:
 	std::pair<unsigned int, unsigned int>* subsets;
 	//pair.first = parent;
 	//pair.second = rank;
-	std::multiset<Edge, LessWeight> edges;
 
 	const unsigned int find(const unsigned int& u) {
 		if (subsets[u].first != u)
@@ -41,10 +40,15 @@ private:
 		}
 	}
 
-	void makeSet() {
+	inline void makeSet(const unsigned int& v) {
+		subsets[v].first = v;
+		subsets[v].second = 0;
+	}
+
+	std::multiset<Edge, LessWeight> getEdgesLessWeight() {
 		std::multiset<Edge> set = graph.getEdges();
-		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))
-			edges.emplace(e->U, e->V, e->WEIGHT);
+		std::multiset<Edge, LessWeight> edges(set.cbegin(), set.cend());
+		return edges;
 	}
 
 public:
@@ -62,25 +66,29 @@ public:
 	}
 
 	void kruskal() {
-		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
-			subsets[u].first = u;
-			subsets[u].second = 0;
-		}
+		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++)
+			makeSet(u);
 
-		makeSet();
+		std::multiset<Edge, LessWeight> edges(getEdgesLessWeight());
 
-		std::cout << "Kruskal:" << std::endl;
+		PageTable table("Kruskal");
+		table.addHeader({"Edge", "C(e)", ""});
+
 		while (!edges.empty()) {
 			unsigned int u = find(edges.cbegin()->U);
 			unsigned int v = find(edges.cbegin()->V);
 
-			if (u != v) {
+			if (u != v)
 				makeUnion(edges.cbegin()->U, edges.cbegin()->V);
-				graph.writeEdge(*edges.cbegin());
-				std::cout << std::endl;
-			}
+
+			table.addRow(3);
+			table.setValueAt(table.getRowCount() - 1, 0, graph.getEdgeName(*edges.cbegin()));
+			table.setValueAt(table.getRowCount() - 1, 1, edges.cbegin()->WEIGHT);
+			table.setValueAt(table.getRowCount() - 1, 2, u != v);
 
 			edges.erase(edges.cbegin());
 		}
+
+		table.print();
 	}
 };

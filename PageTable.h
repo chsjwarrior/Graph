@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 
-//0====================CELL_CLASS====================0
+//0====================CELL_CLASS=====================0
 class Cell {
 private:
 	std::string value;
@@ -59,7 +59,15 @@ public:
 	PageTable(const PageTable&&) = delete;
 	PageTable operator=(const PageTable&&) = delete;
 
-	explicit PageTable(const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : HEADER_ORIENTATION(headerOrientation) {}
+	PageTable() : HEADER_ORIENTATION(HeaderOrientation::COLUMN) {}
+
+	explicit PageTable(const std::string descriptions[], const size_t& size, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : HEADER_ORIENTATION(headerOrientation) {
+		addHeader(descriptions, size);
+	}
+
+	explicit PageTable(const std::initializer_list<std::string> descriptions, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : HEADER_ORIENTATION(headerOrientation) {
+		addHeader(descriptions);
+	}
 
 	explicit PageTable(const std::string& title, const HeaderOrientation& headerOrientation = HeaderOrientation::COLUMN) : title(title), HEADER_ORIENTATION(headerOrientation) {}
 
@@ -168,9 +176,10 @@ public:
 				dRow.emplace_back(new Cell());
 		}
 		*dRow[column] = value;
+		ifAutoResizingColumnsUpdateColumnWidth(column + 1, dRow.at(column)->value.size());
 	}
 
-	void print() {
+	void print() const {
 		size_t numPages = (columnsWidth.size() - 1) / columnsPage;
 		for (size_t i = 0; i <= numPages; ++i)
 			printPage(i);
@@ -195,6 +204,10 @@ public:
 		return title;
 	}
 
+	const size_t getRowCount() const { return data.size(); }
+
+	const size_t getColumnCount() const { return columnsWidth.size() - 1; }
+
 private:
 	const HeaderOrientation HEADER_ORIENTATION;
 
@@ -202,9 +215,9 @@ private:
 		const unsigned char left, middle, right;
 	};
 	struct Border {
-		const BorderSide top{ 218, 194, 191 };
-		const BorderSide middle{ 195, 197, 180 };
-		const BorderSide botton{ 192, 193, 217 };
+		const BorderSide top{218, 194, 191};
+		const BorderSide middle{195, 197, 180};
+		const BorderSide botton{192, 193, 217};
 		const unsigned char horizontal = 196;
 		const unsigned char vertical = 179;
 	} border;
@@ -219,7 +232,9 @@ private:
 	std::vector<Row> data;
 
 	inline void resizeColumnsWidth(const size_t& size) {
-		if (size > columnsWidth.size())
+		if (size == columnsWidth.size() + 1)
+			columnsWidth.push_back(0);
+		else if (size > columnsWidth.size())
 			columnsWidth.resize(size, 0);
 	}
 
@@ -275,7 +290,7 @@ private:
 		std::cout << std::endl;
 	}
 
-	void printPage(const size_t& page) {
+	void printPage(const size_t& page) const {
 		size_t startIndex = page * columnsPage;
 		size_t endIndex = std::min(startIndex + columnsPage, columnsWidth.size() - 1);
 
@@ -284,18 +299,18 @@ private:
 
 		//0==============================TITLE============================================0
 		if (page == 0 && title.empty() == false) {
-			printBorderSide(startIndex, endIndex + 1, { border.top.left, border.horizontal, border.top.right });
+			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
 			std::cout << border.vertical << title;
 
-			size_t fill = endIndex - startIndex;
-			for (size_t i = startIndex; i < endIndex + 1; ++i)
+			size_t fill = endIndex - startIndex - 1;
+			if (columnsWidth.front() > 0)
+				fill += columnsWidth.front() + 1;
+			for (size_t i = 1 + startIndex; i < endIndex + 1; ++i)
 				fill += columnsWidth.at(i);
-			if (HEADER_ORIENTATION == HeaderOrientation::ROW && header.empty())
-				fill++;
 			printFill(' ', fill - title.size());
 
 			std::cout << border.vertical << std::endl;
-			printBorderSide(startIndex, endIndex + 1, { border.middle.left,border.top.middle,border.middle.right });
+			printBorderSide(startIndex, endIndex + 1, {border.middle.left,border.top.middle,border.middle.right});
 		} else
 			printBorderSide(startIndex, endIndex + 1, border.top);
 
@@ -319,12 +334,14 @@ private:
 
 		//0==================================ROWS=========================================0
 		for (size_t r = 0; r < data.size(); ++r) {
-			if (HEADER_ORIENTATION == HeaderOrientation::ROW && r < header.size()) {
-				std::cout << border.vertical;
-				printCell(header[r], columnsWidth.front());
-			} else if (header.empty() == false) {
-				std::cout << border.vertical;
-				printFill(' ', columnsWidth.front());
+			if (HEADER_ORIENTATION == HeaderOrientation::ROW) {
+				if (r < header.size()) {
+					std::cout << border.vertical;
+					printCell(header[r], columnsWidth.front());
+				} else if (header.empty() == false) {
+					std::cout << border.vertical;
+					printFill(' ', columnsWidth.front());
+				}
 			}
 
 			printRow(startIndex, endIndex, data[r]);

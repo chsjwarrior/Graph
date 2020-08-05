@@ -16,13 +16,13 @@ struct Edge {
 	Edge() = delete;
 
 	explicit Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
-		//std::cout << "constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		std::cout << "constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 	explicit Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
-		//std::cout << "copy constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		std::cout << "copy constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 	~Edge() {
-		//std::cout << "destructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		std::cout << "destructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 
 	const bool operator<(const Edge& other) const {
@@ -253,12 +253,10 @@ public:
 	void printAdjacenceList() const {
 		std::cout << "Lista de adjacencia:" << std::endl;
 		for (unsigned int u = 0; u < AMOUNT_VERTEXES; u++) {
-			writeVertex(u);
+			std::cout << '[' << getVertexName(u) << ']';
 			getAdjacencesFrom(u);
-			for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v)) {
-				std::cout << "->";
-				writeVertex(*v);
-			}
+			for (auto v = adjacences.cbegin(); v != adjacences.cend(); v = adjacences.erase(v))
+				std::cout << "->[" << getVertexName(*v) << ']';
 			std::cout << std::endl;
 		}
 	}
@@ -266,10 +264,11 @@ public:
 	void printIncidenceList() const {
 		std::cout << "Lista de incidencia:" << std::endl;
 		for (const Edge& e : edges) {
+			std::cout << '[';
 			writeVertex(e.U);
 			std::cout << ',';
 			writeVertex(e.V);
-			std::cout << "->";
+			std::cout << "]->";
 		}
 		std::cout << std::endl;
 	}
@@ -350,16 +349,16 @@ public:
 			return "nil";
 	}
 
+	const std::string getEdgeName(const Edge& edge) const {
+		return "{" + getVertexName(edge.U) + "," + getVertexName(edge.V) + "}";
+	}
+
 	void writeVertex(const unsigned int& vertex) const {
 		std::cout << getVertexName(vertex);
 	}
 
 	void writeEdge(const Edge& edge) const {
-		std::cout << '{';
-		writeVertex(edge.U);
-		std::cout << ',';
-		writeVertex(edge.V);
-		std::cout << '}';
+		std::cout << getEdgeName(edge);
 	}
 
 	void writeEdge(const unsigned int& edge) const {
