@@ -13,14 +13,13 @@ private:
 
 	void print() const {
 		PageTable table("Bellman-Ford:", PageTable::HeaderOrientation::ROW);
-		table.setAutoResizeColumns(false);
 		table.setColumnsForPage(20);
 		table.addHeader({"Vi","Di","Pi"});
 
 		table.addRow(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setValueAt(0, i, graph.getVertexName(i));
-			table.setColumnWidth(i, 4);
+			table.setColumnMaxWidth(i, 4);
 		}
 		table.addRow(distance, graph.AMOUNT_VERTEXES);
 		table.addRow(graph.AMOUNT_VERTEXES);

@@ -159,22 +159,6 @@ int main() {
 	std::cout << "Desenvolvido por Carlos Henrique Stapait Junior." << std::endl;
 	int choice = 0;
 
-	PageTable table("Teste", PageTable::HeaderOrientation::COLUMN);
-	table.addRow(5);
-	table.addRow(5);
-	table.addRow(5);
-	table.addRow(5);
-	table.addRow(5);
-	for (int i = 0; i < 5; i++) {
-		//table.addHeader(std::to_string(i));
-		table.setValueAt(0, i, i);
-		table.setValueAt(1, i, i * 100);
-		table.setValueAt(2, i, 5 - i);
-		table.setValueAt(3, i, float(i));
-		table.setValueAt(4, i, char(i + 97));
-	}
-	table.print();
-
 	do {
 		std::cout << "Dgt 0 para encerrar." << std::endl
 			<< "Dgt 1 para criar um grafo." << std::endl

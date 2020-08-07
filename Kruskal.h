@@ -71,7 +71,7 @@ public:
 
 		std::multiset<Edge, LessWeight> edges(getEdgesLessWeight());
 
-		PageTable table("Kruskal");
+		PageTable table("Kruskal", PageTable::HeaderOrientation::COLUMN);
 		table.addHeader({"Edge", "C(e)", ""});
 
 		while (!edges.empty()) {

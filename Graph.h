@@ -307,7 +307,6 @@ public:
 		std::cout << "valorado" << std::endl;
 
 		PageTable table("Graus dos vertices:", PageTable::HeaderOrientation::ROW);
-		table.setAutoResizeColumns(false);
 		table.setColumnsForPage(20);
 
 		table.addRow(AMOUNT_VERTEXES);
@@ -322,7 +321,7 @@ public:
 		table.addHeader("out");
 
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
-			table.setColumnWidth(i, 4);
+			table.setColumnMaxWidth(i, 4);
 			table.setValueAt(0, i, getVertexName(i));
 			if (IS_DIGRAPH)
 				table.setValueAt(1, i, getInDegreeFrom(i));
