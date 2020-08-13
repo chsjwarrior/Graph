@@ -16,13 +16,13 @@ struct Edge {
 	Edge() = delete;
 
 	explicit Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
-		std::cout << "constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		//std::cout << "constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 	explicit Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
-		std::cout << "copy constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		//std::cout << "copy constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 	~Edge() {
-		std::cout << "destructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		//std::cout << "destructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
 	}
 
 	const bool operator<(const Edge& other) const {
@@ -309,23 +309,21 @@ public:
 		PageTable table("Graus dos vertices:", PageTable::HeaderOrientation::ROW);
 		table.setColumnsForPage(20);
 
-		table.addRow(AMOUNT_VERTEXES);
 		table.addHeader("Vi");
+		table.setColumnCount(AMOUNT_VERTEXES);
 		size_t rowsCount = 1;
 		if (IS_DIGRAPH) {
 			rowsCount++;
-			table.addRow(AMOUNT_VERTEXES);
-			table.addHeader("in");
-		}
-		table.addRow(AMOUNT_VERTEXES);
-		table.addHeader("out");
+			table.addHeader("In");
+		}		
+		table.addHeader("Out");
 
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.setValueAt(0, i, getVertexName(i));
+			table.updateValueAt(0, i, getVertexName(i));
 			if (IS_DIGRAPH)
-				table.setValueAt(1, i, getInDegreeFrom(i));
-			table.setValueAt(rowsCount, i, getOutDegreeFrom(i));
+				table.updateValueAt(1, i, getInDegreeFrom(i));
+			table.updateValueAt(rowsCount, i, getOutDegreeFrom(i));
 		}
 		table.print();
 	}

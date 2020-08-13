@@ -50,19 +50,18 @@ private:
 	}
 
 	void print(const std::string& title) const {
-		PageTable table(title, PageTable::HeaderOrientation::ROW);
+		PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
 		table.setColumnsForPage(20);
-		table.addHeader({"Vi", "Di", "Pi"});
 
-		table.addRow(graph.AMOUNT_VERTEXES);
+		table.addHeader({"Vi", "Di", "Pi"});
+		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnMaxWidth(i, 4);
+			table.updateValueAt(0, i, graph.getVertexName(i));			
 		}
-		table.addRow(discovery, graph.AMOUNT_VERTEXES);
-		table.addRow(graph.AMOUNT_VERTEXES);
+		table.updateRowAt(1, discovery, graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
-			table.setValueAt(2, i, graph.getVertexName(predecessor[i]));
+			table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
 
 		table.print();
 	}
@@ -99,7 +98,8 @@ public:
 		if (isRecursive) {
 			bfsRecursive(queue);
 			print("Busca em largura recursiva:");
-		} else {
+		}
+		else {
 			bfsIterative(queue);
 			print("Busca em largura iterativa:");
 		}

@@ -15,8 +15,13 @@ public:
 	Cell(const Cell&&) = delete;
 	Cell& operator=(const Cell&&) = delete;
 
-	explicit Cell() = default;
-	~Cell() { value.clear(); }
+	explicit Cell() {
+		std::cout << "Cell()" << std::endl;
+	}
+	~Cell() {
+		value.clear();
+		std::cout << "~Cell()" << std::endl;
+	}
 
 	//this function works for setValueAt
 	Cell& operator=(const std::string& s) {
@@ -50,23 +55,30 @@ public:
 //0====================TABLE_CLASS====================0
 class PageTable {
 public:
-	enum class HeaderOrientation : bool { NONE, COLUMN, ROW };
+	enum class HeaderOrientation {
+		NONE, COLUMN, ROW
+	};
 
 	PageTable(const PageTable&) = delete;
 	PageTable operator=(const PageTable&) = delete;
 	PageTable(const PageTable&&) = delete;
 	PageTable operator=(const PageTable&&) = delete;
 
-	PageTable() : HEADER_ORIENTATION(HeaderOrientation::COLUMN) {}
+	PageTable() : HEADER_ORIENTATION(HeaderOrientation::NONE) {}
 
-	explicit PageTable(const std::string descriptions[], const size_t& size, const HeaderOrientation& headerOrientation) :
+	explicit PageTable(const HeaderOrientation& headerOrientation) :
+		HEADER_ORIENTATION(headerOrientation) {}
+
+	explicit PageTable(const size_t& rowCount, const size_t& columnCount, const HeaderOrientation& headerOrientation = HeaderOrientation::NONE) :
 		HEADER_ORIENTATION(headerOrientation) {
-		addHeader(descriptions, size);
+		setRowCount(rowCount);
+		setColumnCount(columnCount);
 	}
 
-	explicit PageTable(const std::initializer_list<std::string>& descriptions, const HeaderOrientation& headerOrientation) :
-		HEADER_ORIENTATION(headerOrientation) {
-		addHeader(descriptions);
+	explicit PageTable(const std::string& title, const size_t& rowCount, const size_t& columnCount, const HeaderOrientation& headerOrientation = HeaderOrientation::NONE) :
+		title(title), HEADER_ORIENTATION(headerOrientation) {
+		setRowCount(rowCount);
+		setColumnCount(columnCount);
 	}
 
 	explicit PageTable(const std::string& title, const HeaderOrientation& headerOrientation = HeaderOrientation::NONE) :
@@ -83,124 +95,235 @@ public:
 	}
 
 	void addHeader(const std::string& description) {
-		if (HEADER_ORIENTATION == HeaderOrientation::NONE)
-			throw std::invalid_argument("Error - Header Orientation is NONE.");
-
-		header.push_back(description);
 		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN) {
-			resizeColumnsWidth(header.size() + 1);
+			setColumnCount(getColumnCount() + 1);
+			header.back() = description;
 			updateColumnWidth(header.size(), description.size());
-		} else {//if (HEADER_ORIENTATION == HeaderOrientation::ROW)
-			resizeColumnsWidth(1);
-			updateColumnWidth(0, header.back().size());
 		}
+		else if (HEADER_ORIENTATION == HeaderOrientation::ROW) {
+			setRowCount(getRowCount() + 1);
+			header.back() = description;
+			updateColumnWidth(0, description.size());
+		}
+		else //if (HEADER_ORIENTATION == HeaderOrientation::NONE) 
+			throw std::invalid_argument("Error - header orientation is set to NONE.");
 	}
 
 	void addHeader(const std::string descriptions[], const size_t& size) {
-		if (HEADER_ORIENTATION == HeaderOrientation::NONE)
-			throw std::invalid_argument("Error - Header Orientation is NONE.");
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+			setColumnCount(getColumnCount() + size);
+		else if (HEADER_ORIENTATION == HeaderOrientation::ROW)
+			setRowCount(getRowCount() + size);
+		else //if (HEADER_ORIENTATION == HeaderOrientation::NONE) 
+			throw std::invalid_argument("Error - header orientation is set to NONE.");
 
-		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? size + 1 : 1);
-
-		for (size_t i = 0; i < size; ++i) {
-			header.push_back(descriptions[i]);
+		for (size_t i = 0, j = header.size() - size; i < size; ++i, ++j) {
+			header[j] = descriptions[i];
 			if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
-				updateColumnWidth(header.size() + 1, descriptions[i].size());
-			else//if (HEADER_ORIENTATION == HeaderOrientation::ROW)
-				updateColumnWidth(0, header.back().size());
+				updateColumnWidth(j + 1, header[j].size());
+			else if (HEADER_ORIENTATION == HeaderOrientation::ROW)
+				updateColumnWidth(0, header[j].size());
 		}
 	}
 
 	void addHeader(const std::initializer_list<std::string>& descriptions) {
-		if (HEADER_ORIENTATION == HeaderOrientation::NONE)
-			throw std::invalid_argument("Error - Header Orientation is NONE.");
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+			setColumnCount(getColumnCount() + descriptions.size());
+		else if (HEADER_ORIENTATION == HeaderOrientation::ROW)
+			setRowCount(getRowCount() + descriptions.size());
+		else //if (HEADER_ORIENTATION == HeaderOrientation::NONE) 
+			throw std::invalid_argument("Error - header orientation is set to NONE.");
 
-		resizeColumnsWidth(HEADER_ORIENTATION == HeaderOrientation::COLUMN ? descriptions.size() + 1 : 1);
-
-		for (auto s = descriptions.begin(); s != descriptions.end(); ++s) {
-			header.push_back(*s);
+		for (size_t i = 0, j = header.size() - descriptions.size(); i < descriptions.size(); ++i, ++j) {
+			header[j] = *(descriptions.begin() + i);
 			if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
-				updateColumnWidth(header.size() + 1, header.back().size());
-			else//if (HEADER_ORIENTATION == HeaderOrientation::ROW)
-				updateColumnWidth(0, header.back().size());
+				updateColumnWidth(j + 1, header[j].size());
+			else if (HEADER_ORIENTATION == HeaderOrientation::ROW)
+				updateColumnWidth(0, header[j].size());
 		}
 	}
 
-	void addRow(size_t columnsCount) {
-		if (columnsCount == 0)
-			columnsCount = columnsWidth.size() - 1;
-		else
-			resizeColumnsWidth(columnsCount + 1);
-		data.emplace_back(columnsCount);
-		Row& newRow = data.back();
+	void updateHeaderAt(const size_t& index, const std::string& description) {
+		if (HEADER_ORIENTATION == HeaderOrientation::NONE)
+			throw std::invalid_argument("Error - header orientation is set to NONE.");
+		if (index >= header.size())
+			throw std::out_of_range("Error - header index is out of range.");
 
-		for (auto c = newRow.begin(); c != newRow.end(); ++c)
-			*c = std::make_unique<Cell>();
+		header.at(index) = description;
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+			updateColumnWidth(index + 1, description.size());
+		else//if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
+			updateColumnWidth(0, description.size());
 	}
 
 	template<class T, class = typename std::enable_if<std::is_arithmetic<typename std::remove_pointer<T>::type>::value>>
 	void addRow(const T& row, const size_t& size) {
-		data.emplace_back(size);
-		resizeColumnsWidth(size + 1);
-		Row& newRow = data.back();
-
-		for (size_t i = 0; i < size; ++i) {
-			newRow.at(i) = std::make_unique<Cell>();
-			*newRow.at(i) = row[i];
-			updateColumnWidth(i + 1, newRow.at(i)->value.size());
-		}
+		setRowCount(getRowCount() + 1);
+		updateRowAt(getRowCount() - 1, row, size);
 	}
 
 	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
 	void addRow(const std::initializer_list<T>& row) {
-		data.emplace_back(row.size());
-		resizeColumnsWidth(row.size() + 1);
-		Row& newRow = data.back();
+		setRowCount(getRowCount() + 1);
+		updateRowAt(getRowCount() - 1, row);
+	}
 
-		for (size_t i = 0; i < row.size(); ++i) {
-			newRow.at(i) = std::make_unique<Cell>();
-			*newRow.at(i) = *(row.begin() + i);
-			updateColumnWidth(i + 1, newRow.at(i)->value.size());
+	template<class T, class = typename std::enable_if<std::is_arithmetic<typename std::remove_pointer<T>::type>::value>>
+	void updateRowAt(const size_t& index, const T& row, const size_t& size) {
+		if (index >= getRowCount())
+			throw std::out_of_range("Error - row index is out of range.");
+
+		Row& cRow = data.at(index);
+		const size_t columnCount = getColumnCount();
+		for (size_t c = 0; c < columnCount && size; ++c) {
+			*cRow.at(c) = row[c];
+			updateColumnWidth(c + 1, cRow.at(c)->value.size());
 		}
 	}
 
 	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
-	void setValueAt(const size_t& row, const size_t& column, const T& value) {
-		if (row >= data.size())
+	void updateRowAt(const size_t& index, const std::initializer_list<T>& row) {
+		if (index >= getRowCount())
 			throw std::out_of_range("Error - row index is out of range.");
-		if (column >= columnsWidth.size() - 1)
-			throw std::out_of_range("Error - column index is out of range.");
 
-		Row& dRow = data.at(row);
-
-		if (column >= dRow.size()) {
-			dRow.reserve(columnsWidth.size() - 1);
-			for (size_t i = dRow.size(); i < columnsWidth.size() - 1; ++i)
-				dRow.emplace_back(new Cell());
+		Row& cRow = data.at(index);
+		const size_t columnCount = getColumnCount();
+		for (size_t c = 0; c < columnCount && row.size(); ++c) {
+			*cRow.at(c) = *(row.begin() + c);
+			updateColumnWidth(c + 1, cRow.at(c)->value.size());
 		}
-		*dRow[column] = value;
-		updateColumnWidth(column + 1, dRow.at(column)->value.size());
 	}
 
-	void setColumnMaxWidth(const size_t& index, const size_t& width) {
-		if (index >= columnsWidth.size() - 1)
-			throw std::out_of_range("Error - column index is out of range.");
-
-		columnsWidth[index + 1].first = true;
-		columnsWidth[index + 1].second = width;
+	template<class T, class = typename std::enable_if<std::is_arithmetic<typename std::remove_pointer<T>::type>::value>>
+	void addColumn(const T& column, const size_t& size) {
+		setColumnCount(getColumnCount() + 1);
+		updateColumnAt(getColumnCount() - 1, column, size);
 	}
 
-	void clearColumns(const size_t& index) {
-		if (index >= columnsWidth.size() - 1)
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
+	void addColumn(const std::initializer_list<T>& column) {
+		setColumnCount(getColumnCount() + 1);
+		updateColumnAt(getColumnCount() - 1, column);
+	}
+
+	template<class T, class = typename std::enable_if<std::is_arithmetic<typename std::remove_pointer<T>::type>::value>>
+	void updateColumnAt(const size_t& index, const T& column, const size_t& size) {
+		if (index >= getColumnCount())
 			throw std::out_of_range("Error - column index is out of range.");
 
-		columnsWidth[index + 1].first = false;
-		columnsWidth[index + 1].second = 0;
-		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN)
-			updateColumnWidth(index + 1, header[index].size());
+		const size_t rowCount = getRowCount();
+		for (size_t r = 0; r < rowCount && r < size; ++r) {
+			*data.at(r).at(index) = column[r];
+			updateColumnWidth(index + 1, data.at(r).at(index)->value.size());
+		}
+	}
+
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
+	void updateColumnAt(const size_t& index, const std::initializer_list<T>& column) {
+		if (index >= getColumnCount())
+			throw std::out_of_range("Error - column index is out of range.");
+
+		const size_t rowCount = getRowCount();
+		for (size_t r = 0; r < rowCount && r < column.size(); ++r) {
+			*data.at(r).at(index) = *(column.begin() + r);
+			updateColumnWidth(index + 1, data.at(r).at(index)->value.size());
+		}
+	}
+
+	template<class T, class = typename std::enable_if<std::is_arithmetic<T>::value>>
+	void updateValueAt(const size_t& row, const size_t& column, const T& value) {
+		if (row >= getRowCount())
+			throw std::out_of_range("Error - row index is out of range.");
+		if (column >= getColumnCount())
+			throw std::out_of_range("Error - column index is out of range.");
+
+		*data.at(row).at(column) = value;
+		updateColumnWidth(column + 1, data.at(row).at(column)->value.size());
+	}
+
+	const size_t getRowCount() const {
+		return data.size();
+	}
+
+	void setRowCount(const size_t& size) {
+		//0=========================ROW=HEADER=========================0
+		if (HEADER_ORIENTATION == HeaderOrientation::ROW) {
+			while (header.size() < size) {
+				header.push_back("row " + std::to_string(header.size() + 1));
+				updateColumnWidth(0, header.back().size());
+			}
+			while (header.size() > size)
+				header.pop_back();
+		}//0=========================ROW=HEADER=========================0
+
+		if (data.size() < size) {
+			do {
+				data.emplace_back(getColumnCount());
+				for (auto c = data.back().begin(); c != data.back().end(); ++c)
+					*c = std::unique_ptr<Cell>(new Cell);
+			} while (data.size() < size);
+		}
+		else
+			while (data.size() > size) {
+				data.back().clear();
+				data.pop_back();
+			}
+	}
+
+	const size_t getColumnCount() const {
+		if (columnsWidth.empty())
+			return 0;
+		return columnsWidth.size() - 1;
+	}
+
+	void setColumnCount(size_t size) {
+		size++;
+		while (columnsWidth.size() < size)
+			columnsWidth.emplace_back(false, 0);
+		while (columnsWidth.size() > size)
+			columnsWidth.pop_back();
+		size--;
+
+		//0======================COLUMN=HEADER=========================0
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN) {
+			while (header.size() < size) {
+				header.push_back("column " + std::to_string(header.size() + 1));
+				updateColumnWidth(header.size(), header.back().size());
+			}
+			while (header.size() > size)
+				header.pop_back();
+		}//0======================COLUMN=HEADER=========================0
+
+		for (Row& row : data)
+			if (row.size() < size) {
+				do
+					row.emplace_back(new Cell);
+				while (row.size() < size);
+			}
+			else
+				while (row.size() > size)
+					row.pop_back();
+	}
+
+	void setColumnMaxWidth(size_t index, const size_t& width) {
+		if (index >= getColumnCount())
+			throw std::out_of_range("Error - column index is out of range.");
+
+		index++;
+		columnsWidth[index].first = true;
+		columnsWidth[index].second = width;
+	}
+
+	void clearColumnMaxWidth(size_t index) {
+		if (index >= getColumnCount())
+			throw std::out_of_range("Error - column index is out of range.");
+
+		index++;
+		columnsWidth[index].first = false;
+		columnsWidth[index].second = 0;
 		for (const Row& row : data)
 			if (index < row.size())
-				updateColumnWidth(index + 1, row[index]->value.size());
+				updateColumnWidth(index, row[index - 1]->value.size());
 	}
 
 	const size_t getColumnsForPage() const {
@@ -219,16 +342,8 @@ public:
 		return title;
 	}
 
-	const size_t getRowCount() const {
-		return data.size();
-	}
-
-	const size_t getColumnCount() const {
-		return columnsWidth.size() - 1;
-	}
-
 	void print() const {
-		size_t numPages = (columnsWidth.size() - 1) / columnsPage;
+		size_t numPages = getColumnCount() / columnsPage;
 		for (size_t i = 0; i <= numPages; ++i)
 			printPage(i);
 	}
@@ -237,14 +352,15 @@ private:
 	const HeaderOrientation HEADER_ORIENTATION;
 
 	struct BorderSide {
-		const unsigned char left, middle, right;
+		const unsigned char LEFT, MIDDLE, RIGHT;
 	};
 	struct Border {
-		const BorderSide top{218, 194, 191};
-		const BorderSide middle{195, 197, 180};
-		const BorderSide botton{192, 193, 217};
-		const unsigned char horizontal = 196;
-		const unsigned char vertical = 179;
+		const BorderSide TOP{218, 194, 191};
+		const BorderSide MIDDLE{195, 197, 180};
+		const BorderSide BOTTON{192, 193, 217};
+		const unsigned char HORIZONTAL = 196;
+		const unsigned char VERTICAL = 179;
+		const unsigned char EMPTY = 32;
 	} border;
 
 	size_t columnsPage = 10;
@@ -259,136 +375,112 @@ private:
 	typedef std::vector<std::unique_ptr<Cell>> Row;
 	std::vector<Row> data;
 
-	inline void resizeColumnsWidth(const size_t& size) {
-		if (size == columnsWidth.size() + 1)
-			columnsWidth.emplace_back(false, 0);
-		else if (size > columnsWidth.size())
-			columnsWidth.resize(size, std::pair<bool, size_t>(false, 0));
-	}
-
-	inline void updateColumnWidth(const size_t& index, const size_t& width) {
+	inline void updateColumnWidth(size_t index, const size_t& width) const {
 		if (columnsWidth.at(index).second == 0 || columnsWidth.at(index).first == false)
 			columnsWidth[index].second = std::max(columnsWidth[index].second, width);
 	}
 
-	inline void printFill(const char& value, const size_t& lenght) const {
+	inline void printFill(const unsigned char& value, const size_t& lenght) const {
 		for (size_t i = 0; i < lenght; i++)
 			std::cout << value;
 	}
 
-	void printBorderSide(const size_t& startIndex, const size_t& endIndex, const BorderSide& side) const {
-		std::cout << side.left;
+	void printBorderSide(const size_t& startColumn, const size_t& endColumn, const BorderSide& side) const {
+		std::cout << side.LEFT;
 
-		if (columnsWidth.front().second > 0) {
-			printFill(border.horizontal, columnsWidth.front().second);
-			std::cout << side.middle;
-		}
-		for (size_t i = 1 + startIndex; i < endIndex; ++i) {
-			printFill(border.horizontal, columnsWidth.at(i).second);
-			if (i != endIndex - 1)
-				std::cout << side.middle;
+		if (HEADER_ORIENTATION == HeaderOrientation::ROW) {
+			printFill(border.HORIZONTAL, columnsWidth.front().second);
+			std::cout << side.MIDDLE;
 		}
 
-		std::cout << side.right << std::endl;
+		for (size_t i = startColumn; i < endColumn; ++i) {
+			printFill(border.HORIZONTAL, columnsWidth[i + 1].second);
+			if (i != endColumn - 1)
+				std::cout << side.MIDDLE;
+		}
+
+		std::cout << side.RIGHT << std::endl;
 	}
 
 	void printCell(const std::string& value, size_t cellWidth) const {
 		std::cout << value;
 		if (value.size() <= cellWidth)
 			cellWidth = cellWidth - value.size();
-		printFill(' ', cellWidth);
+		printFill(border.EMPTY, cellWidth);
 	}
 
-	void printRow(const size_t& startIndex, const size_t& endIndex, const Row& row) const {
-		std::cout << border.vertical;
-
-		for (size_t c = startIndex; c < endIndex; ++c) {
-			if (c < row.size())
-				printCell(row[c]->value, columnsWidth[c + 1].second);
-			else
-				printFill(' ', columnsWidth[c + 1].second);
-
-			std::cout << border.vertical;
+	void printRow(const size_t& startColumn, const size_t& endColumn, const Row& row) const {
+		std::cout << border.VERTICAL;
+		for (size_t c = startColumn; c < endColumn; ++c) {
+			printCell(row[c]->value, columnsWidth[c + 1].second);
+			std::cout << border.VERTICAL;
 		}
-
 		std::cout << std::endl;
 	}
 
 	void printPage(const size_t& page) const {
-		size_t startIndex = page * columnsPage;
-		size_t endIndex = std::min(startIndex + columnsPage, columnsWidth.size() - 1);
+		size_t startColumn = page * columnsPage;
+		size_t endColumn = std::min(startColumn + columnsPage, getColumnCount());
 
-		if (startIndex >= columnsWidth.size() - 1)
+		if (startColumn >= getColumnCount())
 			return;
-
 		//0==============================TITLE============================================0
 		if (page == 0 && title.empty() == false) {
-			size_t fill = endIndex - startIndex - 1;
-			if (columnsWidth.front().second > 0)
-				fill += columnsWidth.front().second + 1;
-			for (size_t i = 1 + startIndex; i < endIndex + 1; ++i)
-				fill += columnsWidth.at(i).second;
+			size_t fill = endColumn - startColumn;
+			fill += columnsWidth.front().second;
+			for (size_t i = startColumn; i < endColumn; ++i)
+				fill += columnsWidth.at(i + 1).second;
 
 			if (fill < title.size()) {
-				size_t newWidth = endIndex - startIndex - 1;
-				if (newWidth) {
-					newWidth /= title.size();
-					for (size_t i = 1 + startIndex; i < endIndex + 1; ++i)
-						columnsWidth[i].second = newWidth;
-				} else
-					columnsWidth[1].second = newWidth;
+				fill = endColumn - startColumn;
+				fill = title.size() / fill;//divide by zero?
+				for (size_t i = startColumn; i < endColumn; ++i)
+					updateColumnWidth(i + 1, fill);
+				fill = 0;
 			}
 
-			printBorderSide(startIndex, endIndex + 1, {border.top.left, border.horizontal, border.top.right});
-			std::cout << border.vertical << title;
+			printBorderSide(startColumn, endColumn, {border.TOP.LEFT, border.HORIZONTAL, border.TOP.RIGHT});
+			std::cout << border.VERTICAL;
 
-			fill = endIndex - startIndex - 1;
-			if (columnsWidth.front().second > 0)
-				fill += columnsWidth.front().second + 1;
-			for (size_t i = 1 + startIndex; i < endIndex + 1; ++i)
-				fill += columnsWidth.at(i).second;
-			printFill(' ', fill - title.size());
-
-			std::cout << border.vertical << std::endl;
-			printBorderSide(startIndex, endIndex + 1, {border.middle.left,border.top.middle,border.middle.right});
-		} else
-			printBorderSide(startIndex, endIndex + 1, border.top);
-
-		//0=============================COLUMN+HEADER=====================================0
-		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN && header.empty() == false) {
-			std::cout << border.vertical;
-
-			for (size_t c = startIndex; c < endIndex; ++c) {
-				if (c < header.size())
-					printCell(header[c], columnsWidth[c + 1].second);
-				else
-					printFill(' ', columnsWidth[c + 1].second);
-
-				std::cout << border.vertical;
+			if (fill == 0) {
+				fill = endColumn - startColumn;
+				fill += columnsWidth.front().second;
+				for (size_t i = startColumn; i < endColumn; ++i)
+					fill += columnsWidth.at(i + 1).second;
 			}
+			if (HEADER_ORIENTATION != HeaderOrientation::ROW)
+				fill--;
+			printCell(title, fill);
 
-			std::cout << std::endl;
-			if (data.empty() == false)
-				printBorderSide(startIndex, endIndex + 1, border.middle);
+			std::cout << border.VERTICAL << std::endl;
+			printBorderSide(startColumn, endColumn, {border.MIDDLE.LEFT,border.TOP.MIDDLE,border.MIDDLE.RIGHT});
 		}
+		else
+			printBorderSide(startColumn, endColumn, border.TOP);
 
+		//0=============================COLUMN+HEADER=====================================0		
+		if (HEADER_ORIENTATION == HeaderOrientation::COLUMN) {
+			for (size_t c = startColumn; c < endColumn; ++c) {
+				std::cout << border.VERTICAL;
+				printCell(header[c], columnsWidth[c + 1].second);
+			}
+
+			std::cout << border.VERTICAL << std::endl;
+			if (data.empty() == false)
+				printBorderSide(startColumn, endColumn, border.MIDDLE);
+		}
 		//0==================================ROWS=========================================0
 		for (size_t r = 0; r < data.size(); ++r) {
 			if (HEADER_ORIENTATION == HeaderOrientation::ROW) {
-				if (r < header.size()) {
-					std::cout << border.vertical;
-					printCell(header[r], columnsWidth.front().second);
-				} else if (header.empty() == false) {
-					std::cout << border.vertical;
-					printFill(' ', columnsWidth.front().second);
-				}
+				std::cout << border.VERTICAL;
+				printCell(header[r], columnsWidth.front().second);
 			}
 
-			printRow(startIndex, endIndex, data[r]);
+			printRow(startColumn, endColumn, data[r]);
 			if (r < data.size() - 1)
-				printBorderSide(startIndex, endIndex + 1, border.middle);
+				printBorderSide(startColumn, endColumn, border.MIDDLE);
 		}
 
-		printBorderSide(startIndex, endIndex + 1, border.botton);
+		printBorderSide(startColumn, endColumn, border.BOTTON);
 	}
 };

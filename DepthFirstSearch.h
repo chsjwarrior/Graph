@@ -41,7 +41,8 @@ private:
 						stack.push(*v);
 				adjacences.clear();
 
-			} else {
+			}
+			else {
 				if (close[u] == NIL)
 					close[u] = ++time;
 				stack.pop();
@@ -52,15 +53,16 @@ private:
 	void print(const std::string& title) const {
 		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setColumnsForPage(20);
-		table.addHeader({"Vi","Di","Ci"});
 
-		table.addRow(graph.AMOUNT_VERTEXES);
+		table.addHeader({"Vi","Di", "Ci"});
+		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnMaxWidth(i, 4);
+			table.updateValueAt(0, i, graph.getVertexName(i));			
 		}
-		table.addRow(discovery, graph.AMOUNT_VERTEXES);
-		table.addRow(close, graph.AMOUNT_VERTEXES);
+		table.updateRowAt(1, discovery, graph.AMOUNT_VERTEXES);
+		table.updateRowAt(2, close, graph.AMOUNT_VERTEXES);
+
 		table.print();
 	}
 

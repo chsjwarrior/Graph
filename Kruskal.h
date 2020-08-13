@@ -81,10 +81,10 @@ public:
 			if (u != v)
 				makeUnion(edges.cbegin()->U, edges.cbegin()->V);
 
-			table.addRow(3);
-			table.setValueAt(table.getRowCount() - 1, 0, graph.getEdgeName(*edges.cbegin()));
-			table.setValueAt(table.getRowCount() - 1, 1, edges.cbegin()->WEIGHT);
-			table.setValueAt(table.getRowCount() - 1, 2, u != v);
+			table.setRowCount(table.getRowCount() + 1);
+			table.updateValueAt(table.getRowCount() - 1, 0, graph.getEdgeName(*edges.cbegin()));
+			table.updateValueAt(table.getRowCount() - 1, 1, edges.cbegin()->WEIGHT);
+			table.updateValueAt(table.getRowCount() - 1, 2, u != v);
 
 			edges.erase(edges.cbegin());
 		}

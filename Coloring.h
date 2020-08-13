@@ -49,14 +49,15 @@ private:
 	void print(const std::string& title) const {
 		PageTable table(title, PageTable::HeaderOrientation::ROW);
 		table.setColumnsForPage(20);
-		table.addHeader({"Vi", "Ci"});
 
-		table.addRow(graph.AMOUNT_VERTEXES);
+		table.addHeader({"Vi", "Ci"});
+		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			table.setValueAt(0, i, graph.getVertexName(i));
 			table.setColumnMaxWidth(i, 4);
+			table.updateValueAt(0, i, graph.getVertexName(i));			
 		}
 		table.addRow(color, graph.AMOUNT_VERTEXES);
+
 		table.print();
 	}
 
@@ -80,7 +81,8 @@ public:
 					setValidColor(u);
 
 			print("Coloracao seguencial:");
-		} else {
+		}
+		else {
 			unsigned int u = getHigherDegreeNotColored();
 			while (u != graph.AMOUNT_VERTEXES) {
 				setValidColor(u);
