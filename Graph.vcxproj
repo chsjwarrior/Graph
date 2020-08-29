@@ -180,7 +180,6 @@
     <ClInclude Include="Kruskal.h" />
     <ClInclude Include="Prim.h" />
     <ClInclude Include="RobertFlores.h" />
-    <ClInclude Include="PageTable.h" />
     <ClInclude Include="Tarjan.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

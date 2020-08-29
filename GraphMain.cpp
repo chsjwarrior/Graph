@@ -1,6 +1,7 @@
+#include <iostream>
 #include <fstream>
 #include <iomanip>
-#include "PageTable.h"
+#include "../ConsolePageTable/PageTable.h"
 #include "Graph.h"
 #include "BreadthFirstSearch.h"
 #include "DepthFirstSearch.h"
@@ -100,7 +101,7 @@ void createGraph() {
 	unsigned int u, v;
 	std::cout << "Dgt a qtd de Vertices." << std::endl;
 	u = uRead();
-	std::cout << "Dgt 1: Grafo dirigido.\nDgt outro valor: Grafo nao dirigido." << std::endl;
+	std::cout << "[1] Grafo dirigido.\nDgt outro valor: Grafo nao dirigido." << std::endl;
 	int w = iRead();
 	destroyGraph();
 	try {
@@ -109,7 +110,7 @@ void createGraph() {
 		std::cerr << e.what() << std::endl;
 		return;
 	}
-	std::cout << "Dgt 1: Grafo valorado.\nDgt outro valor: Grafo nao valorado." << std::endl;
+	std::cout << "[1] Grafo valorado.\nDgt outro valor: Grafo nao valorado." << std::endl;
 	w = iRead();
 	u = v = NIL;
 	do {
@@ -159,43 +160,43 @@ int main() {
 	std::cout << "Desenvolvido por Carlos Henrique Stapait Junior." << std::endl;
 	int choice = 0;
 
-	do {
-		std::cout << "Dgt 0 para encerrar." << std::endl
-			<< "Dgt 1 para criar um grafo." << std::endl
-			<< "Dgt 2 para abrir um arquivo." << std::endl;
+	do {		
+		std::cout << "[0] encerrar." << std::endl
+			<< "[1] criar um grafo." << std::endl
+			<< "[2] abrir um arquivo." << std::endl;
 		if (graph != nullptr)
 			std::cout << std::endl
-			<< "Dgt 3 para imprimir Matriz de adjacencia." << std::endl
-			<< "Dgt 4 para imprimir Matriz de incidencia." << std::endl
-			<< "Dgt 5 para imprimir lista de adjacencia." << std::endl
-			<< "Dgt 6 para imprimir lista de incidencia." << std::endl
-			<< "Dgt 7 para imprimir Matriz de custo." << std::endl
-			<< "Dgt 8 para imprimir Informacoes do grafo." << std::endl
+			<< "[3] imprimir Matriz de adjacencia." << std::endl
+			<< "[4] imprimir Matriz de incidencia." << std::endl
+			<< "[5] imprimir lista de adjacencia." << std::endl
+			<< "[6] imprimir lista de incidencia." << std::endl
+			<< "[7] imprimir Matriz de custo." << std::endl
+			<< "[8] imprimir Informacoes do grafo." << std::endl
 			<< "---------------caminhamento---------------" << std::endl
-			<< "Dgt 9 para Busca em largura." << std::endl
-			<< "Dgt 10 para Busca em profundidade." << std::endl
+			<< "[9] Busca em largura." << std::endl
+			<< "[10] Busca em profundidade." << std::endl
 			<< "--------------menor caminho---------------" << std::endl
-			<< "Dgt 11 para Dijkstra." << std::endl
-			<< "Dgt 12 para Floyd Warshall." << std::endl
-			<< "Dgt 13 para Bellman-Ford." << std::endl
-			<< "Dgt 14 para Fleury." << std::endl
-			<< "Dgt 15 para Hierholzer." << std::endl
-			<< "Dgt 16 para Robert Flores." << std::endl
-			<< "Dgt 17 para Vizinho mais proximo." << std::endl
-			<< "Dgt 18 para Ligacao mais economica." << std::endl
-			<< "--------------fluxo em rede---------------"
-			<< "\nDgt 19 para Ford-Fulkerson." << std::endl
+			<< "[11] Dijkstra." << std::endl
+			<< "[12] Floyd Warshall." << std::endl
+			<< "[13] Bellman-Ford." << std::endl
+			<< "[14] Fleury." << std::endl
+			<< "[15] Hierholzer." << std::endl
+			<< "[16] Robert Flores." << std::endl
+			<< "[17] Vizinho mais proximo." << std::endl
+			<< "[18] Ligacao mais economica." << std::endl
+			<< "--------------fluxo em rede---------------" << std::endl
+			<< "[19] Ford-Fulkerson." << std::endl
 			<< "---------------conexidade-----------------" << std::endl
-			<< "Dgt 20 para Goodman." << std::endl
-			<< "Dgt 21 para Conjuntos disjuntos." << std::endl
-			<< "Dgt 22 para Kosaraju." << std::endl
-			<< "Dgt 23 para Tarjan." << std::endl
+			<< "[20] Goodman." << std::endl
+			<< "[21] Conjuntos disjuntos." << std::endl
+			<< "[22] Kosaraju." << std::endl
+			<< "[23] Tarjan." << std::endl
 			<< "----------arvore geradora minima----------" << std::endl
-			<< "Dgt 24 para Kruskal." << std::endl
-			<< "Dgt 25 para Prim." << std::endl
-			<< "Dgt 26 para Boruvka," << std::endl
+			<< "[24] Kruskal." << std::endl
+			<< "[25] Prim." << std::endl
+			<< "[26] Boruvka," << std::endl
 			<< "------------------------------------------" << std::endl
-			<< "Dgt 27 para Coloracao." << std::endl;
+			<< "[27] Coloracao." << std::endl;
 		choice = uRead();
 		clearScreen();
 
@@ -227,14 +228,14 @@ int main() {
 					break;
 				case 9:
 				{
-					std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
+					std::cout << "[0] busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
 					bool isRecursive = iRead();
 					BreadthFirstSearch bfs(*graph);
 					bfs.bfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
 				} break;
 				case 10:
 				{
-					std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
+					std::cout << "[0] busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
 					bool isRecursive = iRead();
 					DepthFirstSearch dfs(*graph);
 					dfs.dfs(getVertex("Dgt o numero do vertice de origem."), isRecursive);
@@ -274,14 +275,14 @@ int main() {
 				} break;
 				case 16:
 				{
-					std::cout << "Dgt 0 para busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
+					std::cout << "[0] busca iterativa.\nDgt qualquer valor para busca recursiva." << std::endl;
 					bool isRecursive = iRead();
 					RobertFlores robertFlores(*graph);
 					robertFlores.robertFlores(getVertex("Dgt o numero do vertice de origem."), isRecursive);
 				} break;
 				case 17:
 				{
-					std::cout << "Dgt 0 para Vizinha mais proximo.\nDgt qualquer valor para Vizinho mais proximo repetivo." << std::endl;
+					std::cout << "[0] Vizinha mais proximo.\nDgt qualquer valor para Vizinho mais proximo repetivo." << std::endl;
 					bool isRepetitive = iRead();
 					CloserNeighbor closerNeighbor(*graph);
 					if (isRepetitive)
@@ -370,7 +371,7 @@ int main() {
 				} break;
 				case 27:
 				{
-					std::cout << "Dgt 0 para Coloracao sequencial.\nDgt qualquer valor para Coloracao heuristica." << std::endl;
+					std::cout << "[0] Coloracao sequencial.\nDgt qualquer valor para Coloracao heuristica." << std::endl;
 					bool isHeuristic = iRead();
 					Coloring coloring(*graph);
 					coloring.coloring(isHeuristic);
