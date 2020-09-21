@@ -25,7 +25,8 @@ private:
 					std::cout << " achou";
 					print();
 					break;
-				} else if (visited[*v] == false)
+				}
+				else if (visited[*v] == false)
 					robertFloresRecursive(*v);
 		}
 
@@ -57,11 +58,13 @@ private:
 							std::cout << " achou";
 							print();
 							break;
-						} else if (visited[*v] == false)
+						}
+						else if (visited[*v] == false)
 							stack.push(*v);
-						adjacences.clear();
+				adjacences.clear();
 
-			} else {
+			}
+			else {
 				stack.pop();
 				if (index > 0) {
 					index--;
@@ -103,7 +106,8 @@ public:
 		if (isRecursive) {
 			std::cout << "Robert-Flores recursivo:" << std::endl;
 			robertFloresRecursive(source);
-		} else {
+		}
+		else {
 			std::cout << "Robert-Flores iterativo:" << std::endl;
 			robertFloresIterative(source);
 		}

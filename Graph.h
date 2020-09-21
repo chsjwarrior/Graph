@@ -16,13 +16,13 @@ struct Edge {
 	Edge() = delete;
 
 	explicit Edge(const unsigned int u, const unsigned int v, const int w) : U(u), V(v), WEIGHT(w) {
-		//std::cout << "constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		//std::cout << "Edge(" << U + 1 << ',' << V + 1 << ',' << WEIGHT << ')' << std::endl;
 	}
 	explicit Edge(const Edge& other) : U(other.U), V(other.V), WEIGHT(other.WEIGHT) {
-		//std::cout << "copy constructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		//std::cout << "Edge(Edge&(" << U + 1 << ',' << V + 1 << ',' << WEIGHT << "))" << std::endl;
 	}
 	~Edge() {
-		//std::cout << "destructor {" << U << ',' << V << '=' << WEIGHT << '}' << std::endl;
+		//std::cout << "~Edge(" << U + 1 << ',' << V + 1 << ',' << WEIGHT << ')' << std::endl;
 	}
 
 	const bool operator<(const Edge& other) const {
@@ -75,7 +75,7 @@ public:
 
 	Graph() = delete;
 
-	explicit Graph(const unsigned int& amountVertexes, const bool& isDigraph) noexcept(false) :
+	explicit Graph(const unsigned int amountVertexes, const bool isDigraph) noexcept(false) :
 		AMOUNT_VERTEXES(amountVertexes), IS_DIGRAPH(isDigraph) {
 		if (amountVertexes == 0)
 			throw std::length_error("numero de vertices deve ser maior que zero");
@@ -90,16 +90,6 @@ public:
 	~Graph() {
 		adjacences.clear();
 		edges.clear();
-	}
-
-	const Graph& operator=(const Graph& other) {
-		if (this != &other) {
-			(unsigned int&)AMOUNT_VERTEXES = other.AMOUNT_VERTEXES;
-			(bool&)IS_DIGRAPH = other.IS_DIGRAPH;
-			edges.clear();
-			edges = other.edges;
-		}
-		return *this;
 	}
 
 	const bool isValidVertex(const unsigned int& v) {
@@ -198,6 +188,13 @@ public:
 
 	const size_t getAmountEdges() const {
 		return edges.size();
+	}
+
+	void transpose() {
+		std::multiset<Edge> transpose;
+		for (auto e = edges.cbegin(); edges.empty() == false; e = edges.erase(e))
+			transpose.emplace(e->V, e->U, e->WEIGHT);
+		edges = move(transpose);
 	}
 
 	void printAdjacencematrix() const {
@@ -315,7 +312,7 @@ public:
 		if (IS_DIGRAPH) {
 			rowsCount++;
 			table.addHeader("In");
-		}		
+		}
 		table.addHeader("Out");
 
 		for (unsigned int i = 0; i < AMOUNT_VERTEXES; i++) {

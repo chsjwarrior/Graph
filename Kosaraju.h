@@ -19,17 +19,6 @@ private:
 		stack.push(u);
 	}
 
-	void graphTranspose() {
-		std::multiset<Edge> edges = graph.getEdges();
-
-		const int amountVertexes = graph.AMOUNT_VERTEXES;
-		const bool isDigraph = graph.IS_DIGRAPH;
-		graph = Graph(amountVertexes, isDigraph);
-
-		for (auto e = edges.cbegin(); !edges.empty(); e = edges.erase(e))
-			graph.insertEdge(e->V, e->U, e->WEIGHT);
-	}
-
 	void dfs(const unsigned int& u) {
 		graph.writeVertex(u);
 		std::cout << ' ';
@@ -61,7 +50,7 @@ public:
 			if (visited[u] == false)
 				fillOrder(u);
 
-		graphTranspose();
+		graph.transpose();
 
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
