@@ -8,7 +8,7 @@ private:
 	bool* visited;
 	std::stack<int> stack;
 
-	void fillOrder(const unsigned int& u) {
+	void fillOrder(const unsigned int u) {
 		visited[u] = true;
 
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
@@ -19,7 +19,7 @@ private:
 		stack.push(u);
 	}
 
-	void dfs(const unsigned int& u) {
+	void dfs(const unsigned int u) {
 		graph.writeVertex(u);
 		std::cout << ' ';
 		visited[u] = true;

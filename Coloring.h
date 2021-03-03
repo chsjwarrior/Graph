@@ -10,7 +10,7 @@ private:
 	const Graph& graph;
 	unsigned int* color;
 
-	void setValidColor(const unsigned int& u) {
+	void setValidColor(const unsigned int u) {
 		unsigned int colorI = 0;
 		bool isValidColor = false;
 
@@ -72,7 +72,7 @@ public:
 		color = nullptr;
 	}
 
-	void coloring(const bool& isHeuristic) {
+	void coloring(const bool isHeuristic) {
 		memset(color, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
 		if (isHeuristic == false) {

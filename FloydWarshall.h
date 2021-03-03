@@ -9,41 +9,31 @@ class FloydWarshall {
 	unsigned int** predecessor;
 
 	void print() const {
-		std::cout << std::left << std::setw(4) << "Vi";
-		std::cout << std::right;
+		PageTable table("Floyd-Warshall, cost matrix:", graph.AMOUNT_VERTEXES, graph.AMOUNT_VERTEXES + 1, PageTable::HeaderOrientation::COLUMN);
+		table.setColumnsForPage(20);
+
+		table.updateHeaderAt(0, "");
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeVertex(i);
+			table.setColumnMaxWidth(i, 4);
+			table.updateHeaderAt(static_cast<size_t>(i + 1), graph.getVertexName(i));
+			table.updateValueAt(i, 0, graph.getVertexName(i));
 		}
-		std::cout << std::endl;
+		table.setColumnMaxWidth(table.getColumnCount(), 4);
+
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << std::left << std::setw(4);
-			graph.writeVertex(i);
-			std::cout << std::right;
-			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
-				std::cout << '|' << std::setw(4);
-				graph.writeValue(costMatrix[i][j]);
-			}
-			std::cout << std::endl;
+			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++)
+				table.updateValueAt(i, static_cast<size_t>(j + 1), graph.getFormatedWeight(costMatrix[i][j]));
 		}
-		std::cout << std::endl << std::left << std::setw(4) << "Vi";
-		std::cout << std::right;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << '|' << std::setw(4);
-			graph.writeVertex(i);
-		}
-		std::cout << std::endl;
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
-			std::cout << std::left << std::setw(4);
-			graph.writeVertex(i);
-			std::cout << std::right;
-			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++) {
-				std::cout << '|' << std::setw(4);
-				graph.writeVertex(predecessor[i][j]);
-			}
-			std::cout << std::endl;
-		}
+
+		table.print();
+
+		table.setTitle("Floyd-Warshall, predecessor matrix:");
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++)
+			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++)
+				table.updateValueAt(i, static_cast<size_t>(j + 1), graph.getVertexName(predecessor[i][j]));
+
+		table.print();
 	}
 
 public:

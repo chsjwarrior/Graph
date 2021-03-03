@@ -20,7 +20,7 @@ private:
 	std::set<unsigned int> vertices;
 	std::list<std::list<unsigned int>> sets;
 
-	void makeSet(unsigned int& u) {
+	void makeSet(const unsigned int u) {
 		std::list<unsigned int> set;
 		set.push_back(u);
 		sets.push_back(set);

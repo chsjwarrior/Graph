@@ -11,7 +11,7 @@ private:
 	bool* visited;
 	unsigned int index;
 
-	void robertFloresRecursive(const unsigned int& u) {
+	void robertFloresRecursive(const unsigned int u) {
 		array[index++] = u;
 		visited[u] = true;
 		print();
@@ -99,7 +99,7 @@ public:
 		index = NULL;
 	}
 
-	void robertFlores(const unsigned int& source, const bool& isRecursive) {
+	void robertFlores(const unsigned int source, const bool isRecursive) {
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 		index = 0;
 

@@ -20,13 +20,13 @@ private:
 	//pair.first = parent;
 	//pair.second = rank;
 
-	const unsigned int find(const unsigned int& u) {
+	const unsigned int find(const unsigned int u) {
 		if (subsets[u].first != u)
 			subsets[u].first = find(subsets[u].first);
 		return subsets[u].first;
 	}
 
-	void makeUnion(const unsigned int& u, const unsigned int& v) {
+	void makeUnion(const unsigned int u, const unsigned int v) {
 		const unsigned int uRoot = find(u);
 		const unsigned int vRoot = find(v);
 
@@ -40,7 +40,7 @@ private:
 		}
 	}
 
-	inline void makeSet(const unsigned int& v) {
+	inline void makeSet(const unsigned int v) {
 		subsets[v].first = v;
 		subsets[v].second = 0;
 	}

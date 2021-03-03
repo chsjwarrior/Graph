@@ -44,7 +44,7 @@ public:
 		predecessor = nullptr;
 	}
 
-	void bellmanFord(const unsigned int& source) {
+	void bellmanFord(const unsigned int source) {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			distance[u] = INF;
 			predecessor[u] = NIL;

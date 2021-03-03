@@ -7,7 +7,7 @@ private:
 	unsigned int* predecessor;
 	bool* visited;
 
-	const bool bfsUtil(unsigned int u, const unsigned int& k) {
+	const bool bfsUtil(unsigned int u, const unsigned int k) {
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
 		std::queue<unsigned int> queue;
@@ -57,7 +57,7 @@ public:
 		visited = nullptr;
 	}
 
-	void fordFulkerson(const unsigned int& source, const unsigned int& sink) {
+	void fordFulkerson(const unsigned int source, const unsigned int sink) {
 		std::cout << "Ford-Fulkerson:" << std::endl;
 
 		unsigned int u, v;

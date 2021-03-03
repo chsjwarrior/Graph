@@ -57,7 +57,7 @@ private:
 		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.updateValueAt(0, i, graph.getVertexName(i));			
+			table.updateValueAt(0, i, graph.getVertexName(i));
 		}
 		table.updateRowAt(1, discovery, graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
@@ -83,7 +83,7 @@ public:
 		visited = nullptr;
 	}
 
-	void bfs(const unsigned int& source, const bool& isRecursive) {
+	void bfs(const unsigned int source, const bool isRecursive) {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = NIL;
 			predecessor[u] = NIL;
@@ -98,8 +98,7 @@ public:
 		if (isRecursive) {
 			bfsRecursive(queue);
 			print("Busca em largura recursiva:");
-		}
-		else {
+		} else {
 			bfsIterative(queue);
 			print("Busca em largura iterativa:");
 		}

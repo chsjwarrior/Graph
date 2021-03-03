@@ -12,7 +12,7 @@ private:
 	unsigned int setCount;
 	std::stack<unsigned int> stack;
 
-	void strongConnected(const unsigned int& u) {
+	void strongConnected(const unsigned int u) {
 		discovery[u] = low[u] = ++time;
 		stack.push(u);
 		onStack[u] = true;

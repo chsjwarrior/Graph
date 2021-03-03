@@ -24,7 +24,7 @@ private:
 		return lowerVertex;
 	}
 
-	inline void relax(const unsigned int& u, const unsigned int& v, const int& w) {
+	inline void relax(const unsigned int u, const unsigned int v, const int w) {
 		if (distance[v] > distance[u] + w) {
 			distance[v] = distance[u] + w;
 			predecessor[v] = u;
@@ -36,12 +36,12 @@ private:
 		table.setColumnsForPage(20);
 
 		table.addHeader({"Vi", "Di", "Pi"});
-		table.setColumnCount(graph.AMOUNT_VERTEXES);		
+		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.updateValueAt(0, i, graph.getVertexName(i));			
+			table.updateValueAt(0, i, graph.getVertexName(i));
 		}
-		table.updateRowAt(1, distance, graph.AMOUNT_VERTEXES);		
+		table.updateRowAt(1, distance, graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
 
@@ -65,7 +65,7 @@ public:
 		visited = nullptr;
 	}
 
-	void dijkstra(const unsigned int& source) {
+	void dijkstra(const unsigned int source) {
 		time_t ini = time(NULL);
 
 		std::list<unsigned int> queue;
@@ -83,8 +83,9 @@ public:
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
-				if (visited[*v] == false)//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria anular o programa.
+				if (visited[*v] == false)
 					relax(u, *v, graph.getWeigthFrom(u, *v));
+			//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria gerar exceção.
 		}
 
 		time_t fim = time(NULL);

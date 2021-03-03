@@ -30,7 +30,7 @@ private:
 	std::multiset<Edge, GreaterWeight> edges;
 	std::vector<Edge> selected;
 
-	bool cyclic_recursive(const unsigned int& vertex, const  unsigned int& predecessor) {
+	bool cyclic_recursive(const unsigned int vertex, const  unsigned int predecessor) {
 		bool cycle_found = false;
 		visited[vertex] = true;
 		for (auto e = selected.cbegin(); e != selected.cend() && !cycle_found; ++e) {

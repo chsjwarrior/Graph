@@ -12,7 +12,7 @@ private:
 	bool* visited;
 	unsigned int time;
 
-	void dfsVisitRecursive(const unsigned int& u) {
+	void dfsVisitRecursive(const unsigned int u) {
 		visited[u] = true;
 		discovery[u] = ++time;
 
@@ -41,8 +41,7 @@ private:
 						stack.push(*v);
 				adjacences.clear();
 
-			}
-			else {
+			} else {
 				if (close[u] == NIL)
 					close[u] = ++time;
 				stack.pop();
@@ -58,7 +57,7 @@ private:
 		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.updateValueAt(0, i, graph.getVertexName(i));			
+			table.updateValueAt(0, i, graph.getVertexName(i));
 		}
 		table.updateRowAt(1, discovery, graph.AMOUNT_VERTEXES);
 		table.updateRowAt(2, close, graph.AMOUNT_VERTEXES);
@@ -85,7 +84,7 @@ public:
 		time = NULL;
 	}
 
-	void dfs(const unsigned int& source, const bool& isRecursive) {
+	void dfs(const unsigned int source, const bool isRecursive) {
 		for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; u++) {
 			discovery[u] = NIL;
 			close[u] = NIL;
@@ -106,7 +105,5 @@ public:
 			print("Busca em profundidade recursiva:");
 		else
 			print("Busca em profundidade iterativa:");
-
-
 	}
 };

@@ -9,7 +9,7 @@ private:
 	std::multiset<Edge> edges;
 	std::list<std::set<unsigned int>> sets;
 
-	void sameComponent(const unsigned int& u, const unsigned int& v) {
+	void sameComponent(const unsigned int u, const unsigned int v) {
 		auto set = sets.begin(), setU = sets.end(), setV = sets.end();
 		while (set != sets.end() && (setU == sets.end() || setV == sets.end())) {
 			if (setU == sets.end() && set->find(u) != set->cend())
@@ -29,7 +29,7 @@ private:
 		print();
 	}
 
-	void makeSet(unsigned int& u) {
+	void makeSet(const unsigned int u) {
 		std::set<unsigned int, std::less<unsigned int>> set;
 		set.insert(u);
 		sets.push_back(set);

@@ -32,7 +32,7 @@ private:
 		return std::make_pair(amountFailVertexes, std::make_pair(startOddVertex, endOddVertex));
 	}
 
-	void hierholzer(const unsigned int& source, const unsigned int& sink) {
+	void hierholzer(const unsigned int source, const unsigned int sink) {
 		std::stack<unsigned int> path;
 		std::vector<unsigned int> circuit;
 

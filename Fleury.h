@@ -55,7 +55,7 @@ private:
 		return std::make_pair(amountOddVertexes, firstOddVertex);
 	}
 
-	const unsigned int dfsUtil(const unsigned int& u) {
+	const unsigned int dfsUtil(const unsigned int u) {
 		visited[u] = true;
 		unsigned int count = 1;
 
@@ -66,7 +66,7 @@ private:
 		return count;
 	}
 
-	const bool isBridge(const unsigned int& u, const unsigned int& v) {
+	const bool isBridge(const unsigned int u, const unsigned int v) {
 		if (graph.getOutDegreeFrom(u) == 1)
 			return false;
 
@@ -83,7 +83,7 @@ private:
 		return nonBridge < bridgeCount;
 	}
 
-	void fleuryR(const unsigned int& u) {
+	void fleuryR(const unsigned int u) {
 		std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 		for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 			if (isBridge(u, *v) == false) {

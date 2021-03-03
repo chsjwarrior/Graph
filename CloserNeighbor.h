@@ -11,7 +11,7 @@ private:
 	bool* visited;
 	int total;
 
-	void closerNeighborR(const unsigned int& u) {
+	void closerNeighborR(const unsigned int u) {
 		visited[u] = true;
 		graph.writeVertex(u);
 

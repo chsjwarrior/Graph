@@ -23,7 +23,7 @@ private:
 		return lowerVertex;
 	}
 
-	inline void relax(const unsigned int& u, const unsigned int& v, const int& w) {
+	inline void relax(const unsigned int u, const unsigned int v, const int w) {
 		if (graph.getWeigthFrom(u, v) < key[v]) {
 			predecessor[v] = u;
 			key[v] = w;
@@ -67,7 +67,7 @@ public:
 		visited = nullptr;
 	}
 
-	void prim(const unsigned int& source) {
+	void prim(const unsigned int source) {
 		std::list<unsigned int> queue;
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			key[i] = INF;

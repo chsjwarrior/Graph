@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <algorithm>
 #include "../ConsolePageTable/PageTable.h"
 #include "Graph.h"
 #include "BreadthFirstSearch.h"
@@ -38,8 +39,6 @@ Topological sorting
 Graph* graph;
 
 void destroyGraph() {
-	if (graph == nullptr)
-		return;
 	delete graph;
 	graph = nullptr;
 }
@@ -145,12 +144,12 @@ unsigned int getVertex(const char msg[]) {
 }
 
 void clearScreen() {
-#if defined(_WIN32)
+#ifdef _WIN32
 	system("cls");
-#endif
-
-#if defined(_linux)
+#elif defined(unix) || defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	system("clear");
+#else
+#error "OS not supported."
 #endif
 }
 
@@ -160,7 +159,7 @@ int main() {
 	std::cout << "Desenvolvido por Carlos Henrique Stapait Junior." << std::endl;
 	int choice = 0;
 
-	do {		
+	do {
 		std::cout << "[0] encerrar." << std::endl
 			<< "[1] criar um grafo." << std::endl
 			<< "[2] abrir um arquivo." << std::endl;

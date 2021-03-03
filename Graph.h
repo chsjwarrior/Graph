@@ -92,15 +92,15 @@ public:
 		edges.clear();
 	}
 
-	const bool isValidVertex(const unsigned int& v) {
+	const bool isValidVertex(const unsigned int v) {
 		return v < AMOUNT_VERTEXES;
 	}
 
-	const bool isValidWeight(const int& w) {
+	const bool isValidWeight(const int w) {
 		return w > -INF && w < INF;
 	}
 
-	void insertEdge(const unsigned int& u, const unsigned int& v, const int& weight = 1) noexcept(false) {
+	void insertEdge(const unsigned int u, const unsigned int v, const int weight = 1) noexcept(false) {
 		if (u >= AMOUNT_VERTEXES)
 			throw std::range_error("vertice u deve ser menor que " + AMOUNT_VERTEXES);
 		if (v >= AMOUNT_VERTEXES)
@@ -112,7 +112,7 @@ public:
 		edges.emplace(u, v, weight);
 	}
 
-	void removeEdge(const unsigned int& u, const unsigned int& v) noexcept(false) {
+	void removeEdge(const unsigned int u, const unsigned int v) noexcept(false) {
 		if (u >= AMOUNT_VERTEXES)
 			throw std::range_error("vertice u deve ser menor que " + AMOUNT_VERTEXES);
 		if (v >= AMOUNT_VERTEXES)
@@ -122,6 +122,7 @@ public:
 		for (auto e = edges.cbegin(); e != edges.cend() && edge == edges.cend(); e++)
 			if (e->U == u && e->V == u || !IS_DIGRAPH && e->V == u && e->U == v)
 				edge = e;
+
 		/*
 		auto edge = edges.find(Edge(u, v, 1));
 		if (edge == edges.cend() && IS_DIGRAPH == false)
@@ -132,7 +133,7 @@ public:
 			edges.erase(edge);
 	}
 
-	const int getWeigthFrom(const unsigned int& u, const unsigned int& v) const noexcept(false) {
+	const int getWeigthFrom(const unsigned int u, const unsigned int v) const noexcept(false) {
 		if (u >= AMOUNT_VERTEXES)
 			throw std::range_error("vertice u deve ser menor que " + AMOUNT_VERTEXES);
 		if (v >= AMOUNT_VERTEXES)
@@ -150,7 +151,7 @@ public:
 		return INF;
 	}
 
-	const unsigned int getInDegreeFrom(const unsigned int& v) const noexcept(false) {
+	const unsigned int getInDegreeFrom(const unsigned int v) const noexcept(false) {
 		if (v >= AMOUNT_VERTEXES)
 			throw std::range_error("vertice deve ser menor que " + AMOUNT_VERTEXES);
 
@@ -161,14 +162,14 @@ public:
 	}
 
 	//esse método tambem é usuado para grafos não dirigidos
-	const unsigned int getOutDegreeFrom(const unsigned int& v) const noexcept(false) {
+	const unsigned int getOutDegreeFrom(const unsigned int v) const noexcept(false) {
 		if (v >= AMOUNT_VERTEXES)
 			throw std::range_error("vertice deve ser menor que " + AMOUNT_VERTEXES);
 
-		return std::count_if(edges.cbegin(), edges.cend(), [&IS_DIGRAPH = IS_DIGRAPH, &v](const Edge& e) {return e.U == v || !IS_DIGRAPH && e.V == v; });
+		return std::count_if(edges.cbegin(), edges.cend(), [isDigraph = IS_DIGRAPH, &v](const Edge& e) {return e.U == v || !isDigraph && e.V == v; });
 	}
 
-	std::multiset<unsigned int>& getAdjacencesFrom(const unsigned int& v) const noexcept(false) {
+	std::multiset<unsigned int>& getAdjacencesFrom(const unsigned int v) const noexcept(false) {
 		if (v >= AMOUNT_VERTEXES)
 			throw std::range_error("vertice deve ser menor que " + AMOUNT_VERTEXES);
 
@@ -339,15 +340,20 @@ public:
 	const std::string getVertexName(const unsigned int vertex) const {
 		if (vertex != NIL)
 			return "V" + std::to_string(vertex + 1);
-		else
-			return "nil";
+		return "nil";
+	}
+
+	const std::string getFormatedWeight(const int weight) const {
+		if (weight > -10000 && weight < 10000)
+			return std::to_string(weight);
+		return "inf";
 	}
 
 	const std::string getEdgeName(const Edge& edge) const {
 		return "{" + getVertexName(edge.U) + "," + getVertexName(edge.V) + "}";
 	}
 
-	void writeVertex(const unsigned int& vertex) const {
+	void writeVertex(const unsigned int vertex) const {
 		std::cout << getVertexName(vertex);
 	}
 
@@ -355,14 +361,14 @@ public:
 		std::cout << getEdgeName(edge);
 	}
 
-	void writeEdge(const unsigned int& edge) const {
+	void writeEdge(const unsigned int edge) const {
 		if (edge != UINT_MAX)
 			std::cout << "E" + std::to_string(edge + 1);
 		else
 			std::cout << "nil";
 	}
 
-	void writeValue(const int& value) const {
+	void writeValue(const int value) const {
 		if (value > -10000 && value < 10000)
 			std::cout << value;
 		else
