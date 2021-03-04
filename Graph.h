@@ -108,7 +108,7 @@ public:
 		if (weight <= -INF)
 			throw std::range_error("o custo de u e v deve ser maior que " + -INF);
 		if (weight >= INF)
-			throw std::range_error("o custo de u e v deve ser menor que " + -INF);
+			throw std::range_error("o custo de u e v deve ser menor que " + INF);
 		edges.emplace(u, v, weight);
 	}
 

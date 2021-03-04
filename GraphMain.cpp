@@ -134,7 +134,7 @@ void createGraph() {
 }
 
 unsigned int getVertex(const char msg[]) {
-	unsigned int value;
+	unsigned int value = NIL;
 	do {
 		graph->printVerticesToSelect();
 		std::cout << msg << std::endl;
@@ -254,7 +254,7 @@ int main() {
 					try {
 						BellmanFord bellmanFord(*graph);
 						bellmanFord.bellmanFord(getVertex("Dgt o numero do vertice de origem."));
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -294,7 +294,7 @@ int main() {
 					try {
 						CheapestLink cheapestLink(*graph);
 						cheapestLink.cheapestLink();
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -305,7 +305,7 @@ int main() {
 					try {
 						FordFulkerson fordFulkerson(*graph);
 						fordFulkerson.fordFulkerson(source, sink);
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -314,7 +314,7 @@ int main() {
 					try {
 						Goodman goodman(*graph);
 						goodman.goodman();
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -328,7 +328,7 @@ int main() {
 					try {
 						Kosaraju kosaraju(*graph);
 						kosaraju.kosaraju();
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -337,7 +337,7 @@ int main() {
 					try {
 						Tarjan tarjan(*graph);
 						tarjan.tarjan();
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -346,7 +346,7 @@ int main() {
 					try {
 						Kruskal kruskal(*graph);
 						kruskal.kruskal();
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -355,7 +355,7 @@ int main() {
 					try {
 						Prim prim(*graph);
 						prim.prim(getVertex("Dgt o numero do vertice de origem."));
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;
@@ -364,7 +364,7 @@ int main() {
 					try {
 						Boruvka boruvka(*graph);
 						boruvka.boruvka();
-					} catch (std::exception& e) {
+					} catch (std::invalid_argument& e) {
 						std::cerr << e.what() << std::endl;
 					}
 				} break;

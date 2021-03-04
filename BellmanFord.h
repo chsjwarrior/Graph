@@ -19,7 +19,7 @@ private:
 		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.updateValueAt(0, i, graph.getVertexName(i));			
+			table.updateValueAt(0, i, graph.getVertexName(i));
 		}
 		table.updateRowAt(1, distance, graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)
@@ -30,9 +30,10 @@ private:
 
 public:
 	BellmanFord() = delete;
-	BellmanFord(const Graph& graph) : graph(graph) {
+	BellmanFord(const Graph& graph) noexcept(false) : graph(graph) {
 		if (!graph.IS_DIGRAPH)
 			throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Bellman - Ford funcionar.");
+
 		distance = new int[graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 	}

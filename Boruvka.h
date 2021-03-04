@@ -44,9 +44,9 @@ private:
 
 public:
 	Boruvka() = delete;
-	Boruvka(const Graph& graph) : graph(graph) {
+	Boruvka(const Graph& graph) noexcept(false) : graph(graph) {
 		if (graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo Boruvka funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser nao dirigido para o algoritmo Boruvka funcionar.");
 
 		cheapest = new unsigned int[graph.AMOUNT_VERTEXES];
 		subsets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];

@@ -32,7 +32,7 @@ private:
 
 public:
 	CloserNeighbor() = delete;
-	CloserNeighbor(const Graph& graph) : graph(graph) {
+	CloserNeighbor(const Graph& graph) noexcept(false) : graph(graph) {
 		visited = new bool[graph.AMOUNT_VERTEXES];
 		total = NULL;
 	}

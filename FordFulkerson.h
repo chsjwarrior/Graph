@@ -33,9 +33,9 @@ private:
 
 public:
 	FordFulkerson() = delete;
-	FordFulkerson(const Graph& graph) : graph(graph) {
+	FordFulkerson(const Graph& graph) noexcept(false) : graph(graph) {
 		if (!graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo de Ford-Fulkerson funcionar.");
 
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++)

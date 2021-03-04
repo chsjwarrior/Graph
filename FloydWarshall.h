@@ -16,29 +16,28 @@ class FloydWarshall {
 		unsigned int i;
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.updateHeaderAt(static_cast<size_t>(i + 1), graph.getVertexName(i));
+			table.updateHeaderAt(static_cast<size_t>(1) + i, graph.getVertexName(i));
 			table.updateValueAt(i, 0, graph.getVertexName(i));
 		}
-		table.setColumnMaxWidth(table.getColumnCount(), 4);
+		table.setColumnMaxWidth(table.getColumnCount() - 1, 4);
 
-		for (i = 0; i < graph.AMOUNT_VERTEXES; i++) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++)
-				table.updateValueAt(i, static_cast<size_t>(j + 1), graph.getFormatedWeight(costMatrix[i][j]));
-		}
+				table.updateValueAt(i, static_cast<size_t>(1) + j, graph.getFormatedWeight(costMatrix[i][j]));
 
 		table.print();
 
 		table.setTitle("Floyd-Warshall, predecessor matrix:");
 		for (i = 0; i < graph.AMOUNT_VERTEXES; i++)
 			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; j++)
-				table.updateValueAt(i, static_cast<size_t>(j + 1), graph.getVertexName(predecessor[i][j]));
+				table.updateValueAt(i, static_cast<size_t>(1) + j, graph.getVertexName(predecessor[i][j]));
 
 		table.print();
 	}
 
 public:
 	FloydWarshall() = delete;
-	FloydWarshall(const Graph& graph) : graph(graph) {
+	FloydWarshall(const Graph& graph) noexcept(false) : graph(graph) {
 		costMatrix = new int* [graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int* [graph.AMOUNT_VERTEXES];
 

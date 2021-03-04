@@ -62,9 +62,9 @@ private:
 
 public:
 	Hierholzer() = delete;
-	Hierholzer(const Graph& graph) : graph(graph) {
+	Hierholzer(const Graph& graph) noexcept(false) : graph(graph) {
 		if (!graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser dirigido para o algoritmo Hierholzer funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Hierholzer funcionar.");
 	}
 	~Hierholzer() {}
 

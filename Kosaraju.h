@@ -32,9 +32,9 @@ private:
 
 public:
 	Kosaraju() = delete;
-	Kosaraju(Graph& graph) : graph(graph) {
+	Kosaraju(Graph& graph) noexcept(false) : graph(graph) {
 		if (!graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser dirigido para o algoritmo Kosaraju funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Kosaraju funcionar.");
 
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}

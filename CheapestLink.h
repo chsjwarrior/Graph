@@ -53,9 +53,9 @@ private:
 
 public:
 	CheapestLink() = delete;
-	CheapestLink(const Graph& graph) : graph(graph) {
+	CheapestLink(const Graph& graph) noexcept(false) : graph(graph) {
 		if (graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo de da ligacao mais economica funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser nao dirigido para o algoritmo de da ligacao mais economica funcionar.");
 
 		std::multiset<Edge> set = graph.getEdges();
 		for (auto e = set.cbegin(); !set.empty(); e = set.erase(e))

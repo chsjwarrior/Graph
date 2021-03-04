@@ -54,7 +54,7 @@ private:
 		table.setColumnCount(graph.AMOUNT_VERTEXES);
 		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; i++) {
 			table.setColumnMaxWidth(i, 4);
-			table.updateValueAt(0, i, graph.getVertexName(i));			
+			table.updateValueAt(0, i, graph.getVertexName(i));
 		}
 		table.addRow(color, graph.AMOUNT_VERTEXES);
 
@@ -63,7 +63,7 @@ private:
 
 public:
 	Coloring() = delete;
-	Coloring(const Graph& graph) : graph(graph) {
+	Coloring(const Graph& graph) noexcept(false) : graph(graph) {
 		color = new unsigned int[graph.AMOUNT_VERTEXES];
 	}
 
@@ -81,8 +81,7 @@ public:
 					setValidColor(u);
 
 			print("Coloracao seguencial:");
-		}
-		else {
+		} else {
 			unsigned int u = getHigherDegreeNotColored();
 			while (u != graph.AMOUNT_VERTEXES) {
 				setValidColor(u);

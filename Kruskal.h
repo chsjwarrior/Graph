@@ -53,9 +53,9 @@ private:
 
 public:
 	Kruskal() = delete;
-	Kruskal(const Graph& graph) : graph(graph) {
+	Kruskal(const Graph& graph) noexcept(false) : graph(graph) {
 		if (graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo Kruskal funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser nao dirigido para o algoritmo Kruskal funcionar.");
 
 		subsets = new std::pair<unsigned int, unsigned int>[graph.AMOUNT_VERTEXES];
 	}

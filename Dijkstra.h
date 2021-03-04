@@ -50,7 +50,7 @@ private:
 
 public:
 	Dijkstra() = delete;
-	Dijkstra(const Graph& graph) : graph(graph) {
+	Dijkstra(const Graph& graph) noexcept(false) : graph(graph) {
 		distance = new int[graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];

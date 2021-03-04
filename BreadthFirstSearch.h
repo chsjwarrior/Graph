@@ -68,7 +68,7 @@ private:
 
 public:
 	BreadthFirstSearch() = delete;
-	BreadthFirstSearch(const Graph& graph) : graph(graph) {
+	BreadthFirstSearch(const Graph& graph) noexcept(false) : graph(graph) {
 		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
 		predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];

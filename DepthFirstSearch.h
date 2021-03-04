@@ -67,7 +67,7 @@ private:
 
 public:
 	DepthFirstSearch() = delete;
-	DepthFirstSearch(const Graph& graph) : graph(graph) {
+	DepthFirstSearch(const Graph& graph) noexcept(false) : graph(graph) {
 		discovery = new unsigned int[graph.AMOUNT_VERTEXES];
 		close = new unsigned int[graph.AMOUNT_VERTEXES];
 		visited = new bool[graph.AMOUNT_VERTEXES];

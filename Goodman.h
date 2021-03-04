@@ -41,9 +41,9 @@ private:
 
 public:
 	Goodman() = delete;
-	Goodman(const Graph& graph) : graph(graph) {
+	Goodman(const Graph& graph) noexcept(false) : graph(graph) {
 		if (graph.IS_DIGRAPH)
-			throw std::exception("O Grafo precisa ser nao dirigido para o algoritmo de Goodman funcionar.");
+			throw std::invalid_argument("O Grafo precisa ser nao dirigido para o algoritmo de Goodman funcionar.");
 	}
 
 	~Goodman() {

@@ -99,7 +99,7 @@ private:
 
 public:
 	Fleury() = delete;
-	Fleury(const Graph& graph) : graph(graph) {
+	Fleury(const Graph& graph) noexcept(false) : graph(graph) {
 		visited = new bool[graph.AMOUNT_VERTEXES];
 	}
 
