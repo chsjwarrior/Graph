@@ -74,12 +74,16 @@ void openFile(const char path[]) {
 		std::cerr << "Nao foi possivel abrir o arquivo." << std::endl;
 }
 
+inline void clearCin() {
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 unsigned int uRead() {
 	unsigned int value = NULL;
 	std::cin >> value;
-	if (std::cin.fail()) {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	while (std::cin.fail()) {
+		clearCin();
 		std::cin >> value;
 	}
 	return value;
@@ -89,8 +93,7 @@ int iRead() {
 	int value = NULL;
 	std::cin >> value;
 	while (std::cin.fail()) {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		clearCin();
 		std::cin >> value;
 	}
 	return value;
@@ -157,7 +160,7 @@ int main() {
 	system("COLOR 1F");
 	graph = nullptr;
 	std::cout << "Desenvolvido por Carlos Henrique Stapait Junior." << std::endl;
-	int choice = 0;
+	unsigned int choice = 0;
 
 	do {
 		std::cout << "[0] encerrar." << std::endl
@@ -196,7 +199,12 @@ int main() {
 			<< "[26] Boruvka," << std::endl
 			<< "------------------------------------------" << std::endl
 			<< "[27] Coloracao." << std::endl;
-		choice = uRead();
+		//choice = uRead();
+		std::cin >> choice;
+		if (std::cin.fail()) {
+			clearCin();
+			choice = NIL;
+		}
 		clearScreen();
 
 		if (choice == 1)
@@ -376,7 +384,7 @@ int main() {
 					coloring.coloring(isHeuristic);
 				} break;
 				default:
-					std::cerr << "valor invalido, dgt novamente." << std::endl;
+					std::cerr << "valor invalido." << std::endl;
 			}
 			std::cout << "pressione qualquer tecla para continuar..." << std::flush;
 			std::cin.get();

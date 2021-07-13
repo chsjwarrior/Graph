@@ -92,11 +92,11 @@ public:
 		edges.clear();
 	}
 
-	const bool isValidVertex(const unsigned int v) {
+	const bool isValidVertex(const unsigned int v) noexcept {
 		return v < AMOUNT_VERTEXES;
 	}
 
-	const bool isValidWeight(const int w) {
+	const bool isValidWeight(const int w) noexcept {
 		return w > -INF && w < INF;
 	}
 
