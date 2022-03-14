@@ -51,10 +51,10 @@ void BellmanFord::bellmanFord(const unsigned int source) {
 			}
 
 	//esse algoritmo verifica se o grafo possui ciclo negativo
-	for (auto e = edges.cbegin(); e != edges.cend(); ++e)
-		if (distance[e->U] != INF && distance[e->U] + e->WEIGHT < distance[e->V]) {
+	for (const auto& e : edges)
+		if (distance[e.U] != INF && distance[e.U] + e.WEIGHT < distance[e.V]) {
 			std::cout << "O Grafo contem ciclo com peso negativo" << std::endl;
-			e = edges.cend();
+			break;
 		}
 
 	edges.clear();

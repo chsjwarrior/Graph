@@ -42,7 +42,7 @@ void RobertFlores::robertFloresRecursive(const unsigned int u) {
 	}
 
 	if (index > 0) {
-		index--;
+		--index;
 		visited[u] = false;
 	}
 	print("\n");
@@ -75,7 +75,7 @@ void RobertFlores::robertFloresIterative(unsigned int u) {
 		} else {
 			stack.pop();
 			if (index > 0) {
-				index--;
+				--index;
 				visited[u] = false;
 			}
 			print("\n");

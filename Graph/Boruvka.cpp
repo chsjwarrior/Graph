@@ -48,9 +48,10 @@ void Boruvka::makeSet() {
 }
 
 void Boruvka::boruvka() {
-	for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; ++u) {
-		subsets[u].first = u;
-		subsets[u].second = 0;
+	unsigned int i;
+	for (i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		subsets[i].first = i;
+		subsets[i].second = 0;
 	}
 
 	makeSet();
@@ -62,7 +63,7 @@ void Boruvka::boruvka() {
 	while (numTrees > 1) {
 		memset(cheapest, NIL, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
-		for (unsigned int i = 0; i < edges.size(); ++i) {
+		for (i = 0; i < edges.size(); ++i) {
 			unsigned int set1 = find(edges[i].U);
 			unsigned int set2 = find(edges[i].V);
 
@@ -78,7 +79,7 @@ void Boruvka::boruvka() {
 		}
 
 		// Consider the above picked cheapest edges and add them to MST 
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		for (i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
 			// Check if cheapest for current set exists 
 			if (cheapest[i] != -1) {
 				int set1 = find(edges[cheapest[i]].U);
@@ -91,7 +92,7 @@ void Boruvka::boruvka() {
 					// Do a union of set1 and set2 and decrease number 
 					// of trees 
 					makeUnion(set1, set2);
-					numTrees--;
+					--numTrees;
 				}
 			}
 		}

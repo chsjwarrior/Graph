@@ -16,7 +16,7 @@ void Fleury::print(const std::string& title) const {}
 bool Fleury::isConnected() {
 	unsigned int u;
 	for (u = 0; u < graph.AMOUNT_VERTEXES; ++u)
-		if (graph.getOutDegreeFrom(u) != 0)
+		if (graph.getOutDegreeFrom(u) > 0)
 			break;
 
 	if (u == graph.AMOUNT_VERTEXES)

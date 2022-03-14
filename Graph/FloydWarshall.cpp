@@ -53,19 +53,20 @@ void FloydWarshall::print(const std::string& title) const {
 }
 
 void FloydWarshall::floydWarshall() {
-	for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; ++u)
-		for (unsigned int v = 0; v < graph.AMOUNT_VERTEXES; ++v) {
-			costMatrix[u][v] = graph.getWeigthFrom(u, v);
-			if (u != v && costMatrix[u][v] < INF)
-				predecessor[u][v] = u;
+	unsigned int i, j;
+	for (i = 0; i < graph.AMOUNT_VERTEXES; ++i)
+		for (j = 0; j < graph.AMOUNT_VERTEXES; ++j) {
+			costMatrix[i][j] = graph.getWeigthFrom(i, j);
+			if (i != j && costMatrix[i][j] < INF)
+				predecessor[i][j] = i;
 			else
-				predecessor[u][v] = NIL;
+				predecessor[i][j] = NIL;
 		}
 
 	//esse algoritmo garante a menor distancia
 	for (unsigned int k = 0; k < graph.AMOUNT_VERTEXES; ++k)
-		for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i)
-			for (unsigned int j = 0; j < graph.AMOUNT_VERTEXES; ++j)
+		for (i = 0; i < graph.AMOUNT_VERTEXES; ++i)
+			for (j = 0; j < graph.AMOUNT_VERTEXES; ++j)
 				if (costMatrix[i][j] > costMatrix[i][k] + costMatrix[k][j]) {
 					costMatrix[i][j] = costMatrix[i][k] + costMatrix[k][j];
 					predecessor[i][j] = predecessor[k][j];
@@ -73,7 +74,7 @@ void FloydWarshall::floydWarshall() {
 
 	std::cout << "Floyd-Warshall:" << std::endl;
 	//esse algoritmo verifica se o grafo possui ciclo negativo
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i)
+	for (i = 0; i < graph.AMOUNT_VERTEXES; ++i)
 		if (costMatrix[i][i] < 0) {
 			std::cout << "O Grafo contem ciclo com peso negativo" << std::endl;
 			i = graph.AMOUNT_VERTEXES;
