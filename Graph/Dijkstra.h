@@ -12,11 +12,11 @@ class Dijkstra : private NonCopyable {
 	unsigned int* predecessor;
 	bool* visited;
 
+	void print(const std::string& title) const;
+
 	unsigned int extractMin(std::list<unsigned int>& queue);
 
 	inline void relax(const unsigned int u, const unsigned int v, const int w);
-
-	void print() const;
 
 public:
 	Dijkstra() = delete;

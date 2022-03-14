@@ -16,11 +16,13 @@ private:
 	//pair.second = rank;
 	std::vector<Edge> edges;
 
+	void print(const std::string& title) const;
+
 	unsigned int find(const unsigned int u);
 
 	void makeUnion(const unsigned int u, const unsigned int v);
 
-	void makeSet();
+	void makeSet();	
 
 public:
 	Boruvka() = delete;

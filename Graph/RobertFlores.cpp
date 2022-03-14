@@ -16,19 +16,26 @@ RobertFlores::~RobertFlores() {
 	index = NULL;
 }
 
+void RobertFlores::print(const std::string& title) const {
+	std::cout << title;
+	for (unsigned int* p = array; p != array + index; ++p) {
+		graph.writeVertex(*p);
+		std::cout << '-';
+	}
+}
+
 void RobertFlores::robertFloresRecursive(const unsigned int u) {
 	array[index++] = u;
 	visited[u] = true;
-	print();
+	print("\n");
 
 	std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 	for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v)) {
 		if (*v != u)
 			if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
-				print();
+				print("\n");
 				graph.writeVertex(*v);
-				std::cout << " achou";
-				print();
+				print("achou\n");
 				break;
 			} else if (visited[*v] == false)
 				robertFloresRecursive(*v);
@@ -38,7 +45,7 @@ void RobertFlores::robertFloresRecursive(const unsigned int u) {
 		index--;
 		visited[u] = false;
 	}
-	print();
+	print("\n");
 }
 
 void RobertFlores::robertFloresIterative(unsigned int u) {
@@ -51,16 +58,15 @@ void RobertFlores::robertFloresIterative(unsigned int u) {
 		if (!visited[u]) {
 			array[index++] = u;
 			visited[u] = true;
-			print();
+			print("\n");
 
 			std::multiset<unsigned int>& adjacences = graph.getAdjacencesFrom(u);
 			for (auto v = adjacences.crbegin(); v != adjacences.crend(); ++v)
 				if (*v != u)
 					if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
-						print();
+						print("\n");
 						graph.writeVertex(*v);
-						std::cout << " achou";
-						print();
+						print(" achou\n");
 						break;
 					} else if (visited[*v] == false)
 						stack.push(*v);
@@ -72,16 +78,8 @@ void RobertFlores::robertFloresIterative(unsigned int u) {
 				index--;
 				visited[u] = false;
 			}
-			print();
+			print("\n");
 		}
-	}
-}
-
-void RobertFlores::print() const {
-	std::cout << std::endl;
-	for (unsigned int* p = array; p != array + index; ++p) {
-		graph.writeVertex(*p);
-		std::cout << '-';
 	}
 }
 

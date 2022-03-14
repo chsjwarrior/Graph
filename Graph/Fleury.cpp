@@ -11,6 +11,8 @@ Fleury::~Fleury() {
 	visited = nullptr;
 }
 
+void Fleury::print(const std::string& title) const {}
+
 bool Fleury::isConnected() {
 	unsigned int u;
 	for (u = 0; u < graph.AMOUNT_VERTEXES; ++u)

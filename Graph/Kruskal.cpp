@@ -14,6 +14,8 @@ Kruskal::~Kruskal() {
 	subsets = nullptr;
 }
 
+void Kruskal::print(const std::string& title) const {}
+
 unsigned int Kruskal::find(const unsigned int u) {
 	if (subsets[u].first != u)
 		subsets[u].first = find(subsets[u].first);

@@ -1,5 +1,31 @@
 #include "Tarjan.h"
 
+//Constructor
+Tarjan::Tarjan(const Graph& graph) noexcept(false) : graph(graph) {
+	if (!graph.IS_DIGRAPH)
+		throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Tarjan funcionar.");
+
+	discovery = new unsigned int[graph.AMOUNT_VERTEXES];
+	low = new unsigned int[graph.AMOUNT_VERTEXES];
+	onStack = new bool[graph.AMOUNT_VERTEXES];
+	time = NULL;
+	setCount = time;
+}
+
+//Destructor
+Tarjan::~Tarjan() {
+	delete[] discovery;
+	delete[] low;
+	delete[] onStack;
+	discovery = nullptr;
+	low = nullptr;
+	onStack = nullptr;
+	time = NULL;
+	setCount = NULL;
+}
+
+void Tarjan::print(const std::string& title) const {}
+
 void Tarjan::strongConnected(const unsigned int u) {
 	discovery[u] = low[u] = ++time;
 	stack.push(u);
@@ -23,28 +49,6 @@ void Tarjan::strongConnected(const unsigned int u) {
 			stack.pop();
 		} while (w != u);
 	}
-}
-
-Tarjan::Tarjan(const Graph& graph) noexcept(false) : graph(graph) {
-	if (!graph.IS_DIGRAPH)
-		throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Tarjan funcionar.");
-
-	discovery = new unsigned int[graph.AMOUNT_VERTEXES];
-	low = new unsigned int[graph.AMOUNT_VERTEXES];
-	onStack = new bool[graph.AMOUNT_VERTEXES];
-	time = NULL;
-	setCount = time;
-}
-
-Tarjan::~Tarjan() {
-	delete[] discovery;
-	delete[] low;
-	delete[] onStack;
-	discovery = nullptr;
-	low = nullptr;
-	onStack = nullptr;
-	time = NULL;
-	setCount = NULL;
 }
 
 void Tarjan::tarjan() {

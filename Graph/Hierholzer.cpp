@@ -9,6 +9,8 @@ Hierholzer::Hierholzer(const Graph& graph) noexcept(false) : graph(graph) {
 //Destructor
 Hierholzer::~Hierholzer() {}
 
+void Hierholzer::print(const std::string& title) const {}
+
 const std::pair<unsigned int, std::pair<unsigned int, unsigned int>> Hierholzer::validateGraph() {
 	unsigned int inDegree, outDegree;
 	unsigned int amountFailVertexes = 0;

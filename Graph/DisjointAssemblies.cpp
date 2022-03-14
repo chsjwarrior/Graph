@@ -13,6 +13,16 @@ DisjointAssemblies::~DisjointAssemblies() {
 	sets.clear();
 }
 
+void DisjointAssemblies::print(const std::string& title) const {
+	std::cout << title;
+	for (auto set = sets.cbegin(); set != sets.cend(); ++set) {
+		for (auto u = set->cbegin(); u != set->cend(); ++u)
+			graph.writeVertex(*u);
+		std::cout << '\t';
+	}
+	std::cout << std::endl;
+}
+
 void DisjointAssemblies::sameComponent(const unsigned int u, const unsigned int v) {
 	auto set = sets.begin(), setU = sets.end(), setV = sets.end();
 	while (set != sets.end() && (setU == sets.end() || setV == sets.end())) {
@@ -29,23 +39,13 @@ void DisjointAssemblies::sameComponent(const unsigned int u, const unsigned int 
 	}
 	graph.writeVertex(u);
 	graph.writeVertex(v);
-	std::cout << '|';
-	print();
+	print("|");
 }
 
 void DisjointAssemblies::makeSet(const unsigned int u) {
 	std::set<unsigned int, std::less<unsigned int>> set;
 	set.insert(u);
 	sets.push_back(set);
-}
-
-void DisjointAssemblies::print() const {
-	for (auto set = sets.cbegin(); set != sets.cend(); ++set) {
-		for (auto u = set->cbegin(); u != set->cend(); ++u)
-			graph.writeVertex(*u);
-		std::cout << '\t';
-	}
-	std::cout << std::endl;
 }
 
 void DisjointAssemblies::connectedComponents() {

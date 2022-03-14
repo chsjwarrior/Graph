@@ -19,6 +19,8 @@ private:
 	Graph graph;
 	bool* visited;
 
+	void print(const std::string& title) const;
+
 	bool isConnected();
 
 	const std::pair<unsigned int, unsigned int> validateGraph();

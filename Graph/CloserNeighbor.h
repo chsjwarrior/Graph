@@ -12,6 +12,8 @@ private:
 	bool* visited;
 	int total;
 
+	void print(const std::string& title) const;
+
 	void closerNeighborR(const unsigned int u);
 
 public:

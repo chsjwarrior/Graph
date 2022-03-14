@@ -14,6 +14,8 @@ Kosaraju::~Kosaraju() {
 	visited = nullptr;
 }
 
+void Kosaraju::print(const std::string& title) const {}
+
 void Kosaraju::fillOrder(const unsigned int u) {
 	visited[u] = true;
 

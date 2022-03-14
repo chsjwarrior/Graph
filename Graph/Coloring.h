@@ -11,11 +11,11 @@ private:
 	const Graph& graph;
 	unsigned int* color;
 
+	void print(const std::string& title) const;
+
 	void setValidColor(const unsigned int u);
 
 	unsigned int getHigherDegreeNotColored();
-
-	void print(const std::string& title) const;
 
 public:
 	Coloring() = delete;

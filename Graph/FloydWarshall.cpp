@@ -25,8 +25,8 @@ FloydWarshall::~FloydWarshall() {
 	predecessor = nullptr;
 };
 
-void FloydWarshall::print() const {
-	PageTable table("Floyd-Warshall, cost matrix:", graph.AMOUNT_VERTEXES, graph.AMOUNT_VERTEXES + 1, PageTable::HeaderOrientation::COLUMN);
+void FloydWarshall::print(const std::string& title) const {
+	PageTable table(title, graph.AMOUNT_VERTEXES, graph.AMOUNT_VERTEXES + 1, PageTable::HeaderOrientation::COLUMN);
 	table.setColumnsForPage(20);
 
 	table.updateHeaderAt(0, "");
@@ -79,5 +79,5 @@ void FloydWarshall::floydWarshall() {
 			i = graph.AMOUNT_VERTEXES;
 		}
 
-	print();
+	print("Floyd-Warshall, cost matrix:");
 }

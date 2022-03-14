@@ -19,6 +19,21 @@ DepthFirstSearch::~DepthFirstSearch() {
 	time = NULL;
 }
 
+void DepthFirstSearch::print(const std::string& title) const {
+	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
+	table.setColumnsForPage(20);
+
+	table.addHeader({ "Vi","Di", "Ci" });
+	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		table.setColumnMaxWidth(i, 4);
+		table.updateValueAt(0, i, graph.getVertexName(i));
+		table.updateValueAt(1, i, discovery[i]);
+		table.updateValueAt(2, i, close[i]);
+	}
+
+	table.print();
+}
+
 void DepthFirstSearch::dfsVisitRecursive(const unsigned int u) {
 	visited[u] = true;
 	discovery[u] = ++time;
@@ -54,21 +69,6 @@ void DepthFirstSearch::dfsVisitIterative(unsigned int u) {
 			stack.pop();
 		}
 	}
-}
-
-void DepthFirstSearch::print(const std::string& title) const {
-	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
-	table.setColumnsForPage(20);
-
-	table.addHeader({ "Vi","Di", "Ci" });
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
-		table.setColumnMaxWidth(i, 4);
-		table.updateValueAt(0, i, graph.getVertexName(i));
-		table.updateValueAt(1, i, discovery[i]);
-		table.updateValueAt(2, i, close[i]);
-	}
-
-	table.print();
 }
 
 void DepthFirstSearch::dfs(const unsigned int source, const bool isRecursive) {

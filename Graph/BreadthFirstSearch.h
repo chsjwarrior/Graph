@@ -13,11 +13,11 @@ class BreadthFirstSearch : private NonCopyable {
 	unsigned int* predecessor;
 	bool* visited;
 
+	void print(const std::string& title) const;
+
 	void bfsRecursive(std::queue<unsigned int>& queue);
 
-	void bfsIterative(std::queue<unsigned int>& queue);
-
-	void print(const std::string& title) const;
+	void bfsIterative(std::queue<unsigned int>& queue);	
 
 public:
 	BreadthFirstSearch() = delete;

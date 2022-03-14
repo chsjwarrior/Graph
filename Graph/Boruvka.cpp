@@ -1,7 +1,7 @@
 #include "Boruvka.h"
 
 //Constructor
-Boruvka::Boruvka(const Graph& graph) noexcept(false) : graph(graph) {
+Boruvka::Boruvka(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	if (graph.IS_DIGRAPH)
 		throw std::invalid_argument("O Grafo precisa ser nao dirigido para o algoritmo Boruvka funcionar.");
 
@@ -15,7 +15,10 @@ Boruvka::~Boruvka() {
 	cheapest = nullptr;
 	delete[] subsets;
 	subsets = nullptr;
+	edges.clear();
 }
+
+void Boruvka::print(const std::string& title) const {}
 
 unsigned int Boruvka::find(const unsigned int u) {
 	if (subsets[u].first != u)

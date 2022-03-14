@@ -12,7 +12,7 @@ private:
 	int* distance;
 	unsigned int* predecessor;
 
-	void print() const;
+	void print(const std::string& title) const;
 
 public:
 	BellmanFord() = delete;

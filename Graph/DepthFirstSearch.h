@@ -13,11 +13,11 @@ private:
 	bool* visited;
 	unsigned int time;
 
+	void print(const std::string& title) const;
+
 	void dfsVisitRecursive(const unsigned int u);
 
-	void dfsVisitIterative(unsigned int u);
-
-	void print(const std::string& title) const;
+	void dfsVisitIterative(unsigned int u);	
 
 public:
 	DepthFirstSearch() = delete;

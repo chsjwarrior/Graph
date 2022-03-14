@@ -31,9 +31,11 @@ private:
 	std::multiset<Edge, GreaterWeight> edges;
 	std::vector<Edge> selected;
 
+	void print(const std::string& title) const;
+
 	bool cyclic_recursive(const unsigned int vertex, const  unsigned int predecessor);
 
-	bool cyclic();
+	bool cyclic();	
 
 public:
 	CheapestLink() = delete;

@@ -1,7 +1,7 @@
 #include "BreadthFirstSearch.h"
 
 //Constructor
-BreadthFirstSearch::BreadthFirstSearch(const Graph& graph) noexcept(false) : graph(graph) {
+BreadthFirstSearch::BreadthFirstSearch(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	discovery = new unsigned int[graph.AMOUNT_VERTEXES];
 	predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 	visited = new bool[graph.AMOUNT_VERTEXES];
@@ -15,6 +15,21 @@ BreadthFirstSearch::~BreadthFirstSearch() {
 	discovery = nullptr;
 	predecessor = nullptr;
 	visited = nullptr;
+}
+
+void BreadthFirstSearch::print(const std::string& title) const {
+	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
+	table.setColumnsForPage(20);
+
+	table.addHeader({ "Vi", "Di", "Pi" });
+	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		table.setColumnMaxWidth(i, 4);
+		table.updateValueAt(0, i, graph.getVertexName(i));
+		table.updateValueAt(1, i, discovery[i]);
+		table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
+	}
+
+	table.print();
 }
 
 void BreadthFirstSearch::bfsRecursive(std::queue<unsigned int>& queue) {
@@ -51,21 +66,6 @@ void BreadthFirstSearch::bfsIterative(std::queue<unsigned int>& queue) {
 				visited[*v] = true;
 			}
 	}
-}
-
-void BreadthFirstSearch::print(const std::string& title) const {
-	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
-	table.setColumnsForPage(20);
-
-	table.addHeader({ "Vi", "Di", "Pi" });
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
-		table.setColumnMaxWidth(i, 4);
-		table.updateValueAt(0, i, graph.getVertexName(i));
-		table.updateValueAt(1, i, discovery[i]);
-		table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
-	}
-
-	table.print();
 }
 
 void BreadthFirstSearch::bfs(const unsigned int source, const bool isRecursive) {

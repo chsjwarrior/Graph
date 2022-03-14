@@ -13,6 +13,8 @@ CloserNeighbor::~CloserNeighbor() {
 	total = NULL;
 }
 
+void CloserNeighbor::print(const std::string& title) const {}
+
 void CloserNeighbor::closerNeighborR(const unsigned int u) {
 	visited[u] = true;
 	graph.writeVertex(u);

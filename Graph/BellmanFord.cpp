@@ -1,7 +1,7 @@
 #include "BellmanFord.h"
 
 //Constructor
-BellmanFord::BellmanFord(const Graph& graph) noexcept(false) : graph(graph) {
+BellmanFord::BellmanFord(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	if (!graph.IS_DIGRAPH)
 		throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Bellman - Ford funcionar.");
 
@@ -17,8 +17,8 @@ BellmanFord::~BellmanFord() {
 	predecessor = nullptr;
 }
 
-void BellmanFord::print() const {
-	PageTable table("Bellman-Ford:", PageTable::HeaderOrientation::ROW);
+void BellmanFord::print(const std::string& title) const {
+	PageTable table(title, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi","Di","Pi" });
@@ -58,5 +58,5 @@ void BellmanFord::bellmanFord(const unsigned int source) {
 		}
 
 	edges.clear();
-	print();
+	print("Bellman-Ford:");
 }

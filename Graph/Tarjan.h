@@ -14,6 +14,8 @@ private:
 	unsigned int setCount;
 	std::stack<unsigned int> stack;
 
+	void print(const std::string& title) const;
+
 	void strongConnected(const unsigned int u);
 
 public:

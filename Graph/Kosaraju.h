@@ -10,6 +10,8 @@ private:
 	bool* visited;
 	std::stack<int> stack;
 
+	void print(const std::string& title) const;
+
 	void fillOrder(const unsigned int u);
 
 	void dfs(const unsigned int u);

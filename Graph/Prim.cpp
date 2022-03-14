@@ -20,6 +20,23 @@ Prim::~Prim() {
 	visited = nullptr;
 }
 
+void Prim::print(const std::string& title) const {
+	PageTable table(title, PageTable::HeaderOrientation::ROW);
+	table.setColumnsForPage(20);
+
+	table.addHeader({ "Vi", "Ki", "Pi" });
+	table.setColumnCount(graph.AMOUNT_VERTEXES);
+	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		table.setColumnMaxWidth(i, 4);
+		table.updateValueAt(0, i, graph.getVertexName(i));
+	}
+	table.addRow(key, graph.AMOUNT_VERTEXES);
+	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i)
+		table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
+
+	table.print();
+}
+
 unsigned int Prim::extractMin(std::list<unsigned int>& queue) {
 	int lowerDistance = INF;
 	unsigned int lowerVertex = NIL;
@@ -37,23 +54,6 @@ inline void Prim::relax(const unsigned int u, const unsigned int v, const int w)
 		predecessor[v] = u;
 		key[v] = w;
 	}
-}
-
-void Prim::print() const {
-	PageTable table("Prim:", PageTable::HeaderOrientation::ROW);
-	table.setColumnsForPage(20);
-
-	table.addHeader({ "Vi", "Ki", "Pi" });
-	table.setColumnCount(graph.AMOUNT_VERTEXES);
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
-		table.setColumnMaxWidth(i, 4);
-		table.updateValueAt(0, i, graph.getVertexName(i));
-	}
-	table.addRow(key, graph.AMOUNT_VERTEXES);
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i)
-		table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
-
-	table.print();
 }
 
 void Prim::prim(const unsigned int source) {
@@ -76,5 +76,5 @@ void Prim::prim(const unsigned int source) {
 			if (visited[*v] == false)
 				relax(u, *v, graph.getWeigthFrom(u, *v));
 	}
-	print();
+	print("Prim:");
 }

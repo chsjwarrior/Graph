@@ -14,13 +14,7 @@ Goodman::~Goodman() {
 	sets.clear();
 }
 
-void Goodman::makeSet(const unsigned int u) {
-	std::list<unsigned int> set;
-	set.push_back(u);
-	sets.push_back(set);
-}
-
-void Goodman::print() const {
+void Goodman::print(const std::string& title) const {
 	unsigned int i = 0;
 	for (auto set = sets.cbegin(); set != sets.cend(); ++set) {
 		std::cout << "Conjunto " << ++i << ": ";
@@ -31,6 +25,12 @@ void Goodman::print() const {
 		std::cout << '|';
 	}
 	std::cout << std::endl;
+}
+
+void Goodman::makeSet(const unsigned int u) {
+	std::list<unsigned int> set;
+	set.push_back(u);
+	sets.push_back(set);
 }
 
 void Goodman::goodman() {
@@ -51,7 +51,7 @@ void Goodman::goodman() {
 			if (u == v)
 				continue;
 			sets.back().push_back(v);
-			print();
+			print("");
 			graph.printAdjacenceList();
 			for (auto vv = adjacences.cbegin(); !adjacences.empty(); vv = adjacences.erase(vv)) {
 				graph.insertEdge(v, *vv, graph.getWeigthFrom(u, *vv));

@@ -21,10 +21,10 @@ private:
 	std::set<unsigned int> vertices;
 	std::list<std::list<unsigned int>> sets;
 
+	void print(const std::string& title) const;
+
 	void makeSet(const unsigned int u);
-
-	void print() const;
-
+	
 public:
 	Goodman() = delete;
 	Goodman(const Graph& graph) noexcept(false);

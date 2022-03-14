@@ -22,6 +22,8 @@ CheapestLink::~CheapestLink() {
 	selected.clear();
 }
 
+void CheapestLink::print(const std::string& title) const {}
+
 bool CheapestLink::cyclic_recursive(const unsigned int vertex, const  unsigned int predecessor) {
 	bool cycle_found = false;
 	visited[vertex] = true;

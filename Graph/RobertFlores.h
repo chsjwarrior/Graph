@@ -14,11 +14,11 @@ private:
 	bool* visited;
 	unsigned int index;
 
+	void print(const std::string& title) const;
+
 	void robertFloresRecursive(const unsigned int u);
 
-	void robertFloresIterative(unsigned int u);
-
-	void print() const;
+	void robertFloresIterative(unsigned int u);	
 
 public:
 	RobertFlores() = delete;

@@ -27,6 +27,8 @@ FordFulkerson::~FordFulkerson() {
 	visited = nullptr;
 }
 
+void FordFulkerson::print(const std::string& title) const {}
+
 bool FordFulkerson::bfsUtil(unsigned int u, const unsigned int k) {
 	memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 

@@ -17,6 +17,21 @@ Dijkstra::~Dijkstra() {
 	visited = nullptr;
 }
 
+void Dijkstra::print(const std::string& title) const {
+	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
+	table.setColumnsForPage(20);
+
+	table.addHeader({ "Vi", "Di", "Pi" });
+	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		table.setColumnMaxWidth(i, 4);
+		table.updateValueAt(0, i, graph.getVertexName(i));
+		table.updateValueAt(1, i, distance[i]);
+		table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
+	}
+
+	table.print();
+}
+
 unsigned int Dijkstra::extractMin(std::list<unsigned int>& queue) {
 	int lowerDistance = INF;
 	unsigned int lowerVertex = NIL;
@@ -35,21 +50,6 @@ inline void Dijkstra::relax(const unsigned int u, const unsigned int v, const in
 		distance[v] = distance[u] + w;
 		predecessor[v] = u;
 	}
-}
-
-void Dijkstra::print() const {
-	PageTable table("Dijkstra:", 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
-	table.setColumnsForPage(20);
-
-	table.addHeader({ "Vi", "Di", "Pi" });
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
-		table.setColumnMaxWidth(i, 4);
-		table.updateValueAt(0, i, graph.getVertexName(i));
-		table.updateValueAt(1, i, distance[i]);
-		table.updateValueAt(2, i, graph.getVertexName(predecessor[i]));
-	}
-
-	table.print();
 }
 
 void Dijkstra::dijkstra(const unsigned int source) {
@@ -73,5 +73,5 @@ void Dijkstra::dijkstra(const unsigned int source) {
 				relax(u, *v, graph.getWeigthFrom(u, *v));
 		//if (graph.getWeigthFrom(u, *v) > 0)se o peso é negativo deveria gerar exceção.
 	}
-	print();
+	print("Dijkstra:");
 }

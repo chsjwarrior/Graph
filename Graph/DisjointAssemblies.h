@@ -11,11 +11,11 @@ private:
 	std::multiset<Edge> edges;
 	std::list<std::set<unsigned int>> sets;
 
+	void print(const std::string& title) const;
+
 	void sameComponent(const unsigned int u, const unsigned int v);
 
-	void makeSet(const unsigned int u);
-
-	void print() const;
+	void makeSet(const unsigned int u);	
 
 public:
 	DisjointAssemblies() = delete;

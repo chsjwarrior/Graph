@@ -11,6 +11,21 @@ Coloring::~Coloring() {
 	color = nullptr;
 }
 
+void Coloring::print(const std::string& title) const {
+	PageTable table(title, PageTable::HeaderOrientation::ROW);
+	table.setColumnsForPage(20);
+
+	table.addHeader({ "Vi", "Ci" });
+	table.setColumnCount(graph.AMOUNT_VERTEXES);
+	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
+		table.setColumnMaxWidth(i, 4);
+		table.updateValueAt(0, i, graph.getVertexName(i));
+	}
+	table.addRow(color, graph.AMOUNT_VERTEXES);
+
+	table.print();
+}
+
 void Coloring::setValidColor(const unsigned int u) {
 	unsigned int colorI = 0;
 	bool isValidColor = false;
@@ -45,21 +60,6 @@ unsigned int Coloring::getHigherDegreeNotColored() {
 		}
 	}
 	return vertex;
-}
-
-void Coloring::print(const std::string& title) const {
-	PageTable table(title, PageTable::HeaderOrientation::ROW);
-	table.setColumnsForPage(20);
-
-	table.addHeader({ "Vi", "Ci" });
-	table.setColumnCount(graph.AMOUNT_VERTEXES);
-	for (unsigned int i = 0; i < graph.AMOUNT_VERTEXES; ++i) {
-		table.setColumnMaxWidth(i, 4);
-		table.updateValueAt(0, i, graph.getVertexName(i));
-	}
-	table.addRow(color, graph.AMOUNT_VERTEXES);
-
-	table.print();
 }
 
 void Coloring::coloring(const bool isHeuristic) {

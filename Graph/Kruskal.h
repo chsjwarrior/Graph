@@ -21,6 +21,8 @@ private:
 	//pair.first = parent;
 	//pair.second = rank;
 
+	void print(const std::string& title) const;
+
 	unsigned int find(const unsigned int u);
 
 	void makeUnion(const unsigned int u, const unsigned int v);
