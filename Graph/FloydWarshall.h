@@ -10,7 +10,7 @@ class FloydWarshall : private NonCopyable {
 	int** costMatrix;
 	unsigned int** predecessor;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 public:
 	FloydWarshall() = delete;

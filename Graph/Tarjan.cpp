@@ -1,7 +1,7 @@
 #include "Tarjan.h"
 
 //Constructor
-Tarjan::Tarjan(const Graph& graph) noexcept(false) : graph(graph) {
+Tarjan::Tarjan(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	if (!graph.IS_DIGRAPH)
 		throw std::invalid_argument("O Grafo precisa ser dirigido para o algoritmo Tarjan funcionar.");
 
@@ -24,8 +24,6 @@ Tarjan::~Tarjan() {
 	setCount = NULL;
 }
 
-void Tarjan::print(const std::string& title) const {}
-
 void Tarjan::strongConnected(const unsigned int u) {
 	discovery[u] = low[u] = ++time;
 	stack.push(u);
@@ -44,7 +42,7 @@ void Tarjan::strongConnected(const unsigned int u) {
 		int w;
 		do {
 			w = stack.top();
-			graph.writeVertex(w);
+			print(graph.getVertexName(w));
 			onStack[w] = false;
 			stack.pop();
 		} while (w != u);
@@ -58,7 +56,7 @@ void Tarjan::tarjan() {
 		onStack[u] = false;
 	}
 
-	std::cout << "Tajan:" << std::endl;
+	print("Tajan:\n");
 	time = 0;
 	for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; ++u)
 		if (discovery[u] == NIL)

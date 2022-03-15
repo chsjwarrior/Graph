@@ -11,8 +11,6 @@ Fleury::~Fleury() {
 	visited = nullptr;
 }
 
-void Fleury::print(const std::string& title) const {}
-
 bool Fleury::isConnected() {
 	unsigned int u;//primeiro vertice com grau de saída
 	for (u = 0; u < graph.AMOUNT_VERTEXES; ++u)
@@ -84,9 +82,9 @@ void Fleury::fleuryR(const unsigned int u) {
 	std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
 	for (auto v = adjacences.cbegin(); !adjacences.empty(); v = adjacences.erase(v))
 		if (isBridge(u, *v) == false) {
-			graph.writeVertex(u);
+			std::cout << graph.getVertexName(u);
 			std::cout << "->";
-			graph.writeVertex(*v);
+			std::cout << graph.getVertexName(*v);
 			std::cout << std::endl;
 			graph.removeEdge(u, *v);
 			fleuryR(*v);

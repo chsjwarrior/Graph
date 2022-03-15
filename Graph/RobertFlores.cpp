@@ -16,12 +16,10 @@ RobertFlores::~RobertFlores() {
 	index = NULL;
 }
 
-void RobertFlores::print(const std::string& title) const {
-	std::cout << title;
-	for (unsigned int* p = array; p != array + index; ++p) {
-		graph.writeVertex(*p);
-		std::cout << '-';
-	}
+void RobertFlores::print(const std::string& text) const {
+	std::cout << text;
+	for (unsigned int* p = array; p != array + index; ++p)
+		std::cout << graph.getVertexName(*p) << '-';
 }
 
 void RobertFlores::robertFloresRecursive(const unsigned int u) {
@@ -34,8 +32,8 @@ void RobertFlores::robertFloresRecursive(const unsigned int u) {
 		if (*v != u)
 			if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
 				print("\n");
-				graph.writeVertex(*v);
-				print("achou\n");
+				std::cout << graph.getVertexName(*v);
+				print(" achou\n");
 				break;
 			} else if (visited[*v] == false)
 				robertFloresRecursive(*v);
@@ -65,7 +63,7 @@ void RobertFlores::robertFloresIterative(unsigned int u) {
 				if (*v != u)
 					if (index == graph.AMOUNT_VERTEXES && array[0] == *v) {
 						print("\n");
-						graph.writeVertex(*v);
+						std::cout << graph.getVertexName(*v);
 						print(" achou\n");
 						break;
 					} else if (visited[*v] == false)

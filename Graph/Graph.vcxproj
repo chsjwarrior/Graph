@@ -159,6 +159,7 @@
     <ClCompile Include="Hierholzer.cpp" />
     <ClCompile Include="Kosaraju.cpp" />
     <ClCompile Include="Kruskal.cpp" />
+    <ClCompile Include="NonCopyable.cpp" />
     <ClCompile Include="Prim.cpp" />
     <ClCompile Include="RobertFlores.cpp" />
     <ClCompile Include="Source.cpp" />

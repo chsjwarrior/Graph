@@ -13,7 +13,7 @@ private:
 	unsigned int* predecessor;
 	bool* visited;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	unsigned int extractMin(std::list<unsigned int>& queue);
 

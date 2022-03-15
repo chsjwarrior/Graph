@@ -11,7 +11,7 @@ private:
 	const Graph& graph;
 	unsigned int* color;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	void setValidColor(const unsigned int u);
 

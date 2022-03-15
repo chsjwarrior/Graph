@@ -14,7 +14,7 @@ private:
 	bool* visited;
 	unsigned int index;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	void robertFloresRecursive(const unsigned int u);
 

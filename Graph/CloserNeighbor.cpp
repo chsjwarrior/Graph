@@ -1,7 +1,7 @@
 #include "CloserNeighbor.h"
 
 //Constructor
-CloserNeighbor::CloserNeighbor(const Graph& graph) noexcept(false) : graph(graph) {
+CloserNeighbor::CloserNeighbor(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	visited = new bool[graph.AMOUNT_VERTEXES];
 	total = NULL;
 }
@@ -13,11 +13,10 @@ CloserNeighbor::~CloserNeighbor() {
 	total = NULL;
 }
 
-void CloserNeighbor::print(const std::string& title) const {}
-
 void CloserNeighbor::closerNeighborR(const unsigned int u) {
 	visited[u] = true;
-	graph.writeVertex(u);
+	print(graph.getVertexName(u));
+	//graph.writeVertex(u);
 
 	int lowerWeight = INF;
 	unsigned int lowerVertex = NIL;
@@ -28,28 +27,27 @@ void CloserNeighbor::closerNeighborR(const unsigned int u) {
 			lowerWeight = graph.getWeigthFrom(u, *v);
 		}
 	if (lowerVertex != NIL) {
-		std::cout << "->";
+		print("->");
 		total += graph.getWeigthFrom(u, lowerVertex);
 		closerNeighborR(lowerVertex);
 	}
 }
 
 void CloserNeighbor::closerNeighbor(const unsigned int source) {
-	std::cout << "Vizinho mais proximo:" << std::endl;
+	print("Vizinho mais proximo:\n");
 
 	memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 	total = 0;
 	closerNeighborR(source);
 
 	if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](const bool& x) { return x == true; })) {
-		std::cout << "->";
-		graph.writeVertex(source);
+		print("->" + graph.getVertexName(source));
 	}
 	std::cout << "= " << total << std::endl;
 }
 
 void CloserNeighbor::closerNeighborRepetitive() {
-	std::cout << "Vizinho mais proximo repetitivo:" << std::endl;
+	print("Vizinho mais proximo repetitivo:\n");
 
 	for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; ++u) {
 		memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
@@ -57,8 +55,7 @@ void CloserNeighbor::closerNeighborRepetitive() {
 		closerNeighborR(u);
 
 		if (std::all_of(visited, visited + graph.AMOUNT_VERTEXES, [](const bool& x) { return x == true; })) {
-			std::cout << "->";
-			graph.writeVertex(u);
+			print("->" + graph.getVertexName(u));
 		}
 		std::cout << "= " << total << std::endl;
 	}

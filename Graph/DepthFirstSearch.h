@@ -13,7 +13,7 @@ private:
 	bool* visited;
 	unsigned int time;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	void dfsVisitRecursive(const unsigned int u);
 

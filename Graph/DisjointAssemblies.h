@@ -11,7 +11,7 @@ private:
 	std::multiset<Edge> edges;
 	std::list<std::set<unsigned int>> sets;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	void sameComponent(const unsigned int u, const unsigned int v);
 

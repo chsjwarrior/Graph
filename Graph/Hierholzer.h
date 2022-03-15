@@ -6,9 +6,7 @@ O algoritmo de Hierholzer é utilizado para a identificação de um ciclo euleriano
 */
 class Hierholzer : private NonCopyable {
 private:
-	Graph graph;
-
-	void print(const std::string& title) const;
+	Graph graph;	
 
 	const std::pair<unsigned int, std::pair<unsigned int, unsigned int>> validateGraph();
 

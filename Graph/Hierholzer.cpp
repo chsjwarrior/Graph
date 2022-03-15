@@ -9,8 +9,6 @@ Hierholzer::Hierholzer(const Graph& graph) noexcept(false) : graph(graph) {
 //Destructor
 Hierholzer::~Hierholzer() {}
 
-void Hierholzer::print(const std::string& title) const {}
-
 const std::pair<unsigned int, std::pair<unsigned int, unsigned int>> Hierholzer::validateGraph() {
 	unsigned int inDegree, outDegree;
 	unsigned int amountFailVertexes = 0;
@@ -59,9 +57,9 @@ void Hierholzer::hierholzer(const unsigned int source, const unsigned int sink) 
 	}
 
 	for (auto i = circuit.crbegin(); i != circuit.crend(); ++i) {
-		graph.writeVertex(*i);
+		print(graph.getVertexName(*i));
 		if ((i + 1) != circuit.crend())
-			std::cout << "->";
+			print("->");
 	}
 }
 

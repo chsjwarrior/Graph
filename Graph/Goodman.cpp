@@ -14,12 +14,13 @@ Goodman::~Goodman() {
 	sets.clear();
 }
 
-void Goodman::print(const std::string& title) const {
+void Goodman::print(const std::string& text) const {
 	unsigned int i = 0;
 	for (auto set = sets.cbegin(); set != sets.cend(); ++set) {
 		std::cout << "Conjunto " << ++i << ": ";
 		for (auto u = set->cbegin(); u != set->cend(); ++u) {
-			graph.writeVertex(*u);
+			std::cout << graph.getVertexName(*u);
+			//graph.writeVertex(*u);
 			std::cout << '+';
 		}
 		std::cout << '|';

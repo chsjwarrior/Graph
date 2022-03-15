@@ -14,8 +14,6 @@ Kosaraju::~Kosaraju() {
 	visited = nullptr;
 }
 
-void Kosaraju::print(const std::string& title) const {}
-
 void Kosaraju::fillOrder(const unsigned int u) {
 	visited[u] = true;
 
@@ -28,8 +26,8 @@ void Kosaraju::fillOrder(const unsigned int u) {
 }
 
 void Kosaraju::dfs(const unsigned int u) {
-	graph.writeVertex(u);
-	std::cout << ' ';
+	print(graph.getVertexName(u));
+	print(" ");
 	visited[u] = true;
 
 	std::multiset<unsigned int> adjacences = graph.getAdjacencesFrom(u);
@@ -49,7 +47,7 @@ void Kosaraju::kosaraju() {
 
 	memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 
-	std::cout << "Kosaraju:" << std::endl;
+	print("Kosaraju:\n");
 	unsigned int c = 1;
 	while (!stack.empty()) {
 		int u = stack.top();
@@ -58,7 +56,7 @@ void Kosaraju::kosaraju() {
 		if (!visited[u]) {
 			std::cout << "Conjunto " << c++ << ": {";
 			dfs(u);
-			std::cout << '}' << std::endl;
+			print("}\n");
 		}
 	}
 }

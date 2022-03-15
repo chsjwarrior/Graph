@@ -1,7 +1,7 @@
 #include "DepthFirstSearch.h"
 
 //Constructor
-DepthFirstSearch::DepthFirstSearch(const Graph& graph) noexcept(false) : graph(graph) {
+DepthFirstSearch::DepthFirstSearch(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	discovery = new unsigned int[graph.AMOUNT_VERTEXES];
 	close = new unsigned int[graph.AMOUNT_VERTEXES];
 	visited = new bool[graph.AMOUNT_VERTEXES];
@@ -19,8 +19,8 @@ DepthFirstSearch::~DepthFirstSearch() {
 	time = NULL;
 }
 
-void DepthFirstSearch::print(const std::string& title) const {
-	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
+void DepthFirstSearch::print(const std::string& text) const {
+	PageTable table(text, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi","Di", "Ci" });

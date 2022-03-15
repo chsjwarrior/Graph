@@ -1,7 +1,7 @@
 #include "Dijkstra.h"
 
 //Construtor
-Dijkstra::Dijkstra(const Graph& graph) noexcept(false) : graph(graph) {
+Dijkstra::Dijkstra(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	distance = new int[graph.AMOUNT_VERTEXES];
 	predecessor = new unsigned int[graph.AMOUNT_VERTEXES];
 	visited = new bool[graph.AMOUNT_VERTEXES];
@@ -17,8 +17,8 @@ Dijkstra::~Dijkstra() {
 	visited = nullptr;
 }
 
-void Dijkstra::print(const std::string& title) const {
-	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
+void Dijkstra::print(const std::string& text) const {
+	PageTable table(text, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi", "Di", "Pi" });

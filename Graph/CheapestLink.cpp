@@ -1,7 +1,7 @@
 #include "CheapestLink.h"
 
 //Constructor
-CheapestLink::CheapestLink(const Graph& graph) noexcept(false) : graph(graph) {
+CheapestLink::CheapestLink(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	if (graph.IS_DIGRAPH)
 		throw std::invalid_argument("O Grafo precisa ser nao dirigido para o algoritmo de da ligacao mais economica funcionar.");
 
@@ -21,8 +21,6 @@ CheapestLink::~CheapestLink() {
 	visited = nullptr;
 	selected.clear();
 }
-
-void CheapestLink::print(const std::string& title) const {}
 
 bool CheapestLink::cyclic_recursive(const unsigned int vertex, const  unsigned int predecessor) {
 	bool cycle_found = false;
@@ -46,16 +44,17 @@ bool CheapestLink::cyclic() {
 }
 
 void CheapestLink::cheapestLink() {
-	std::cout << "Ligacao mais economica:" << std::endl;
+	print("Ligacao mais economica:\n");
 
 	memset(degrees, 0, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
 	selected.emplace_back(edges.cbegin()->U, edges.cbegin()->V, edges.cbegin()->WEIGHT);
 	degrees[edges.cbegin()->U]++;
 	degrees[edges.cbegin()->V]++;
-	graph.writeEdge(*edges.cbegin());
+	print(graph.getEdgeName(*edges.cbegin()));
+	//graph.writeEdge(*edges.cbegin());
 	std::cout << '=' << edges.cbegin()->WEIGHT;
-	std::cout << " entry" << std::endl;
+	print(" entry\n");
 	edges.erase(edges.cbegin());
 
 	//bool hasZeroDegree = true;
@@ -66,9 +65,10 @@ void CheapestLink::cheapestLink() {
 			if (cyclic() == false) {
 				degrees[edges.cbegin()->U]++;
 				degrees[edges.cbegin()->V]++;
-				graph.writeEdge(*edges.cbegin());
+				print(graph.getEdgeName(*edges.cbegin()));
+				//graph.writeEdge(*edges.cbegin());
 				std::cout << '=' << edges.cbegin()->WEIGHT;
-				std::cout << " entry" << std::endl;
+				print(" entry\n");
 				//hasZeroDegree = std::any_of(degrees, degrees + graph.AMOUNT_VERTEXES, [](unsigned int d) { return d == 0; });
 			} else
 				selected.pop_back();

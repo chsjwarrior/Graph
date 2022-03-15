@@ -18,8 +18,6 @@ Boruvka::~Boruvka() {
 	edges.clear();
 }
 
-void Boruvka::print(const std::string& title) const {}
-
 unsigned int Boruvka::find(const unsigned int u) {
 	if (subsets[u].first != u)
 		subsets[u].first = find(subsets[u].first);
@@ -59,7 +57,7 @@ void Boruvka::boruvka() {
 	int numTrees = graph.AMOUNT_VERTEXES;
 	int MSTweight = 0;
 
-	std::cout << "Boruvka:" << std::endl;
+	print("Boruvka:\n");
 	while (numTrees > 1) {
 		memset(cheapest, NIL, sizeof(unsigned int) * graph.AMOUNT_VERTEXES);
 
@@ -87,8 +85,8 @@ void Boruvka::boruvka() {
 
 				if (set1 != set2) {
 					MSTweight += edges[cheapest[i]].WEIGHT;
-					graph.writeEdge(edges[cheapest[i]]);
-					std::cout << std::endl;
+					print(graph.getEdgeName(edges[cheapest[i]]));
+					print("\n");
 					// Do a union of set1 and set2 and decrease number 
 					// of trees 
 					makeUnion(set1, set2);
@@ -97,6 +95,8 @@ void Boruvka::boruvka() {
 			}
 		}
 	}
-	std::cout << "Weight of MST is " << MSTweight << std::endl;
+	print("Weight of MST is ");
+	print(std::to_string(MSTweight));
+	print("\n");
 	return;
 }

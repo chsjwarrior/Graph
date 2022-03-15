@@ -85,11 +85,5 @@ public:
 
 	const std::string getEdgeName(const Edge& edge) const;
 
-	void writeVertex(const unsigned int vertex) const;
-
-	void writeEdge(const Edge& edge) const;
-
-	void writeEdge(const unsigned int edge) const;
-
-	void writeValue(const int value) const;
+	const std::string getEdgeName(const unsigned int edge) const;
 };

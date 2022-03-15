@@ -13,11 +13,11 @@ DisjointAssemblies::~DisjointAssemblies() {
 	sets.clear();
 }
 
-void DisjointAssemblies::print(const std::string& title) const {
-	std::cout << title;
+void DisjointAssemblies::print(const std::string& text) const {
+	std::cout << text;
 	for (auto set = sets.cbegin(); set != sets.cend(); ++set) {
 		for (auto u = set->cbegin(); u != set->cend(); ++u)
-			graph.writeVertex(*u);
+			std::cout << graph.getVertexName(*u);
 		std::cout << '\t';
 	}
 	std::cout << std::endl;
@@ -37,8 +37,8 @@ void DisjointAssemblies::sameComponent(const unsigned int u, const unsigned int 
 		setU->insert(setV->cbegin(), setV->cend());
 		sets.erase(setV);
 	}
-	graph.writeVertex(u);
-	graph.writeVertex(v);
+	std::cout << graph.getVertexName(u);
+	std::cout << graph.getVertexName(v);
 	print("|");
 }
 
@@ -53,7 +53,7 @@ void DisjointAssemblies::connectedComponents() {
 	std::cout << '\t' << '|';
 	for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; ++u) {
 		makeSet(u);
-		graph.writeVertex(u);
+		std::cout << graph.getVertexName(u);
 		std::cout << '\t';
 	}
 	std::cout << std::endl;

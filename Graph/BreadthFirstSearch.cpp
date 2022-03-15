@@ -17,8 +17,8 @@ BreadthFirstSearch::~BreadthFirstSearch() {
 	visited = nullptr;
 }
 
-void BreadthFirstSearch::print(const std::string& title) const {
-	PageTable table(title, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
+void BreadthFirstSearch::print(const std::string& text) const {
+	PageTable table(text, 0, graph.AMOUNT_VERTEXES, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi", "Di", "Pi" });

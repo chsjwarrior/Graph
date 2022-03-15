@@ -7,13 +7,13 @@ O algoritmo começa em um vertice raiz e explora todos os vertices vizinhos antes
 O algoritmo da busca em largura calcula pode calcular a distância (menor número de arestas)
 desde o vértice raiz ate todos os vértices acessiveis.
 */
-class BreadthFirstSearch : private NonCopyable {
+class BreadthFirstSearch : protected NonCopyable {
 	const Graph& graph;
 	unsigned int* discovery;
 	unsigned int* predecessor;
 	bool* visited;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	void bfsRecursive(std::queue<unsigned int>& queue);
 

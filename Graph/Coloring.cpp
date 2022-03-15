@@ -1,7 +1,7 @@
 #include "Coloring.h"
 
 //Constructor
-Coloring::Coloring(const Graph& graph) noexcept(false) : graph(graph) {
+Coloring::Coloring(const Graph& graph) noexcept(false) : NonCopyable(), graph(graph) {
 	color = new unsigned int[graph.AMOUNT_VERTEXES];
 }
 
@@ -11,8 +11,8 @@ Coloring::~Coloring() {
 	color = nullptr;
 }
 
-void Coloring::print(const std::string& title) const {
-	PageTable table(title, PageTable::HeaderOrientation::ROW);
+void Coloring::print(const std::string& text) const {
+	PageTable table(text, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi", "Ci" });

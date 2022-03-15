@@ -21,7 +21,7 @@ private:
 	std::set<unsigned int> vertices;
 	std::list<std::list<unsigned int>> sets;
 
-	void print(const std::string& title) const;
+	void print(const std::string& text) const override;
 
 	void makeSet(const unsigned int u);
 	

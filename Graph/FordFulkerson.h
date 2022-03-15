@@ -8,9 +8,7 @@ private:
 	int** costMatrix;
 	unsigned int* predecessor;
 	bool* visited;
-
-	void print(const std::string& title) const;
-
+	
 	bool bfsUtil(unsigned int u, const unsigned int k);
 
 public:

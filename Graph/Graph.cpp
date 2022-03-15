@@ -168,13 +168,15 @@ void Graph::printAdjacencematrix() const {
 	std::cout << std::right;
 	for (unsigned int i = 0; i < AMOUNT_VERTEXES; ++i) {
 		std::cout << '|' << std::setw(4);
-		writeVertex(i);
+		std::cout << getVertexName(i);
+		//writeVertex(i);
 	}
 	std::cout << std::endl;
 	size_t count;
 	for (unsigned int u = 0; u < AMOUNT_VERTEXES; ++u) {
 		std::cout << std::left << std::setw(4);
-		writeVertex(u);
+		std::cout << getVertexName(u);
+		//writeVertex(u);
 		std::cout << std::right;
 		getAdjacencesFrom(u);
 		for (unsigned int v = 0; v < AMOUNT_VERTEXES; ++v) {
@@ -191,13 +193,15 @@ void Graph::printIncidenceMatrix() const {
 	std::cout << std::right;
 	for (unsigned int i = 0; i < edges.size(); ++i) {
 		std::cout << '|' << std::setw(4);
-		writeEdge(i);
+		std::cout << getEdgeName(i);
+		//writeEdge(i);
 	}
 	std::cout << std::endl;
 	int value;
 	for (unsigned int u = 0; u < AMOUNT_VERTEXES; ++u) {
 		std::cout << std::left << std::setw(4);
-		writeVertex(u);
+		std::cout << getVertexName(u);
+		//writeVertex(u);
 		std::cout << std::right;
 		for (auto e = edges.cbegin(); e != edges.cend(); ++e) {
 			value = 0;
@@ -206,7 +210,8 @@ void Graph::printIncidenceMatrix() const {
 			else if (e->U == u || e->V == u)
 				value = 1;
 			std::cout << '|' << std::setw(4);
-			writeValue(value);
+			std::cout << getFormatedWeight(value);
+			//writeValue(value);
 		}
 		std::cout << std::endl;
 	}
@@ -227,9 +232,11 @@ void Graph::printIncidenceList() const {
 	std::cout << "Lista de incidencia:" << std::endl;
 	for (const Edge& e : edges) {
 		std::cout << '[';
-		writeVertex(e.U);
+		std::cout << getVertexName(e.U);
+		//writeVertex(e.U);
 		std::cout << ',';
-		writeVertex(e.V);
+		std::cout << getVertexName(e.V);
+		//writeVertex(e.V);
 		std::cout << "]->";
 	}
 	std::cout << std::endl;
@@ -242,16 +249,19 @@ void Graph::printCostMatrix() const {
 	unsigned int i;
 	for (i = 0; i < AMOUNT_VERTEXES; ++i) {
 		std::cout << '|' << std::setw(4);
-		writeVertex(i);
+		std::cout << getVertexName(i);
+		//writeVertex(i);
 	}
 	std::cout << std::endl;
 	for (i = 0; i < AMOUNT_VERTEXES; ++i) {
 		std::cout << std::left << std::setw(4);
-		writeVertex(i);
+		std::cout << getVertexName(i);
+		//writeVertex(i);
 		std::cout << std::right;
 		for (unsigned int j = 0; j < AMOUNT_VERTEXES; ++j) {
 			std::cout << '|' << std::setw(4);
-			writeValue(getWeigthFrom(i, j));
+			std::cout << getFormatedWeight(getWeigthFrom(i, j));
+			//writeValue(getWeigthFrom(i, j));
 		}
 		std::cout << std::endl;
 	}
@@ -293,7 +303,8 @@ void Graph::printGraphInfo() const {
 void Graph::printVerticesToSelect() const {
 	for (unsigned int u = 0; u < AMOUNT_VERTEXES; ++u) {
 		std::cout << u + 1 << "= [";
-		writeVertex(u);
+		std::cout << getVertexName(u);
+		//writeVertex(u);
 		std::cout << "] ";
 		if (u + 1 % 10 == 0)
 			std::cout << std::endl;
@@ -317,24 +328,8 @@ const std::string Graph::getEdgeName(const Edge& edge) const {
 	return "{" + getVertexName(edge.U) + "," + getVertexName(edge.V) + "}";
 }
 
-void Graph::writeVertex(const unsigned int vertex) const {
-	std::cout << getVertexName(vertex);
-}
-
-void Graph::writeEdge(const Edge& edge) const {
-	std::cout << getEdgeName(edge);
-}
-
-void Graph::writeEdge(const unsigned int edge) const {
-	if (edge != UINT_MAX)
-		std::cout << "E" + std::to_string(edge + 1);
-	else
-		std::cout << "nil";
-}
-
-void Graph::writeValue(const int value) const {
-	if (value > -10000 && value < 10000)
-		std::cout << value;
-	else
-		std::cout << "inf";
+const std::string Graph::getEdgeName(const unsigned int edge) const {
+	if (edge < edges.size())
+		return "E" + std::to_string(edge + 1);
+	return "nil";
 }

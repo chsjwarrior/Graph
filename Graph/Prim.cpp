@@ -20,8 +20,8 @@ Prim::~Prim() {
 	visited = nullptr;
 }
 
-void Prim::print(const std::string& title) const {
-	PageTable table(title, PageTable::HeaderOrientation::ROW);
+void Prim::print(const std::string& text) const {
+	PageTable table(text, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi", "Ki", "Pi" });

@@ -17,8 +17,8 @@ BellmanFord::~BellmanFord() {
 	predecessor = nullptr;
 }
 
-void BellmanFord::print(const std::string& title) const {
-	PageTable table(title, PageTable::HeaderOrientation::ROW);
+void BellmanFord::print(const std::string& text) const {
+	PageTable table(text, PageTable::HeaderOrientation::ROW);
 	table.setColumnsForPage(20);
 
 	table.addHeader({ "Vi","Di","Pi" });
