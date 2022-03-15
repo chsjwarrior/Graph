@@ -14,7 +14,7 @@ Fleury::~Fleury() {
 void Fleury::print(const std::string& title) const {}
 
 bool Fleury::isConnected() {
-	unsigned int u;
+	unsigned int u;//primeiro vertice com grau de saída
 	for (u = 0; u < graph.AMOUNT_VERTEXES; ++u)
 		if (graph.getOutDegreeFrom(u) > 0)
 			break;
@@ -22,10 +22,11 @@ bool Fleury::isConnected() {
 	if (u == graph.AMOUNT_VERTEXES)
 		return true;
 
+	bool value = false;
 	memset(visited, false, sizeof(bool) * graph.AMOUNT_VERTEXES);
 	dfsUtil(u);
 
-	bool value = true;
+	value = true;
 	for (u = 0; u < graph.AMOUNT_VERTEXES && value == true; ++u)
 		if (visited[u] == false)
 			value = !(graph.getOutDegreeFrom(u) > 0);
@@ -33,14 +34,13 @@ bool Fleury::isConnected() {
 }
 
 const std::pair<unsigned int, unsigned int> Fleury::validateGraph() {
-	unsigned int degree;
 	unsigned int amountOddVertexes = 0;
 	unsigned int firstOddVertex = NIL;
 
-	for (unsigned int u = 0; u < graph.AMOUNT_VERTEXES; ++u) {
+	for (unsigned int u = 0, degree; u < graph.AMOUNT_VERTEXES; ++u) {
 		degree = graph.getOutDegreeFrom(u);//para digrafo tambem usa-se grau de saída
 		if (degree % 2 != 0) {
-			amountOddVertexes++;
+			++amountOddVertexes;
 			if (firstOddVertex == NIL)
 				firstOddVertex = u;
 		}
@@ -63,6 +63,7 @@ unsigned int Fleury::dfsUtil(const unsigned int u) {
 }
 
 bool Fleury::isBridge(const unsigned int u, const unsigned int v) {
+
 	if (graph.getOutDegreeFrom(u) == 1)
 		return false;
 

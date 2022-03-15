@@ -13,7 +13,6 @@ struct Edge {
 	const int WEIGHT;
 
 	Edge() = delete;
-
 	explicit Edge(const unsigned int u, const unsigned int v, const int w);
 	explicit Edge(const Edge& other);
 	~Edge();
@@ -22,17 +21,16 @@ struct Edge {
 
 	bool operator>(const Edge& other) const;
 
-	Edge& operator=(const Edge&) = delete;	
+	Edge& operator=(const Edge&) = delete;
 };
 
 class Graph {
-private:
-	mutable std::multiset<unsigned int> adjacences;
-	std::multiset<Edge> edges;
 	/*
 	O conjunto de arestas do grafo armazena apenas as aresta u->v de um grafo não dirigido.
 	Significa que as arestas v->u são encontradas pela conta-parte u->v.
 	*/
+	std::multiset<Edge> edges;
+	mutable std::multiset<unsigned int> adjacences;
 
 public:
 	const unsigned int AMOUNT_VERTEXES;

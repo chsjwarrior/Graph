@@ -56,8 +56,8 @@ Graph::Graph(const Graph& other) : AMOUNT_VERTEXES(other.AMOUNT_VERTEXES), IS_DI
 }
 
 Graph::~Graph() {
-	adjacences.clear();
 	edges.clear();
+	adjacences.clear();
 }
 
 bool Graph::isValidVertex(const unsigned int v) const noexcept {
@@ -88,14 +88,8 @@ void Graph::removeEdge(const unsigned int u, const unsigned int v) noexcept(fals
 
 	auto edge = edges.cend();
 	for (auto e = edges.cbegin(); e != edges.cend() && edge == edges.cend(); ++e)
-		if (e->U == u && e->V == u || !IS_DIGRAPH && e->V == u && e->U == v)
+		if (e->U == u && e->V == v || !IS_DIGRAPH && e->V == u && e->U == v)
 			edge = e;
-
-	/*
-	auto edge = edges.find(Edge(u, v, 1));
-	if (edge == edges.cend() && IS_DIGRAPH == false)
-		edge = edges.find(Edge(v, u, 1));
-		*/
 
 	if (edge != edges.cend())
 		edges.erase(edge);
@@ -143,11 +137,13 @@ std::multiset<unsigned int>& Graph::getAdjacencesFrom(const unsigned int v) cons
 
 	if (!adjacences.empty())
 		adjacences.clear();
+
 	for (const Edge& e : edges)
 		if (e.U == v)
 			adjacences.insert(e.V);
 		else if (!IS_DIGRAPH && e.V == v)
 			adjacences.insert(e.U);
+
 	return adjacences;
 }
 
